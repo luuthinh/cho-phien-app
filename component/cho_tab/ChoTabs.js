@@ -1,7 +1,37 @@
 import React, {Component} from 'react';
 import {FlatList,ActivityIndicator, Text, View, StyleSheet} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import { createStackNavigator} from '@react-navigation/stack';
+
+const Stack = createStackNavigator()
 
 class ChoTabs extends Component {
+    render() {
+        return(
+            <Stack.Navigator>
+                <Stack.Screen name="Chợ" component={DotMoBan} 
+                    options={{title:'Chợ',
+                              headerStyle:{
+                                backgroundColor:"#f4511e",
+                              },
+                              headerTintColor:'#fff',
+                              headerTitleStyle: {
+                                fontWeight: 'bold',
+                              },
+                            }}/>
+            </Stack.Navigator>
+        )
+    }
+}
+export default ChoTabs
+
+const styles = StyleSheet.create({
+    container:{
+        flex:1,
+        paddingTop:20
+    }
+}) 
+class DotMoBan extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -57,12 +87,4 @@ class ChoTabs extends Component {
         )
     }
 }
-export default ChoTabs
-
-const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        paddingTop:20
-    }
-}) 
 
