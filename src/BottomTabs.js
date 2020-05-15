@@ -1,7 +1,7 @@
 import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
-import  Feed  from './Feed';
+import  ChoPhien  from './ChoPhien';
 import  Messages  from './Message';
 import  Notifications  from './Notification';
 
@@ -10,13 +10,13 @@ const Tab = createMaterialBottomTabNavigator();
 export default function BottomTab() {
   return (
     <Tab.Navigator
-      initialRouteName="Feed"
+      initialRouteName="Chợ"
       shifting={true}
       sceneAnimationEnabled={false}
     >
       <Tab.Screen
-        name="Feed"
-        component={Feed}
+        name="Chợ"
+        component={ChoPhien}
         options={{
           tabBarIcon: 'home-account',
         }}
