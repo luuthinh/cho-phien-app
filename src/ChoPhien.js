@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, FlatList, StyleSheet, Dimensions } from 'react-native';
+import { Text, View, FlatList, StyleSheet, Dimensions, ActivityIndicator, Alert } from 'react-native';
 import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 import dot_mb from '../assets/dot_mb.json'
 
@@ -18,18 +18,47 @@ const PRODUCT_ITEM_MARGIN = PRODUCT_ITEM_OFFSET * 2;
 
 // main
 class ChoPhien extends React.Component {
-
-  _keyExtractor = item => {
-    return item.id;
-  };
+	constructor(props) {
+		super(props);
+	
+		this.state = {
+		  data: [],
+		  isLoading: true
+		};
+	  }
+	componentDidMount() {
+		  	fetch('http://192.168.1.100:8069/dotmoban', {
+					method: 'POST',
+					headers: {
+						Accept: 'application/json',
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						jsonrpc: '2.0',
+						params:{}
+					})
+					})
+					.then((response) => response.json())
+					.then((json) => {
+					  this.setState({ data: json.result });
+					})
+					.catch((error) => console.error(error))
+					.finally(() => {
+					  this.setState({ isLoading: false });
+					});
+	  }
+	_keyExtractor = item => {
+		return item.id;
+	};
 
   _renderItem = data => {
+	  var item = data.item
     return (
       <View style={styles.item}>
         <Card>
           <Card.Title title="Card Title" subtitle="Card Subtitle" left={LeftContent} />
           <Card.Content>
-            <Title>{data.name}</Title>
+            <Title>{item.bsd_ten_dmb}</Title>
             <Paragraph>Card content</Paragraph>
           </Card.Content>
           <Card.Cover source={{ uri: 'https://picsum.photos/300' }} />
@@ -52,11 +81,18 @@ class ChoPhien extends React.Component {
   };
 
   render() {
+    if (this.state.isLoading) {
+      return (
+        <View style={styles.center}>
+          <ActivityIndicator animating={true} />
+        </View>
+      )
+    }  
     return (
       <View style={styles.container}>
         <FlatList
           style={styles.listContainer}
-          data={dot_mb.data}
+          data={this.state.data}
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}
           getItemLayout={this._getItemLayout}
