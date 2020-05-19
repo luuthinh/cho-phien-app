@@ -11,7 +11,7 @@ export default function BottomTab() {
   return (
     <Tab.Navigator
       initialRouteName="Chợ"
-      shifting={true}
+      shifting={false}
       sceneAnimationEnabled={false}
     >
       <Tab.Screen

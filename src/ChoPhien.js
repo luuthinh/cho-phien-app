@@ -52,20 +52,14 @@ class ChoPhien extends React.Component {
 	};
 
   _renderItem = data => {
-	  var item = data.item
+    var item = data.item
     return (
       <View style={styles.item}>
         <Card>
-          <Card.Title title="Card Title" subtitle="Card Subtitle" left={LeftContent} />
-          <Card.Content>
-            <Title>{item.bsd_ten_dmb}</Title>
-            <Paragraph>Card content</Paragraph>
-          </Card.Content>
-          <Card.Cover source={{ uri: 'https://picsum.photos/300' }} />
-          <Card.Actions>
-            <Button>Cancel</Button>
-            <Button>Ok</Button>
-          </Card.Actions>
+          <Card.Cover style={styles.itemImage} source={{uri: `data:image/jpeg;base64,${item.bsd_image_512}}`}}/>
+          <Paragraph style={styles.itemTitle}>{item.bsd_product_id[1]}</Paragraph>
+          <Paragraph style={styles.itemPrice}>100000</Paragraph>
+          <Paragraph style={styles.itemPriceClearance}>150000</Paragraph>
         </Card>
       </View>
     );
@@ -92,6 +86,7 @@ class ChoPhien extends React.Component {
       <View style={styles.container}>
         <FlatList
           style={styles.listContainer}
+          extraData={this.state}
           data={this.state.data}
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}
@@ -108,7 +103,7 @@ export default ChoPhien;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.15)',
+    backgroundColor: 'white',
   },
   listContainer: {
     flex: 1,
@@ -122,10 +117,10 @@ const styles = StyleSheet.create({
       PRODUCT_ITEM_MARGIN,
     height: PRODUCT_ITEM_HEIGHT,
     flexDirection: 'column',
-    backgroundColor: 'green',
+    backgroundColor: 'white',
     ...Platform.select({
       ios: {
-        shadowColor: 'rgba(0,0,0, .2)',
+        shadowColor: 'rgba(0,0,0, 0)',
         shadowOffset: { height: 0, width: 0 },
         shadowOpacity: 1,
         shadowRadius: 1,
@@ -135,36 +130,20 @@ const styles = StyleSheet.create({
       },
     }),
   },
-  itemImage: {
-    width: (SCREEN_WIDTH - PRODUCT_ITEM_MARGIN) / numColumns -
-      PRODUCT_ITEM_MARGIN,
-    height: 125,
-    justifyContent: 'center',
-    alignItems: 'center',
+  itemImage:{
+    borderRadius: 3,
+    height:150,
   },
   itemTitle: {
-    flex: 1,
-    ...Platform.select({
-      ios: {
-        fontWeight: '400',
-      },
-    }),
-    margin: PRODUCT_ITEM_OFFSET * 2,
-  },
-  itemFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingTop: PRODUCT_ITEM_OFFSET * 2,
-    borderWidth: 0,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(0,0,0,0.15)',
-    margin: PRODUCT_ITEM_OFFSET * 2,
+    fontSize: 14,
+    overflow: 'hidden',
+    height: 50,
   },
   itemPrice: {
     fontWeight: 'bold',
   },
   itemPriceClearance: {
-    fontWeight: 'bold',
-    color: 'red',
+    
+    
   },
 });

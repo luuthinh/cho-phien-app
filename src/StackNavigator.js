@@ -63,7 +63,7 @@ export default StackNavigator = () => {
       <Stack.Screen
         name="Feed"
         component={BottomTabs}
-        options={{ headerTitle: 'Twitter' }}
+        options={{ headerTitle: 'Chợ phiên ' }}
       />
       <Stack.Screen
         name="Details"
