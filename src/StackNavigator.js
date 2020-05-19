@@ -1,15 +1,16 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Appbar, Avatar } from 'react-native-paper';
+import { Appbar, Avatar, useTheme } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import BottomTabs from './BottomTabs';
-import  Details  from './Details';
+import DatHang from './DatHang';
 
 const Stack = createStackNavigator();
 
 const Header = ({ scene, previous, navigation }) => {
+  const theme = useTheme();
   const { options } = scene.descriptor;
   const title =
     options.headerTitle !== undefined
@@ -19,11 +20,11 @@ const Header = ({ scene, previous, navigation }) => {
       : scene.route.name;
 
   return (
-    <Appbar.Header>
+    <Appbar.Header theme={{colors:{primary: theme.colors.surface}}}>
       {previous ? (
         <Appbar.BackAction
-          onPress={navigation.pop}
-          color="red"
+          onPress={navigation.goBack}
+          color={theme.colors.primary}
         />
       ) : (
         <TouchableOpacity
@@ -42,7 +43,7 @@ const Header = ({ scene, previous, navigation }) => {
       )}
       <Appbar.Content
         title={
-          previous ? title : <MaterialCommunityIcons name="twitter" size={40} />
+          previous ? title : <MaterialCommunityIcons name="home" size={40} />
         }
       />
     </Appbar.Header>
@@ -52,7 +53,7 @@ const Header = ({ scene, previous, navigation }) => {
 export default StackNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName="Feed"
+      initialRouteName="Chợ"
       headerMode="screen"
       screenOptions={{
         header: ({ scene, previous, navigation }) => (
@@ -61,14 +62,14 @@ export default StackNavigator = () => {
       }}
     >
       <Stack.Screen
-        name="Feed"
+        name="Chợ"
         component={BottomTabs}
-        options={{ headerTitle: 'Chợ phiên ' }}
+        options={{ title: 'Chợ' }}
       />
       <Stack.Screen
-        name="Details"
-        component={Details}
-        options={{ headerTitle: 'Tweet' }}
+        name="Đặt hàng"
+        component={DatHang}
+        options={{ headerTitle: 'Đặt hàng' }}
       />
     </Stack.Navigator>
   );

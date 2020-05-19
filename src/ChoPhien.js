@@ -19,13 +19,15 @@ const PRODUCT_ITEM_MARGIN = PRODUCT_ITEM_OFFSET * 2;
 // main
 class ChoPhien extends React.Component {
 	constructor(props) {
-		super(props);
-	
+    super(props);
 		this.state = {
 		  data: [],
 		  isLoading: true
 		};
-	  }
+  }
+  goToNextScreen = () => {
+      return this.props.navigation.push('Đặt hàng');
+  }	
 	componentDidMount() {
 		  	fetch('http://192.168.1.100:8069/dotmoban', {
 					method: 'POST',
@@ -55,7 +57,7 @@ class ChoPhien extends React.Component {
     var item = data.item
     return (
       <View style={styles.item}>
-        <Card>
+        <Card onPress={() => this.goToNextScreen()}> 
           <Card.Cover style={styles.itemImage} source={{uri: `data:image/jpeg;base64,${item.bsd_image_512}}`}}/>
           <Paragraph style={styles.itemTitle}>{item.bsd_product_id[1]}</Paragraph>
           <Paragraph style={styles.itemPrice}>100000</Paragraph>
