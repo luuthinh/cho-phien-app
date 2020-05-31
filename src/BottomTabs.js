@@ -1,39 +1,44 @@
 import React from 'react';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-
-import  ChoPhien  from './ChoPhien';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import  Messages  from './Message';
 import  Notifications  from './Notification';
+import StackCho from './StackCho';
 
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function BottomTab() {
   return (
-    <Tab.Navigator
-      initialRouteName="Chợ"
-      shifting={false}
-      sceneAnimationEnabled={false}
-    >
+    <Tab.Navigator initialRouteName="Chợ">
       <Tab.Screen
         name="Chợ"
-        component={ChoPhien}
+        component={StackCho}
         options={{
-          tabBarIcon: 'home-account',
-        }}
-      />
+          tabBarLabel: 'Chợ',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="home" color={color} size={size} />
+          ),
+        }}        
+        />
       <Tab.Screen
-        name="Notifications"
+        name="Thông báo"
         component={Notifications}
         options={{
-          tabBarIcon: 'bell-outline',
-        }}
+          tabBarLabel: 'Thông báo',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="bell" color={color} size={size} />
+          ),
+        }}        
       />
       <Tab.Screen
-        name="Messages"
+        name="Cá nhân"
         component={Messages}
         options={{
-          tabBarIcon: 'message-text-outline',
-        }}
+          tabBarLabel: 'Cá nhân',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="account" color={color} size={size} />
+          ),
+        }}        
       />
     </Tab.Navigator>
   );

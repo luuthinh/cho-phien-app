@@ -1,9 +1,10 @@
 import React from 'react';
-import { Text, View, FlatList, StyleSheet, Dimensions, ActivityIndicator, Alert } from 'react-native';
-import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
-import dot_mb from '../assets/dot_mb.json'
+import { View, FlatList, StyleSheet, Dimensions, ActivityIndicator, Text} from 'react-native';
+import { Card, Paragraph } from 'react-native-paper';
+import * as Progress from 'react-native-progress';
+import DotMoBan from './component/DotMoBan';
+import { color } from 'react-native-reanimated';
 
-const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
 // screen sizing
 const { width, height } = Dimensions.get('window');
 // orientation must fixed
@@ -25,9 +26,6 @@ class ChoPhien extends React.Component {
 		  isLoading: true
 		};
   }
-  goToNextScreen = () => {
-      return this.props.navigation.push('Đặt hàng');
-  }	
 	componentDidMount() {
 		  	fetch('http://192.168.1.100:8069/dotmoban', {
 					method: 'POST',
@@ -52,18 +50,15 @@ class ChoPhien extends React.Component {
 	_keyExtractor = item => {
 		return item.id;
 	};
-
+  _formatCurency = (money) => {
+    money = money.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.") + 'đ';
+    return money;
+  }
   _renderItem = data => {
-    var item = data.item
+	  console.log("prop o cho phien")
+	  console.log(this.props)
     return (
-      <View style={styles.item}>
-        <Card onPress={() => this.goToNextScreen()}> 
-          <Card.Cover style={styles.itemImage} source={{uri: `data:image/jpeg;base64,${item.bsd_image_512}}`}}/>
-          <Paragraph style={styles.itemTitle}>{item.bsd_product_id[1]}</Paragraph>
-          <Paragraph style={styles.itemPrice}>100000</Paragraph>
-          <Paragraph style={styles.itemPriceClearance}>150000</Paragraph>
-        </Card>
-      </View>
+		<DotMoBan {...data} navigation={this.props}/>
     );
   };
 
@@ -79,8 +74,8 @@ class ChoPhien extends React.Component {
   render() {
     if (this.state.isLoading) {
       return (
-        <View style={styles.center}>
-          <ActivityIndicator animating={true} />
+        <View style={styles.container}>
+          <ActivityIndicator animating={true} style={styles.center} size='large'/>
         </View>
       )
     }  
@@ -103,6 +98,10 @@ class ChoPhien extends React.Component {
 export default ChoPhien;
 
 const styles = StyleSheet.create({
+  center:{
+	justifyContent: 'center',
+	alignItems: 'center',
+  },
   container: {
     flex: 1,
     backgroundColor: 'white',
@@ -134,7 +133,7 @@ const styles = StyleSheet.create({
   },
   itemImage:{
     borderRadius: 3,
-    height:150,
+    height:125,
   },
   itemTitle: {
     fontSize: 14,
@@ -142,10 +141,9 @@ const styles = StyleSheet.create({
     height: 50,
   },
   itemPrice: {
-    fontWeight: 'bold',
+	fontWeight: 'bold',
+	color: 'red',
   },
   itemPriceClearance: {
-    
-    
   },
 });

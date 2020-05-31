@@ -1,11 +1,12 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { View} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Appbar, Avatar, useTheme } from 'react-native-paper';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Appbar, useTheme } from 'react-native-paper';
 
-import BottomTabs from './BottomTabs';
+
+import ChoPhien from './ChoPhien';
 import DatHang from './DatHang';
+
 
 const Stack = createStackNavigator();
 
@@ -21,39 +22,31 @@ const Header = ({ scene, previous, navigation }) => {
 
   return (
     <Appbar.Header theme={{colors:{primary: theme.colors.surface}}}>
-      {previous ? (
-        <Appbar.BackAction
+      {previous ?(
+        <View style={{flex:1}}>
+          <Appbar.BackAction
           onPress={navigation.goBack}
-          color={theme.colors.primary}
-        />
-      ) : (
-        <TouchableOpacity
-          onPress={() => {
-            navigation.openDrawer();
-          }}
-        >
-          <Avatar.Image
-            size={40}
-            source={{
-              uri:
-                'https://pbs.twimg.com/profile_images/952545910990495744/b59hSXUd_400x400.jpg',
-            }}
           />
-        </TouchableOpacity>
-      )}
-      <Appbar.Content
-        title={
-          previous ? title : <MaterialCommunityIcons name="home" size={40} />
-        }
+          <Appbar.Action 
+            style={{position: 'absolute', right: 0}}
+            icon="archive"
+            onPress={() => console.log('Pressed archive')} />           
+          </View>
+        )
+       : 
+        <Appbar.Content
+        title={title}
+        style={{alignItems:'center'}}
       />
+      }    
     </Appbar.Header>
   );
 };
 
-export default StackNavigator = () => {
+export default function StackNavigator()  {
   return (
     <Stack.Navigator
-      initialRouteName="Chợ"
+      initialRouteName="Sản phẩm"
       headerMode="screen"
       screenOptions={{
         header: ({ scene, previous, navigation }) => (
@@ -62,9 +55,9 @@ export default StackNavigator = () => {
       }}
     >
       <Stack.Screen
-        name="Chợ"
-        component={BottomTabs}
-        options={{ title: 'Chợ' }}
+        name="Sản phẩm"
+        component={ChoPhien}
+        options={{ headerTitle: 'Chợ' }}
       />
       <Stack.Screen
         name="Đặt hàng"
