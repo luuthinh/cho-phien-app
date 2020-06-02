@@ -3,7 +3,6 @@ import { Text, View,StyleSheet,Dimensions } from 'react-native';
 import {Card, Paragraph} from 'react-native-paper';
 import * as Progress from 'react-native-progress';
 import moment from 'moment';
-import CountDown from 'react-native-countdown-component';
 
 // screen sizing
 const { width, height } = Dimensions.get('window');
@@ -21,46 +20,49 @@ export default class DotMoBan extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      totalDuration: '',
-    };
+      eventDate1:moment.duration().add({days:1,hours:3,minutes:40,seconds:50}),
+      eventDate:moment.duration(moment(this.props.data.item.bsd_den_ngay).diff(moment())),
+      days:0,
+      hours:0,
+      mins:0,
+      secs:0
+    }
   }
   _formatCurency = (money) => {
     money = money.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.") + 'đ'
     return money
   }
+  updateTimer=()=>{
+    const x = setInterval(()=>{
+      let { eventDate} = this.state
 
-  componentDidMount() {
-    var that = this;
+      if(eventDate <=0){
+        clearInterval(x)
+      }else {
+        eventDate = eventDate.subtract(1,"s")
+        const days = eventDate.days()
+        const hours = eventDate.hours()
+        const mins = eventDate.minutes()
+        const secs = eventDate.seconds()
+        
+        this.setState({
+          days,
+          hours,
+          mins,
+          secs,
+          eventDate
+        })
+      }
+    },1000)
+  }
 
-    //We are showing the coundown timer for a given expiry date-time
-    //If you are making an quize type app then you need to make a simple timer
-    //which can be done by using the simple like given below
-    //that.setState({ totalDuration: 30 }); //which is 30 sec
-
-    var date = moment()
-      .utcOffset('+05:30')
-      .format('YYYY-MM-DD hh:mm:ss');
-    //Getting the current date-time with required formate and UTC   
-    
-    var expirydate = '2020-10-23 04:00:45';//You can set your own date-time
-    //Let suppose we have to show the countdown for above date-time 
-
-    var diffr = moment.duration(moment(expirydate).diff(moment(date)));
-    //difference of the expiry date-time given and current date-time
-
-    var hours = parseInt(diffr.asHours());
-    var minutes = parseInt(diffr.minutes());
-    var seconds = parseInt(diffr.seconds());
-    
-    var d = hours * 60 * 60 + minutes * 60 + seconds;
-    //converting in seconds
-
-    that.setState({ totalDuration: d });
-    //Settign up the duration of countdown in seconds to re-render
-  }  
+  componentDidMount(){
+    this.updateTimer()
+  }
 
   render() {
     const item = this.props.data.item
+    console.log(this.state.eventDate1)
     return (
         <View style={styles.item}>
         <Card onPress={() => {return this.props.navigation.push('Đặt hàng',item)}}> 
@@ -68,25 +70,12 @@ export default class DotMoBan extends React.Component {
           <Paragraph style={styles.itemTitle}>{item.bsd_product_id[1]}</Paragraph>
         	<Paragraph style={styles.itemPrice}>Giá hiện tại: {this._formatCurency(100000)}</Paragraph>
           <Paragraph style={styles.itemPriceClearance}>Giá khởi điểm: {this._formatCurency(150000)}</Paragraph>
-		      <Progress.Bar progress={0.9} color='red' height={19} backgroundColor='gray'>
-			      <Text style={{alignSelf:"center",color:'white',position:"absolute",top:0.5}}>selected week 8</Text>
+		      <Progress.Bar progress={0.6} color='red' height={19} backgroundColor='gray'>
+			      <Text style={{alignSelf:"center",color:'white',position:"absolute",top:0.5}}>
+              {`${this.state.days} ngày ${this.state.hours} : ${this.state.mins} : ${this.state.secs}`}
+            </Text>
           </Progress.Bar>
-          <CountDown
-          style={{}}
-          until={this.state.totalDuration}
-          //duration of countdown in seconds
-          timetoShow={('M', 'S')}
-          //formate to show
-          onFinish={() => alert('finished')}
-          //on Finish call
-          onPress={() => alert('hello')}
-          //on Press call
-          size={10}
-          timeLabels={{d:null,h:null,m:null,s:null}}
-          digitStyle={{backgroundColor:'transparent'}}
-          separatorStyle={{color: '#000'}}
-          showSeparator
-        />
+          <Text></Text>
           </Card>
       </View>
     );
@@ -141,6 +130,7 @@ const styles = StyleSheet.create({
       color: 'red',
     },
     itemPriceClearance: {
+      textDecorationLine: 'line-through'
     },
     day:{
       fontSize: 12,
