@@ -58,7 +58,7 @@ class ChoPhien extends React.Component {
 	  console.log("prop o cho phien")
 	  console.log(this.props)
     return (
-		<DotMoBan {...data} navigation={this.props}/>
+		<DotMoBan {...this.props} data={data}/>
     );
   };
 
