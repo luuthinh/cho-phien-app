@@ -65,7 +65,7 @@ export default class DotMoBan extends React.Component {
     console.log(this.state.eventDate1)
     return (
         <View style={styles.item}>
-        <Card onPress={() => {return this.props.navigation.push('Đặt hàng',item)}}> 
+        <Card onPress={() => {return this.props.navigation.navigate('Đặt hàng',item)}}> 
           <Card.Cover style={styles.itemImage} source={{uri: `data:image/jpeg;base64,${item.bsd_image_512}}`}}/>
           <Paragraph style={styles.itemTitle}>{item.bsd_product_id[1]}</Paragraph>
         	<Paragraph style={styles.itemPrice}>Giá hiện tại: {this._formatCurency(100000)}</Paragraph>
