@@ -3,9 +3,8 @@ import { View} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Appbar, useTheme } from 'react-native-paper';
 
-
-import ChoPhien from './ChoPhien';
-import DatHang from './DatHang';
+import DangNhap from '../screen/DangNhap';
+import MainCaNhan from '../screen/MainCaNhan';
 
 
 const Stack = createStackNavigator();
@@ -43,10 +42,10 @@ const Header = ({ scene, previous, navigation }) => {
   );
 };
 
-export default function StackNavigator()  {
+export default function StackCaNhan()  {
   return (
     <Stack.Navigator
-      initialRouteName="Sản phẩm"
+      initialRouteName="Cá nhân"
       headerMode="screen"
       screenOptions={{
         header: ({ scene, previous, navigation }) => (
@@ -55,14 +54,14 @@ export default function StackNavigator()  {
       }}
     >
       <Stack.Screen
-        name="Sản phẩm"
-        component={ChoPhien}
-        options={{ headerTitle: 'Chợ' }}
+        name="Cá nhân"
+        component={MainCaNhan}
+        options={{ headerTitle: 'Cá nhân' }}
       />
       <Stack.Screen
-        name="Đặt hàng"
-        component={DatHang}
-        options={{ headerTitle: 'Đặt hàng' }}
+        name="Đăng ký/ Đăng nhập"
+        component={DangNhap}
+        options={{ headerTitle: "Đăng ký/ Đăng nhập" }}
       />
     </Stack.Navigator>
   );

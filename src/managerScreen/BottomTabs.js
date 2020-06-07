@@ -1,9 +1,9 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import  Messages  from './Message';
-import  Notifications  from './Notification';
+import  Notifications  from '../Notification';
 import StackCho from './StackCho';
+import StackCaNhan from './StackCaNhan';
 
 const Tab = createBottomTabNavigator();
 
@@ -32,7 +32,7 @@ export default function BottomTab() {
       />
       <Tab.Screen
         name="Cá nhân"
-        component={Messages}
+        component={StackCaNhan}
         options={{
           tabBarLabel: 'Cá nhân',
           tabBarIcon: ({ color, size }) => (
