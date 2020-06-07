@@ -1,9 +1,7 @@
 import React from 'react';
-import { View, FlatList, StyleSheet, Dimensions, ActivityIndicator, Text} from 'react-native';
-import { Card, Paragraph } from 'react-native-paper';
-import * as Progress from 'react-native-progress';
-import DotMoBan from './component/DotMoBan';
-import { color } from 'react-native-reanimated';
+import { View, FlatList, StyleSheet, Dimensions} from 'react-native';
+import {ActivityIndicator,} from 'react-native-paper';
+import DotMoBan from '../component/DotMoBan';
 
 // screen sizing
 const { width, height } = Dimensions.get('window');
@@ -17,7 +15,6 @@ const PRODUCT_ITEM_HEIGHT = 255;
 const PRODUCT_ITEM_OFFSET = 5;
 const PRODUCT_ITEM_MARGIN = PRODUCT_ITEM_OFFSET * 2;
 
-// main
 class ChoPhien extends React.Component {
 	constructor(props) {
     super(props);
