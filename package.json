@@ -29,14 +29,10 @@
     "react-native-vector-icons": "^6.6.0",
     "react-native-progress": "4.1.2",
     "react-native-web": "~0.11.7",
-<<<<<<< HEAD
     "moment": "2.26.0",
     "redux": "4.0.1",
     "react-redux": "6.0.1",
     "react-thunk": "2.3.0"
-=======
-    "moment": "2.26.0"
->>>>>>> 5413368a47ed8ece60ab30dc4f5de17f140c4a28
   },
   "devDependencies": {
     "babel-preset-expo": "~8.1.0",
