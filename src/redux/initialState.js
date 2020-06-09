@@ -1,8 +1,6 @@
 export const initialState = {
-    isLoggedIn: false,
-    userId: '',
-    token: '',
-    refreshToken: '',
-    expiresOn: '',
-    data: '',
-},
+    user: null,
+    token: null,
+    loggingIn: false,
+    errorMessage: '',
+}

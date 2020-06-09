@@ -1,1 +1,1 @@
-export const LoginUrl = '192.168.1.100:8069'
+export const API_URL = 'https://api.league7.app/v1';
