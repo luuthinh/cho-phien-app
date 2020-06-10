@@ -1,5 +1,5 @@
 import axios from 'axios';
-import AsyncStorage from '@react-native-community/async-storage';
+import {AsyncStorage} from 'react-native';
 import {API_URL} from '../constants/API';
 
 function login(username, password) {

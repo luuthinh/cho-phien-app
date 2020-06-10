@@ -7,11 +7,11 @@ export const loggedIn = data => ({
     payload: data,
 });
 
-export const errorLogIn = errorMessage => ({
-    type: t.AUTH_CLEAR_LOGIN_ERROR_MESSAGE,
-});
+export const clearLoginErrorMessage = () => ({
+    type: t.AUTH_CLEAR_LOGIN_ERROR_MESSAGE
+})
 
-export const loggingIn = () => ({
+export const errorLogIn = errorMessage => ({
     type: t.AUTH_ERR_LOG_IN,
     payload: errorMessage,
 });
