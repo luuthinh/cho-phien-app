@@ -5,24 +5,24 @@ import {errorParser} from '../service/apiErrorParser';
 export const loggedIn = data => ({
     type: t.AUTH_LOGGED_IN,
     payload: data,
-});
-
-export const errorLogIn = errorMessage => ({
+  });
+  
+  export const clearLoginErrorMessage = () => ({
     type: t.AUTH_CLEAR_LOGIN_ERROR_MESSAGE,
-});
-
-export const loggingIn = () => ({
+  });
+  
+  export const errorLogIn = errorMessage => ({
     type: t.AUTH_ERR_LOG_IN,
     payload: errorMessage,
-});
-
-export const loggingIn = () => ({
+  });
+  
+  export const loggingIn = () => ({
     type: t.AUTH_LOGGING_IN,
-});
-
-export const loggedOut = () => ({
+  });
+  
+  export const loggedOut = () => ({
     type: t.AUTH_LOGOUT,
-});
+  });
 
 export const logout = () => async(dispatch,getState) => {
     await userService.logout(getState).then((res) => {

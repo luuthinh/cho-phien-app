@@ -1,1 +1,1 @@
-export const API_URL = 'https://api.league7.app/v1';
+export const API_URL = 'http://192.168.1.100:8089/web/session/authenticate';

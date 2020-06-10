@@ -1,7 +1,7 @@
 import { initialState} from './initialState';
 import * as t from './actionTypes';
 
-export const loginReducer = (state = initialState, action) => {
+export default function (state = initialState, action) {
     switch (action.type){
         case t.AUTH_LOGOUT:
             return {
