@@ -11,7 +11,7 @@ class Dangnhap extends Component {
     password: '',
   };
 
-  componentWillReceiveProps(nextProps): void {
+  componentWillReceiveProps(nextProps) {
     const { errorMessage } = this.props;
     if (nextProps.errorMessage !== errorMessage && nextProps.errorMessage !== '') {
       Alert.alert(
