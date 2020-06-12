@@ -52,8 +52,6 @@ class ChoPhien extends React.Component {
     return money;
   }
   _renderItem = data => {
-	  console.log("prop o cho phien")
-	  console.log(this.props)
     return (
 		<DotMoBan {...this.props} data={data}/>
     );

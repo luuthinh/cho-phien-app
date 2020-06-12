@@ -41,6 +41,7 @@ class Dangnhap extends Component {
           value={username}
         />
         <TextInput
+          autoCapitalize="none"
           placeholder="Password"
           onChangeText={pass => this.setState({ password: pass })}
           secureTextEntry

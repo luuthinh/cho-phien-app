@@ -1,22 +1,35 @@
 import axios from 'axios';
-// import AsyncStorage from '@react-native-community/async-storage';
+import {AsyncStorage} from 'react-native';
 import { API_URL } from '../constants/API';
 
-function login(username, password) {
+async function login(username, password) {
+  console.log("chạy login service")
   return new Promise((resolve, reject) => {
-    axios.post(`${API_URL}`, {
-        data: JSON.stringify({
-            jsonrpc: '2.0',
-            params:{username,password}
-        })
-    }).then((response) => {
+    console.log("chạy vào đây")
+    fetch('http://192.168.1.100:8069/web/session/authenticate', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        jsonrpc: '2.0',
+        params:{'db':'odoo_db','login':username,'password':password}
+      })
+    }).then(async(response) => { 
+      console.log(response.headers.map["set-cookie"])
+      console.log(typeof response.headers.map["set-cookie"])
+      await AsyncStorage.setItem('sessionID', response.headers.map["set-cookie"])
+      let json = await response.json()
+      json.result.session_id = response.headers.map["set-cookie"]
+      return json
+    })
+    .then(async(json) => {
         console.log("chuoi nhan ve")
-        console.log(response)
-    //   AsyncStorage.setItem('userToken', response.data.token)
-    //     .then(() => {
-    //       resolve(response);
-    //       AsyncStorage.setItem('userData', JSON.stringify(response.data.user));
-    //     });
+        await AsyncStorage.setItem('uid', json.result.uid.toString())
+        console.log(json)
+        resolve(json)
     }).catch(err => reject(err));
   });
 }

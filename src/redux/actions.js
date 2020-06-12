@@ -33,7 +33,9 @@ export const logout = () => async(dispatch,getState) => {
 export const login = (username, password) => (dispatch) => {
     dispatch(loggingIn());
     userService.login(username,password).then(async(res) => {
-        await dispatch(loggedIn(res.data));
+        console.log("in actions")
+        console.log(res.result)
+        await dispatch(loggedIn(res.result));
     }).catch((err) => {
         dispatch(errorLogIn(errorParser.parseLoginError(err).message));
     });

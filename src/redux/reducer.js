@@ -20,8 +20,8 @@ export default function (state = initialState, action) {
         case t.AUTH_LOGGED_IN:
             return {
                 ...state,
-                user: action.payload.user,
-                token: action.payload.token,
+                user: action.payload.uid,
+                token: action.payload.session_id,
                 loggingIn: false,
             };
         case t.AUTH_ERR_LOG_IN:
