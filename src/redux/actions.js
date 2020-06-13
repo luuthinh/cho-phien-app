@@ -24,18 +24,21 @@ export const loggedIn = data => ({
     type: t.AUTH_LOGOUT,
   });
 
+  export const getInfo = () => ({
+    type: t.AUTH_GET_INFO,
+  })
+
 export const logout = () => async(dispatch,getState) => {
     await userService.logout(getState).then((res) => {
         dispatch(loggedOut());
     }).catch((err) => {});
 };
 
-export const login = (username, password) => (dispatch) => {
+export const login = (navigation,username, password) => (dispatch) => {
     dispatch(loggingIn());
     userService.login(username,password).then(async(res) => {
-        console.log("in actions")
-        console.log(res.result)
         await dispatch(loggedIn(res.result));
+        navigation.navigate('Cá nhân')
     }).catch((err) => {
         dispatch(errorLogIn(errorParser.parseLoginError(err).message));
     });

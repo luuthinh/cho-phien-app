@@ -2,6 +2,8 @@ import { initialState} from './initialState';
 import * as t from './actionTypes';
 
 export default function (state = initialState, action) {
+    console.log("reducer")
+    console.log(action)
     switch (action.type){
         case t.AUTH_LOGOUT:
             return {
@@ -20,8 +22,9 @@ export default function (state = initialState, action) {
         case t.AUTH_LOGGED_IN:
             return {
                 ...state,
-                user: action.payload.uid,
-                token: action.payload.session_id,
+                userName: action.payload.username,
+                uid: action.uid,
+                token: action.session_id,
                 loggingIn: false,
             };
         case t.AUTH_ERR_LOG_IN:
@@ -29,7 +32,7 @@ export default function (state = initialState, action) {
                 ...state,
                 loggingIn: false,
                 errorMessage: action.payload,
-            }
+            };
         default:
             return state;
     }

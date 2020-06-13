@@ -3,9 +3,7 @@ import {AsyncStorage} from 'react-native';
 import { API_URL } from '../constants/API';
 
 async function login(username, password) {
-  console.log("chạy login service")
   return new Promise((resolve, reject) => {
-    console.log("chạy vào đây")
     fetch('http://192.168.1.100:8069/web/session/authenticate', {
       method: 'POST',
       credentials: 'include',
@@ -28,7 +26,6 @@ async function login(username, password) {
     .then(async(json) => {
         console.log("chuoi nhan ve")
         await AsyncStorage.setItem('uid', json.result.uid.toString())
-        console.log(json)
         resolve(json)
     }).catch(err => reject(err));
   });

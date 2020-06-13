@@ -6,25 +6,30 @@ import { ActivityIndicator, Alert } from 'react-native';
 import { clearLoginErrorMessage, login } from '../redux/actions';
 
 class Dangnhap extends Component {
-  state = {
-    username: '',
-    password: '',
-  };
 
-  componentWillReceiveProps(nextProps) {
-    const { errorMessage } = this.props;
-    if (nextProps.errorMessage !== errorMessage && nextProps.errorMessage !== '') {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: '',
+      password: '',
+    };    
+  }
+  
+
+  componentDidUpdate(prevtProps) {
+    const { errorMessage } = prevtProps;
+    if (this.props.errorMessage !== errorMessage && this.props.errorMessage !== '') {
       Alert.alert(
-        nextProps.errorMessage,
+        this.props.errorMessage,
         '',
         [{ text: 'OK', onPress: () => this.props.clearLoginErrorMessage() }],
       );
     }
   }
 
-  signInAsync = async () => {
+  signInAsync = async() => {
     const { password, username } = this.state;
-    await this.props.login(username, password);
+    await this.props.login(this.props.navigation,username, password)
   };
 
   render() {
