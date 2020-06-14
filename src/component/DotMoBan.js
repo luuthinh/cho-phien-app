@@ -66,7 +66,7 @@ export default class DotMoBan extends React.Component {
     return (
         <View style={styles.item}>
         <Card onPress={() => {return this.props.navigation.navigate('Đặt hàng',item)}}> 
-          <Card.Cover style={styles.itemImage} source={{uri: `data:image/jpeg;base64,${item.bsd_image_512}}`}}/>
+          <Card.Cover style={styles.itemImage} source={{uri: `http:192.168.1.100:8069/dotmoban/${item.id}`}}/>
           <Paragraph style={styles.itemTitle}>{item.bsd_product_id[1]}</Paragraph>
         	<Paragraph style={styles.itemPrice}>Giá hiện tại: {this._formatCurency(100000)}</Paragraph>
           <Paragraph style={styles.itemPriceClearance}>Giá khởi điểm: {this._formatCurency(150000)}</Paragraph>
