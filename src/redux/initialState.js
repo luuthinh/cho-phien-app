@@ -1,7 +1,9 @@
 export const initialState = {
-    userName: 'Đăng nhập/ Đăng ký',
+    name: 'Đăng nhập/ Đăng ký',
+    userName: '',
     uid: null,
-    token: null,
+    sessionID: '',
+    expiresDate: '',
     loggingIn: false,
     errorMessage: '',
 }

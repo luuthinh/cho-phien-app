@@ -20,13 +20,18 @@ class MainCaNhan extends React.Component {
             <View style={{ flex: 1}}>
                 <Card>
                     <Card.Title 
-                    title={this.props.userName}
-                    subtitle="Chưa đăng nhâp"
+                    title={this.props.name}
+                    subtitle={this.props.userName}
                     left = {() => <Avatar.Image size={36} source={require('./image/download.jpeg')}/>}
                     right={() => <IconButton
                                             icon="archive" 
                                             onPress={() => {return this.props.navigation.navigate('Đăng ký/ Đăng nhập')}}/>}
                     />
+                </Card>
+                <Card>
+                    <Text>{this.props.uid}</Text>
+                    <Text>{this.props.sessionID}</Text>
+                    <Text>{this.props.expiresDate}</Text>
                 </Card>
             </View>
           );
@@ -37,6 +42,10 @@ class MainCaNhan extends React.Component {
 function mapStateToProps(state) {
     return {
       userName: state.auth.userName,
+      name: state.auth.name,
+      uid : state.auth.uid,
+      sessionID: state.auth.sessionID,
+      expiresDate: state.auth.expiresDate,
     };
   }
 

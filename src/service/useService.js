@@ -20,7 +20,8 @@ async function login(username, password) {
       console.log(typeof response.headers.map["set-cookie"])
       await AsyncStorage.setItem('sessionID', response.headers.map["set-cookie"])
       let json = await response.json()
-      json.result.session_id = response.headers.map["set-cookie"]
+      json.result.session_id = response.headers.map["set-cookie"].split("; ")[0].split("=")[1]
+      json.result.expires_date = response.headers.map["set-cookie"].split("; ")[1].split("=")[1]
       return json
     })
     .then(async(json) => {
