@@ -3,4 +3,4 @@ export const AUTH_LOGGED_IN = '[AUTH] LOGGED_IN';
 export const AUTH_ERR_LOG_IN = '[AUTH] ERR_LOG_IN';
 export const AUTH_LOGOUT = '[AUTH] LOGOUT';
 export const AUTH_CLEAR_LOGIN_ERROR_MESSAGE = '[AUTH] CLEAR_LOGIN_ERROR_MESSAGE';
-
+export const AUTH_GET_INFO = '[AUTH] GET_INFO';

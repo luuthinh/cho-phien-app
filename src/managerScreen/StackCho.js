@@ -1,6 +1,6 @@
 import React from 'react';
 import { View} from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 import { Appbar, useTheme } from 'react-native-paper';
 
 
@@ -9,6 +9,18 @@ import DatHang from '../screen/DatHang';
 
 
 const Stack = createStackNavigator();
+
+const config = {
+  animation: 'timing',
+  config: {
+    stiffness:1000,
+    damping:500,
+    mas: 3,
+    overshootClaming:true,
+    restDisplacementThreshold: 0.01,
+    resSpeedThreshold: 0.01,
+  }
+}
 
 const Header = ({ scene, previous, navigation }) => {
   const theme = useTheme();
@@ -52,17 +64,26 @@ export default function StackCho()  {
         header: ({ scene, previous, navigation }) => (
           <Header scene={scene} previous={previous} navigation={navigation} />
         ),
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
       }}
     >
       <Stack.Screen
         name="Sản phẩm"
         component={ChoPhien}
-        options={{ headerTitle: 'Chợ' }}
+        options={{ 
+          headerTitle: 'Chợ', 
+          transitionSpec:{
+            open: config,
+            close: config,
+          }
+        }}
       />
       <Stack.Screen
         name="Đặt hàng"
         component={DatHang}
-        options={{ headerTitle: 'Đặt hàng' }}
+        options={{ 
+          headerTitle: 'Đặt hàng'        
+        }}
       />
     </Stack.Navigator>
   );
