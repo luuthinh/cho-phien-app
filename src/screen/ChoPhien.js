@@ -2,6 +2,7 @@ import React from 'react';
 import { View, FlatList, StyleSheet, Dimensions} from 'react-native';
 import {ActivityIndicator,} from 'react-native-paper';
 import DotMoBan from '../component/DotMoBan';
+import {connect} from 'react-redux';
 
 // screen sizing
 const { width, height } = Dimensions.get('window');
@@ -18,13 +19,15 @@ const PRODUCT_ITEM_MARGIN = PRODUCT_ITEM_OFFSET * 2;
 class ChoPhien extends React.Component {
 	constructor(props) {
     super(props);
+    console.log("chợ phiên")
+    console.log(this.props)
 		this.state = {
 		  data: [],
 		  isLoading: true
 		};
   }
 	componentDidMount() {
-		  	fetch('http://192.168.1.100:8069/dotmoban', {
+		  	fetch('https://vuonnhatoi.odoo.com/jsonrpc', {
 					method: 'POST',
 					headers: {
 						Accept: 'application/json',
@@ -32,7 +35,11 @@ class ChoPhien extends React.Component {
 					},
 					body: JSON.stringify({
 						jsonrpc: '2.0',
-						params:{}
+						params:{
+              "service":"object",
+              "method":"execute_kw",
+              "args":["vuonnhatoi",2,"nothing123","x_dot_mb","search_read",[],{"fields":["x_name","x_product_id","x_to_date"]}]
+            }
 					})
 					})
 					.then((response) => response.json())
@@ -90,7 +97,18 @@ class ChoPhien extends React.Component {
   }
 }
 
-export default ChoPhien;
+function mapStateToProps(state) {
+  return {
+    userName: state.auth.userName,
+    name: state.auth.name,
+    uid : state.auth.uid,
+    password: state.auth.password,
+    sessionID: state.auth.sessionID,
+    expiresDate: state.auth.expiresDate,
+  };
+}
+
+export default connect(mapStateToProps)(ChoPhien); 
 
 const styles = StyleSheet.create({
   center:{

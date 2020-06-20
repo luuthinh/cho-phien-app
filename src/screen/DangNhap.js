@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, TextInput } from 'react-native-paper';
-import { ActivityIndicator, Alert } from 'react-native';
+import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native';
 import { clearLoginErrorMessage, login } from '../redux/actions';
 
 class Dangnhap extends Component {
@@ -15,7 +14,6 @@ class Dangnhap extends Component {
     };    
   }
   
-
   componentDidUpdate(prevtProps) {
     const { errorMessage } = prevtProps;
     if (this.props.errorMessage !== errorMessage && this.props.errorMessage !== '') {
@@ -38,7 +36,8 @@ class Dangnhap extends Component {
     const isEnabledSubmit = (username.length >= 4 && password.length >= 5);
 
     return (
-      <React.Fragment>
+      <View style={styles.container}>
+        <View style={styles.center}>
         <TextInput
           autoCapitalize="none"
           placeholder="Username"
@@ -58,7 +57,9 @@ class Dangnhap extends Component {
           ) : null}
           onPress={this.signInAsync}
         >Đăng nhập</Button>
-      </React.Fragment>
+      </View>
+      </View>
+
     );
   }
 }
@@ -75,3 +76,13 @@ export default connect(mapStateToProps, {
   login,
   clearLoginErrorMessage,
 })(Dangnhap);
+
+const styles = StyleSheet.create({
+  container:{
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  center: {
+    justifyContent: 'center',
+  }
+})

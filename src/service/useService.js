@@ -4,7 +4,7 @@ import { API_URL } from '../constants/API';
 
 async function login(username, password) {
   return new Promise((resolve, reject) => {
-    fetch('http://192.168.1.100:8069/web/session/authenticate', {
+    fetch('https://vuonnhatoi.odoo.com/web/session/authenticate', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -13,11 +13,9 @@ async function login(username, password) {
       },
       body: JSON.stringify({
         jsonrpc: '2.0',
-        params:{'db':'odoo_db','login':username,'password':password}
+        params:{'db':'vuonnhatoi','login':username,'password':password}
       })
     }).then(async(response) => { 
-      console.log(response.headers.map["set-cookie"])
-      console.log(typeof response.headers.map["set-cookie"])
       await AsyncStorage.setItem('sessionID', response.headers.map["set-cookie"])
       let json = await response.json()
       json.result.session_id = response.headers.map["set-cookie"].split("; ")[0].split("=")[1]
@@ -25,7 +23,6 @@ async function login(username, password) {
       return json
     })
     .then(async(json) => {
-        console.log("chuoi nhan ve")
         await AsyncStorage.setItem('uid', json.result.uid.toString())
         resolve(json)
     }).catch(err => reject(err));
