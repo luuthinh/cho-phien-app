@@ -15,11 +15,18 @@ export default class DatHang extends React.Component {
     var item = this.props.route.params
     return (
       <Card>
-      <Card.Cover source={{uri: `data:image/jpeg;base64,${item.bsd_image_512}}`}}/>
+          <Card.Cover source={{uri: `https://vuonnhatoi.odoo.com/web/content/x_dot_mb/${item.id}/x_image_512`,
+                               method: "GET",
+                               headers: {
+                                 "Content-Type": "application/x-www-form-urlencoded",
+                                 "X_Openerp": "e962ad24d1f1a6caaa094c30351d7f73d78476cc"
+                               }
+                      }}
+          />
         <Card.Title title="Abandoned Ship" />
         <Card.Content>
           <Paragraph>
-            {item.bsd_product_id[1]}
+            {item.x_product_id[1]}
             {this._formatCurency(100000)}
           </Paragraph>
         </Card.Content>
