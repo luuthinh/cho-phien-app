@@ -5,15 +5,6 @@ import {errorParser} from '../service/apiErrorParser';
 export const loggedIn = data => ({
     type: t.AUTH_LOGGED_IN,
     payload: data,
-<<<<<<< HEAD
-});
-
-export const clearLoginErrorMessage = () => ({
-    type: t.AUTH_CLEAR_LOGIN_ERROR_MESSAGE
-})
-
-export const errorLogIn = errorMessage => ({
-=======
   });
   
   export const clearLoginErrorMessage = () => ({
@@ -21,7 +12,6 @@ export const errorLogIn = errorMessage => ({
   });
   
   export const errorLogIn = errorMessage => ({
->>>>>>> e1e11d734a7d09d032f96bad971f3e7dc92ac437
     type: t.AUTH_ERR_LOG_IN,
     payload: errorMessage,
   });
