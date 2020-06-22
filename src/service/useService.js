@@ -1,10 +1,6 @@
 import axios from 'axios';
 import {AsyncStorage} from 'react-native';
-<<<<<<< HEAD
-import {API_URL} from '../constants/API';
-=======
 import { API_URL } from '../constants/API';
->>>>>>> e1e11d734a7d09d032f96bad971f3e7dc92ac437
 
 async function login(username, password) {
   return new Promise((resolve, reject) => {

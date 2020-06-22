@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, TextInput } from 'react-native-paper';
-import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native';
+import { Button, TextInput, Appbar, ActivityIndicator } from 'react-native-paper';
+import {  Alert, StyleSheet, View } from 'react-native';
 import { clearLoginErrorMessage, login } from '../redux/actions';
 
 class Dangnhap extends Component {
@@ -33,10 +33,12 @@ class Dangnhap extends Component {
   render() {
     const { loggingIn } = this.props;
     const { username, password } = this.state;
-    const isEnabledSubmit = (username.length >= 4 && password.length >= 5);
 
     return (
       <View style={styles.container}>
+        <Appbar.Header>
+          <Appbar.Content title="Đăng nhập / Đăng ký"/>
+        </Appbar.Header>
         <View style={styles.center}>
         <TextInput
           autoCapitalize="none"
@@ -51,12 +53,10 @@ class Dangnhap extends Component {
           secureTextEntry
         />
         <Button
-          disabled={!isEnabledSubmit}
-          icon={loggingIn ? (
-            <ActivityIndicator size="small" color="#ffffff" />
-          ) : null}
+          loading = {loggingIn}
+          mode="contained"
           onPress={this.signInAsync}
-        >Đăng nhập</Button>
+        >Đăng nhập</Button>         
       </View>
       </View>
 

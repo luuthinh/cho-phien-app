@@ -1,7 +1,7 @@
 import React from 'react';
 import { View} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Appbar, useTheme } from 'react-native-paper';
+import { Appbar} from 'react-native-paper';
 
 import DangNhap from '../screen/DangNhap';
 import MainCaNhan from '../screen/MainCaNhan';
@@ -10,7 +10,6 @@ import MainCaNhan from '../screen/MainCaNhan';
 const Stack = createStackNavigator();
 
 const Header = ({ scene, previous, navigation }) => {
-  const theme = useTheme();
   const { options } = scene.descriptor;
   const title =
     options.headerTitle !== undefined
@@ -20,7 +19,7 @@ const Header = ({ scene, previous, navigation }) => {
       : scene.route.name;
 
   return (
-    <Appbar.Header theme={{colors:{primary: theme.colors.surface}}}>
+    <Appbar.Header>
       {previous ?(
         <View style={{flex:1}}>
           <Appbar.BackAction

@@ -23,7 +23,6 @@ const config = {
 }
 
 const Header = ({ scene, previous, navigation }) => {
-  const theme = useTheme();
   const { options } = scene.descriptor;
   const title =
     options.headerTitle !== undefined
@@ -33,7 +32,7 @@ const Header = ({ scene, previous, navigation }) => {
       : scene.route.name;
 
   return (
-    <Appbar.Header theme={{colors:{primary: theme.colors.surface}}}>
+    <Appbar.Header>
       {previous ?(
         <View style={{flex:1}}>
           <Appbar.BackAction
