@@ -23,6 +23,7 @@ export default function (state = initialState, action) {
                 name: action.payload.name,
                 userName: action.payload.username,
                 uid: action.payload.uid,
+                password : action.payload.password,
                 sessionID: action.payload.session_id,
                 expiresDate: action.payload.expires_date,
                 loggingIn: false,

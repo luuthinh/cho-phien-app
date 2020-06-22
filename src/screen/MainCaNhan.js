@@ -2,7 +2,6 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import { Card, Avatar, IconButton} from 'react-native-paper';
 import {connect} from 'react-redux';
-import {getInfo} from '../redux/actions';
 
 class MainCaNhan extends React.Component {
     constructor(props) {
@@ -32,6 +31,7 @@ class MainCaNhan extends React.Component {
                     <Text>{this.props.uid}</Text>
                     <Text>{this.props.sessionID}</Text>
                     <Text>{this.props.expiresDate}</Text>
+                    <Text>{this.props.password}</Text>
                 </Card>
             </View>
           );
@@ -44,6 +44,7 @@ function mapStateToProps(state) {
       userName: state.auth.userName,
       name: state.auth.name,
       uid : state.auth.uid,
+      password: state.auth.password,
       sessionID: state.auth.sessionID,
       expiresDate: state.auth.expiresDate,
     };

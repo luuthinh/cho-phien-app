@@ -37,8 +37,9 @@ export const logout = () => async(dispatch,getState) => {
 export const login = (navigation,username, password) => (dispatch) => {
     dispatch(loggingIn());
     userService.login(username,password).then(async(res) => {
+        res.result.password = password
         await dispatch(loggedIn(res.result));
-        navigation.navigate('Cá nhân')
+        navigation.navigate('Chợ')
     }).catch((err) => {
         dispatch(errorLogIn(errorParser.parseLoginError(err).message));
     });
