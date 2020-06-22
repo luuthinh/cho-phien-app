@@ -29,7 +29,7 @@ class ChoPhien extends React.Component {
 	componentDidMount() {
 		  	fetch('https://vuonnhatoi.odoo.com/jsonrpc', {
 					method: 'POST',
-					headers: {
+					headers:{
 						Accept: 'application/json',
 						'Content-Type': 'application/json'
 					},
@@ -38,7 +38,12 @@ class ChoPhien extends React.Component {
 						params:{
               "service":"object",
               "method":"execute_kw",
-              "args":["vuonnhatoi",2,"nothing123","x_dot_mb","search_read",[],{"fields":["x_name","x_product_id","x_to_date"]}]
+              "args":["vuonnhatoi",
+                      2,"nothing123",
+                      "x_dot_mb","search_read",[],{
+                        "fields":["x_name","x_product_id","x_to_date",
+                                  "x_gia_khoi_diem", "x_gia_hien_tai","x_tong_so_dh"]
+                      }]
             }
 					})
 					})

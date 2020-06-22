@@ -76,8 +76,9 @@ export default class DotMoBan extends React.Component {
                       }}
           />
           <Paragraph style={styles.itemTitle}>{item.x_product_id[1]}</Paragraph>
-        	<Paragraph style={styles.itemPrice}>Giá hiện tại: {this._formatCurency(100000)}</Paragraph>
-          <Paragraph style={styles.itemPriceClearance}>Giá khởi điểm: {this._formatCurency(150000)}</Paragraph>
+        	<Paragraph style={styles.itemPrice}>Giá hiện tại: {this._formatCurency(item.x_gia_hien_tai)}</Paragraph>
+          <Paragraph style={styles.itemPriceClearance}>Giá khởi điểm: {this._formatCurency(item.x_gia_khoi_diem)}</Paragraph>
+          <Paragraph >Đã bán: {item.x_tong_so_dh}</Paragraph>
 		      <Progress.Bar progress={0.6} color='red' height={19} backgroundColor='gray'>
 			      <Text style={{alignSelf:"center",color:'white',position:"absolute",top:0.5}}>
               {`${this.state.days} ngày ${this.state.hours} : ${this.state.mins} : ${this.state.secs}`}
