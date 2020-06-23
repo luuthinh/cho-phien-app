@@ -57,11 +57,6 @@ export default function StackCaNhan()  {
         component={MainCaNhan}
         options={{ headerTitle: 'Cá nhân' }}
       />
-      <Stack.Screen
-        name="Đăng ký/ Đăng nhập"
-        component={DangNhap}
-        options={{ headerTitle: "Đăng ký/ Đăng nhập" }}
-      />
     </Stack.Navigator>
   );
 };

@@ -1,19 +1,18 @@
 import axios from 'axios';
 import {AsyncStorage} from 'react-native';
-import { API_URL } from '../constants/API';
+import {DB,URL_LOGIN, URL_LOGOUT } from '../constants/API';
 
 async function login(username, password) {
   return new Promise((resolve, reject) => {
-    fetch('https://vuonnhatoi.odoo.com/web/session/authenticate', {
+    fetch(URL_LOGIN, {
       method: 'POST',
       credentials: 'include',
       headers: {
-        Accept: 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         jsonrpc: '2.0',
-        params:{'db':'vuonnhatoi','login':username,'password':password}
+        params:{'db':DB,'login':username,'password':password}
       })
     }).then(async(response) => { 
       await AsyncStorage.setItem('sessionID', response.headers.map["set-cookie"])
@@ -32,15 +31,18 @@ async function login(username, password) {
 async function logout(getState) {
   return new Promise(async (resolve, reject) => {
     const currentState = await getState();
-    const { token } = currentState.auth;
-    axios.post(`${API_URL}/user/logout`, {}, {
+    const { sessionID } = currentState.auth;
+    console.log(sessionID)
+    fetch(URL_LOGOUT, {}, {
+      method: 'POST',
       headers: {
-        authorization: `Bearer ${token}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X_Openerp": sessionID
       },
     }).then(async (response) => {
       resolve(response);
-    //   await AsyncStorage.removeItem('userData');
-    //   await AsyncStorage.removeItem('userToken');
+       await AsyncStorage.removeItem('uid');
+       await AsyncStorage.removeItem('sessionID');
     }).catch(err => reject(err));
   });
 }

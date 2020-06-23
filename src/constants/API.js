@@ -1,1 +1,4 @@
-export const API_URL = 'http://192.168.1.100:8089/web/session/authenticate';
+export const URL_LOGIN = "https://vuonnhatoi.odoo.com/web/session/authenticate";
+export const URL_LOGOUT = "https://vuonnhatoi.odoo.com/web/session/logout";
+export const URL_RPC = "https://vuonnhatoi.odoo.com/jsonrpc";
+export const DB = "vuonnhatoi";
