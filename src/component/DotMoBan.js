@@ -1,22 +1,23 @@
 import React from 'react';
-import { Text, View,StyleSheet,Dimensions } from 'react-native';
+import { Text, View,StyleSheet,Dimensions,TouchableOpacity } from 'react-native';
+import {connect} from 'react-redux';
 import {Card, Paragraph} from 'react-native-paper';
 import * as Progress from 'react-native-progress';
 import moment from 'moment';
 
-// screen sizing
+import {URL_IMAGE} from '../constants/API';
+
+// Lấy kích thước màn hình thiết bị
 const { width, height } = Dimensions.get('window');
 // orientation must fixed
 const SCREEN_WIDTH = width < height ? width : height;
-// const SCREEN_HEIGHT = width < height ? height : width;
-const isSmallDevice = SCREEN_WIDTH <= 414;
-const numColumns = isSmallDevice ? 2 : 3;
+
 // item size
-const PRODUCT_ITEM_HEIGHT = 305;
+const PRODUCT_ITEM_HEIGHT = 200;
 const PRODUCT_ITEM_OFFSET = 5;
 const PRODUCT_ITEM_MARGIN = PRODUCT_ITEM_OFFSET * 2;
 
-export default class DotMoBan extends React.Component {
+class DotMoBan extends React.Component {
   constructor(props){
     super(props)
     this.state = {
@@ -62,34 +63,47 @@ export default class DotMoBan extends React.Component {
 
   render() {
     const item = this.props.data.item
-    console.log(this.state.eventDate1)
     return (
-        <View style={styles.item}>
-        <Card onPress={() => {return this.props.navigation.navigate('Đặt hàng',item)}}> 
-          <Card.Cover style={styles.itemImage} 
-                      source={{uri: `https://vuonnhatoi.odoo.com/web/content/x_dot_mb/${item.id}/x_image_512`,
-                               method: "GET",
-                               headers: {
-                                 "Content-Type": "application/x-www-form-urlencoded",
-                                 "X_Openerp": "e962ad24d1f1a6caaa094c30351d7f73d78476cc"
-                               }
-                      }}
-          />
-          <Paragraph style={styles.itemTitle}>{item.x_product_id[1]}</Paragraph>
-        	<Paragraph style={styles.itemPrice}>Giá hiện tại: {this._formatCurency(item.x_gia_hien_tai)}</Paragraph>
-          <Paragraph style={styles.itemPriceClearance}>Giá khởi điểm: {this._formatCurency(item.x_gia_khoi_diem)}</Paragraph>
-          <Paragraph >Đã bán: {item.x_tong_so_dh}</Paragraph>
-		      <Progress.Bar progress={0.6} color='red' height={19} backgroundColor='gray'>
-			      <Text style={{alignSelf:"center",color:'white',position:"absolute",top:0.5}}>
-              {`${this.state.days} ngày ${this.state.hours} : ${this.state.mins} : ${this.state.secs}`}
-            </Text>
-          </Progress.Bar>
-          <Text></Text>
-          </Card>
-      </View>
+        <TouchableOpacity
+			activeOpacity= {1}
+          	style={styles.container} 
+          	onPress={() => {return this.props.navigation.navigate('Đặt hàng',item)}}>
+            <Card.Cover style={styles.imageView} 
+                        source={{uri: `${URL_IMAGE}/x_dot_mb/${item.id}/x_image_512/200x200`,
+                                method: "GET",
+                                headers: {
+                                  "Content-Type": "application/x-www-form-urlencoded",
+                                  "X_Openerp": this.props.sessionID,
+                                }
+                        }}
+            />
+            <View style={styles.detailView}>
+              <Paragraph style={styles.itemTitle}>{item.x_product_id[1]}</Paragraph>
+              <Paragraph style={styles.itemPrice}>Giá hiện tại: {this._formatCurency(item.x_gia_hien_tai)}</Paragraph>
+              <Paragraph style={styles.itemPriceClearance}>Giá khởi điểm: {this._formatCurency(item.x_gia_khoi_diem)}</Paragraph>
+              <Paragraph >Đã bán: {item.x_tong_so_dh}</Paragraph>
+              <Progress.Bar progress={0.6} color='red' height={19} backgroundColor='gray'>
+                <Text style={{alignSelf:"center",color:'white',position:"absolute",top:0.5}}>
+                  {`${this.state.days} ngày ${this.state.hours} : ${this.state.mins} : ${this.state.secs}`}
+                </Text>
+              </Progress.Bar>
+            </View>
+          </TouchableOpacity>
     );
   }
 }
+function mapStateToProps(state) {
+  return {
+    userName: state.auth.userName,
+    name: state.auth.name,
+    uid : state.auth.uid,
+    password: state.auth.password,
+    sessionID: state.auth.sessionID,
+    expiresDate: state.auth.expiresDate,
+  };
+}
+
+export default connect(mapStateToProps)(DotMoBan);
 
 const styles = StyleSheet.create({
     center:{
@@ -97,21 +111,11 @@ const styles = StyleSheet.create({
       alignItems: 'center',
     },
     container: {
-      flex: 1,
-      backgroundColor: 'white',
-    },
-    listContainer: {
-      flex: 1,
-      padding: PRODUCT_ITEM_OFFSET,
-    },
-    item: {
       margin: PRODUCT_ITEM_OFFSET,
       overflow: 'hidden',
       borderRadius: 3,
-      width: (SCREEN_WIDTH - PRODUCT_ITEM_MARGIN) / numColumns -
-        PRODUCT_ITEM_MARGIN,
-      height: PRODUCT_ITEM_HEIGHT,
-      flexDirection: 'column',
+	  flex: 1,
+      flexDirection: 'row',
       backgroundColor: 'white',
       ...Platform.select({
         ios: {
@@ -125,14 +129,20 @@ const styles = StyleSheet.create({
         },
       }),
     },
-    itemImage:{
-      borderRadius: 3,
-      height:125,
+    imageView:{
+	  borderRadius: 3,
+	  width:150,
+      height:150,
+    },
+    detailView:{
+	  flex:2,
+	  height:150,
+	  padding:10,
     },
     itemTitle: {
-      fontSize: 14,
-      overflow: 'hidden',
-      height: 50,
+	  fontSize: 20,
+	  fontWeight: 'bold',
+	  overflow: 'hidden',
     },
     itemPrice: {
       fontWeight: 'bold',

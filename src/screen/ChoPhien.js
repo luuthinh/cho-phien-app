@@ -3,6 +3,7 @@ import { View, FlatList, StyleSheet, Dimensions} from 'react-native';
 import {ActivityIndicator,} from 'react-native-paper';
 import DotMoBan from '../component/DotMoBan';
 import {connect} from 'react-redux';
+import {DB} from '../constants/API';
 
 // screen sizing
 const { width, height } = Dimensions.get('window');
@@ -38,8 +39,8 @@ class ChoPhien extends React.Component {
 						params:{
               "service":"object",
               "method":"execute_kw",
-              "args":["vuonnhatoi",
-                      2,"nothing123",
+              "args":[DB,
+                      this.props.uid,this.props.password,
                       "x_dot_mb","search_read",[],{
                         "fields":["x_name","x_product_id","x_to_date",
                                   "x_gia_khoi_diem", "x_gia_hien_tai","x_tong_so_dh"]
@@ -82,20 +83,18 @@ class ChoPhien extends React.Component {
     if (this.state.isLoading) {
       return (
         <View style={styles.container}>
-          <ActivityIndicator animating={true} style={styles.center} size='large'/>
+          <ActivityIndicator animating={true} style={styles.center} size='small'/>
         </View>
       )
     }  
     return (
       <View style={styles.container}>
         <FlatList
-          style={styles.listContainer}
           extraData={this.state}
           data={this.state.data}
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}
           getItemLayout={this._getItemLayout}
-          numColumns={numColumns}
         />
       </View>
     );
@@ -116,52 +115,8 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(ChoPhien); 
 
 const styles = StyleSheet.create({
-  center:{
-	justifyContent: 'center',
-	alignItems: 'center',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  listContainer: {
-    flex: 1,
-    padding: PRODUCT_ITEM_OFFSET,
-  },
-  item: {
-    margin: PRODUCT_ITEM_OFFSET,
-    overflow: 'hidden',
-    borderRadius: 3,
-    width: (SCREEN_WIDTH - PRODUCT_ITEM_MARGIN) / numColumns -
-      PRODUCT_ITEM_MARGIN,
-    height: PRODUCT_ITEM_HEIGHT,
-    flexDirection: 'column',
-    backgroundColor: 'white',
-    ...Platform.select({
-      ios: {
-        shadowColor: 'rgba(0,0,0, 0)',
-        shadowOffset: { height: 0, width: 0 },
-        shadowOpacity: 1,
-        shadowRadius: 1,
-      },
-      android: {
-        elevation: 1,
-      },
-    }),
-  },
-  itemImage:{
-    borderRadius: 3,
-    height:125,
-  },
-  itemTitle: {
-    fontSize: 14,
-    overflow: 'hidden',
-    height: 50,
-  },
-  itemPrice: {
-	fontWeight: 'bold',
-	color: 'red',
-  },
-  itemPriceClearance: {
-  },
+  container:{
+    flex:1,
+    backgroundColor: 'white'
+  }
 });

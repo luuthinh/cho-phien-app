@@ -3,7 +3,6 @@ import { View} from 'react-native';
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 import { Appbar, useTheme } from 'react-native-paper';
 
-
 import ChoPhien from '../screen/ChoPhien';
 import DatHang from '../screen/DatHang';
 
@@ -40,7 +39,7 @@ const Header = ({ scene, previous, navigation }) => {
           />
           <Appbar.Action 
             style={{position: 'absolute', right: 0}}
-            icon="archive"
+            icon="cart"
             onPress={() => console.log('Pressed archive')} />           
           </View>
         )

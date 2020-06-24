@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator,CardStyleInterpolators } from '@react-navigation/stack';
 import DangNhap from '../screen/DangNhap';
 import BottomTabs from './BottomTabs';
 
@@ -11,7 +11,8 @@ export default function StackDangNhap()  {
     <Stack.Navigator
       initialRouteName="Đăng ký/ Đăng nhập"
       screenOptions={{
-        headerShown: false
+        headerShown: false,
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
       }}
     >
       <Stack.Screen
