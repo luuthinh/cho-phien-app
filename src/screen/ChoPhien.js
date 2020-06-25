@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, FlatList, StyleSheet, Dimensions} from 'react-native';
+import { View, FlatList, StyleSheet, Dimensions, RefreshControl} from 'react-native';
 import {ActivityIndicator,} from 'react-native-paper';
 import DotMoBan from '../component/DotMoBan';
 import {connect} from 'react-redux';
@@ -24,7 +24,9 @@ class ChoPhien extends React.Component {
     console.log(this.props)
 		this.state = {
 		  data: [],
-		  isLoading: true
+      isLoading: true,
+      isRefreshing: false,
+      error: '',
 		};
   }
 	componentDidMount() {
@@ -42,7 +44,7 @@ class ChoPhien extends React.Component {
               "args":[DB,
                       this.props.uid,this.props.password,
                       "x_dot_mb","search_read",[],{
-                        "fields":["x_name","x_product_id","x_to_date",
+                        "fields":["x_name","x_product_id","x_to_date","x_from_date",
                                   "x_gia_khoi_diem", "x_gia_hien_tai","x_tong_so_dh"]
                       }]
             }
@@ -79,6 +81,39 @@ class ChoPhien extends React.Component {
     };
   };
 
+  _onRefresh = () => {
+    this.setState({isRefreshing: true});
+    fetch('https://vuonnhatoi.odoo.com/jsonrpc', {
+      method: 'POST',
+      headers:{
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        jsonrpc: '2.0',
+        params:{
+          "service":"object",
+          "method":"execute_kw",
+          "args":[DB,
+                  this.props.uid,this.props.password,
+                  "x_dot_mb","search_read",[],{
+                    "fields":["x_name","x_product_id","x_to_date","x_from_date",
+                              "x_gia_khoi_diem", "x_gia_hien_tai","x_tong_so_dh"]
+                  }]
+        }
+      })
+      })
+      .then((response) => response.json())
+      .then((json) => {
+        this.setState({ data: json.result });
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+        this.setState({ isRefreshing: false });
+      });    
+
+  }
+
   render() {
     if (this.state.isLoading) {
       return (
@@ -95,6 +130,9 @@ class ChoPhien extends React.Component {
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}
           getItemLayout={this._getItemLayout}
+          refreshControl={<RefreshControl refreshing={this.state.isRefreshing}
+                                          onRefresh={this._onRefresh}
+                          />}
         />
       </View>
     );

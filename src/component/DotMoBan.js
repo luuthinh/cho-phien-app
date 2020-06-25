@@ -21,12 +21,13 @@ class DotMoBan extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      eventDate1:moment.duration().add({days:1,hours:3,minutes:40,seconds:50}),
       eventDate:moment.duration(moment(this.props.data.item.x_to_date).diff(moment())),
+      timeTotal: moment.duration(moment(this.props.data.item.x_to_date).diff(moment(this.props.data.item.x_from_date))),
+      percent: 0,
       days:0,
-      hours:0,
-      mins:0,
-      secs:0
+      hours:"00",
+      mins:"00",
+      secs:"00",
     }
   }
   _formatCurency = (money) => {
@@ -35,18 +36,20 @@ class DotMoBan extends React.Component {
   }
   updateTimer=()=>{
     const x = setInterval(()=>{
-      let { eventDate} = this.state
+      let { eventDate, timeTotal} = this.state
 
       if(eventDate <=0){
         clearInterval(x)
       }else {
         eventDate = eventDate.subtract(1,"s")
-        const days = eventDate.days()
-        const hours = eventDate.hours()
-        const mins = eventDate.minutes()
-        const secs = eventDate.seconds()
+        const percent = eventDate / timeTotal
+        const days = eventDate.days().toString()
+        const hours = eventDate.hours() > 9 ? eventDate.hours().toString() : "0" + eventDate.hours().toString()
+        const mins = eventDate.minutes() > 9 ? eventDate.minutes().toString() : "0" + eventDate.minutes().toString()
+        const secs = eventDate.seconds() > 9 ? eventDate.seconds().toString() : "0" + eventDate.seconds().toString()
         
         this.setState({
+          percent,
           days,
           hours,
           mins,
@@ -82,11 +85,9 @@ class DotMoBan extends React.Component {
               <Paragraph style={styles.itemPrice}>Giá hiện tại: {this._formatCurency(item.x_gia_hien_tai)}</Paragraph>
               <Paragraph style={styles.itemPriceClearance}>Giá khởi điểm: {this._formatCurency(item.x_gia_khoi_diem)}</Paragraph>
               <Paragraph >Đã bán: {item.x_tong_so_dh}</Paragraph>
-              <Progress.Bar progress={0.6} color='red' height={19} backgroundColor='gray'>
-                <Text style={{alignSelf:"center",color:'white',position:"absolute",top:0.5}}>
-                  {`${this.state.days} ngày ${this.state.hours} : ${this.state.mins} : ${this.state.secs}`}
-                </Text>
-              </Progress.Bar>
+              <Text>
+                {`Thời gian còn: ${this.state.days} ngày ${this.state.hours} : ${this.state.mins} : ${this.state.secs}`}
+              </Text>
             </View>
           </TouchableOpacity>
     );
