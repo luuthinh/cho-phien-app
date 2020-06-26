@@ -60,7 +60,7 @@ class ChoPhien extends React.Component {
 					});
 	  }
 	_keyExtractor = item => {
-		return item.id;
+		return item.id.toString();
 	};
   _formatCurency = (money) => {
     money = money.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.") + 'đ';

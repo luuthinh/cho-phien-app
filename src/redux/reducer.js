@@ -26,6 +26,7 @@ export default function (state = initialState, action) {
                 password : action.payload.password,
                 sessionID: action.payload.session_id,
                 expiresDate: action.payload.expires_date,
+                partnerID: action.payload.partner_id,
                 loggingIn: false,
             };
         case t.AUTH_ERR_LOG_IN:
