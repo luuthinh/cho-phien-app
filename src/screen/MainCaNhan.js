@@ -24,7 +24,7 @@ class MainCaNhan extends React.Component {
                     title={this.props.name}
                     subtitle={this.props.userName}
                     left = {() => <Avatar.Image size={48}                         
-                                                source={{uri: `${URL_IMAGE}/res.partner/${this.props.partnerID}/image_128/36x36`,
+                                                source={{uri: `${URL_IMAGE}/res.partner/${this.props.partnerID}/image_128/48x48`,
                                                         method: "GET",
                                                         headers: {
                                                         "Content-Type": "application/x-www-form-urlencoded",
