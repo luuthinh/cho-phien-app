@@ -13,9 +13,7 @@ const { width, height } = Dimensions.get('window');
 const SCREEN_WIDTH = width < height ? width : height;
 
 // item size
-const PRODUCT_ITEM_HEIGHT = 200;
 const PRODUCT_ITEM_OFFSET = 5;
-const PRODUCT_ITEM_MARGIN = PRODUCT_ITEM_OFFSET * 2;
 
 class DotMoBan extends React.Component {
   constructor(props){

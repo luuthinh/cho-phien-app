@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, Dimensions, StyleSheet, Image } from 'react-native';
-import {Card, Paragraph} from 'react-native-paper';
+import {Card, Paragraph, IconButton, Colors} from 'react-native-paper';
 
 const {width, height} = Dimensions.get('window')
 const SCREEN_WIDTH = parseInt(width)
@@ -8,6 +8,11 @@ const IMAGE_HEIGHT = parseInt(SCREEN_WIDTH / 1.2)
 export default class DatHang extends React.Component {
   constructor(props){
     super(props)
+    this.state = {
+      soLuong : 1,
+      tamTinh : 0,
+
+    }
   }
   _formatCurency = (money) => {
     money = money.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.") + 'đ';
@@ -16,7 +21,7 @@ export default class DatHang extends React.Component {
   render() {
     var item = this.props.route.params
     return (
-      <View style={styles.container}>
+      <Card style={styles.container}>
         <Image source={{uri: `https://vuonnhatoi.odoo.com/web/content/x_dot_mb/${item.id}/x_image_512`,
                                method: "GET",
                                headers: {
@@ -26,33 +31,39 @@ export default class DatHang extends React.Component {
                       }}
                 style={styles.imageView}
         />
-        <Card.Content>
+        <View style={{marginTop:10,padding:10}}>
           <Paragraph>
-          <Paragraph style={styles.itemTitle}>{item.x_product_id[1]} - </Paragraph>
-          <Paragraph style={styles.itemPrice}>Giá: {this._formatCurency(item.x_gia_hien_tai)}</Paragraph>
+            <Paragraph style={styles.itemTitle}>{item.x_product_id[1]} - </Paragraph>
+            <Paragraph style={styles.itemPrice}>Giá: {this._formatCurency(item.x_gia_hien_tai)}</Paragraph>
           </Paragraph>
-          {/* <Text>
-            {`Thời gian còn: ${this.state.days} ngày ${this.state.hours} : ${this.state.mins} : ${this.state.secs}`}
-          </Text> */}
-        </Card.Content>
-      </View>
+          <View style={styles.containerOrder}>
+            <IconButton icon="minus" color={Colors.blueA700} size={30} onPress={()=> this.setState({soLuong:this.state.soLuong -1 })}/>
+            <Text style={{fontSize:20}}>{this.state.soLuong} {item.x_uom_id[1]}</Text>
+            <IconButton icon="plus" color={Colors.blueA700} size={30} onPress={()=> this.setState({soLuong:this.state.soLuong +1 })}/>
+          </View>
+          <View>
+            <Paragraph>Tạm tính: {this.state.tamTinh}</Paragraph>
+          </View>
+        </View>
+      </Card>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container:{
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    flex: 1,
+    alignItems: 'center'
   },
   imageView:{
-    width:SCREEN_WIDTH,
+    marginTop: 5,
+    borderRadius:10,
+    width:SCREEN_WIDTH - 10,
     height:IMAGE_HEIGHT,
-    resizeMode: 'contain'
-  },
-  detailView:{
-  flex:2,
-
-  padding:10,
+    resizeMode: 'stretch',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   itemTitle: {
   fontSize: 20,
@@ -62,16 +73,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
   },
-  itemPriceClearance: {
-    textDecorationLine: 'line-through'
-  },
-  day:{
-    fontSize: 12,
-    color: "#ff0",
-    textAlign:"right"
-   },
-   small:{
-    fontSize: 16,
-    color: "#faa"
-   }   
+  containerOrder:{
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    justifyContent: 'space-between'
+  }
 });
