@@ -14,10 +14,7 @@ export default class DatHang extends React.Component {
     return money;
   }
   render() {
-    console.log(this.props.route.params)
     var item = this.props.route.params
-    console.log(SCREEN_WIDTH)
-    console.log(IMAGE_HEIGHT)
     return (
       <View style={styles.container}>
         <Image source={{uri: `https://vuonnhatoi.odoo.com/web/content/x_dot_mb/${item.id}/x_image_512`,
@@ -30,10 +27,10 @@ export default class DatHang extends React.Component {
                 style={styles.imageView}
         />
         <Card.Content>
-          <Paragraph style={styles.itemTitle}>{item.x_product_id[1]}</Paragraph>
-          <Paragraph style={styles.itemPrice}>Giá hiện tại: {this._formatCurency(item.x_gia_hien_tai)}</Paragraph>
-          <Paragraph style={styles.itemPriceClearance}>Giá khởi điểm: {this._formatCurency(item.x_gia_khoi_diem)}</Paragraph>
-          <Paragraph >Đã bán: {item.x_tong_so_dh}</Paragraph>
+          <Paragraph>
+          <Paragraph style={styles.itemTitle}>{item.x_product_id[1]} - </Paragraph>
+          <Paragraph style={styles.itemPrice}>Giá: {this._formatCurency(item.x_gia_hien_tai)}</Paragraph>
+          </Paragraph>
           {/* <Text>
             {`Thời gian còn: ${this.state.days} ngày ${this.state.hours} : ${this.state.mins} : ${this.state.secs}`}
           </Text> */}
@@ -59,12 +56,11 @@ const styles = StyleSheet.create({
   },
   itemTitle: {
   fontSize: 20,
-  fontWeight: 'bold',
   overflow: 'hidden',
   },
   itemPrice: {
     fontWeight: 'bold',
-    color: 'red',
+    fontSize: 20,
   },
   itemPriceClearance: {
     textDecorationLine: 'line-through'

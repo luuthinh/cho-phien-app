@@ -5,14 +5,6 @@ import DotMoBan from '../component/DotMoBan';
 import {connect} from 'react-redux';
 import {DB} from '../constants/API';
 
-// screen sizing
-const { width, height } = Dimensions.get('window');
-// orientation must fixed
-const SCREEN_WIDTH = width < height ? width : height;
-// const SCREEN_HEIGHT = width < height ? height : width;
-const isSmallDevice = SCREEN_WIDTH <= 414;
-const numColumns = isSmallDevice ? 2 : 3;
-// item size
 const PRODUCT_ITEM_HEIGHT = 255;
 const PRODUCT_ITEM_OFFSET = 5;
 const PRODUCT_ITEM_MARGIN = PRODUCT_ITEM_OFFSET * 2;
@@ -20,8 +12,6 @@ const PRODUCT_ITEM_MARGIN = PRODUCT_ITEM_OFFSET * 2;
 class ChoPhien extends React.Component {
 	constructor(props) {
     super(props);
-    console.log("chợ phiên")
-    console.log(this.props)
 		this.state = {
 		  data: [],
       isLoading: true,
