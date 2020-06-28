@@ -85,6 +85,7 @@ export default connect(mapStateToProps, {
 const styles = StyleSheet.create({
   containerView: {
     flex: 1,
+    
   },
   loginScreenContainer: {
     flex: 1,

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {AsyncStorage} from 'react-native';
 import {DB,URL_LOGIN, URL_LOGOUT } from '../constants/API';
 
