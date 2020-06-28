@@ -1,24 +1,26 @@
 import React from 'react';
 import { Text, View, Dimensions, StyleSheet, Image, Alert} from 'react-native';
 import {Paragraph, IconButton, Colors, Button} from 'react-native-paper';
+import {connect} from 'react-redux';
+import {URL_IMAGE} from '../constants/API';
+import Select2 from '../component/Select-Two/index';
 
-const {width, height} = Dimensions.get('window')
+const {width} = Dimensions.get('window')
 const SCREEN_WIDTH = parseInt(width)
 const IMAGE_HEIGHT = parseInt(SCREEN_WIDTH / 1.2)
-export default class DatHang extends React.Component {
+
+class DatHang extends React.Component {
   constructor(props){
     super(props)
     this.state = {
       soLuong : 1,
       tamTinh : this.props.route.params.x_gia_hien_tai,
-      selectedLocations:[],
-      selectedValues:[],
-      locations: [
-        {item: 'Pháp', id: 1},
-        {item: 'Anh', id: 2},
-        {item: 'Mỹ', id: 3},
-        {item: 'Việt Nam', id:4}
-      ]
+      mockData: [
+        { id: 1, name: "React Native Developer", checked: true }, // set default checked for render option item
+        { id: 2, name: "Android Developer" },
+        { id: 3, name: "iOS Developer" }
+      ],
+      partner: {}, 
     }
   }
   _formatCurency = (money) => {
@@ -30,15 +32,14 @@ export default class DatHang extends React.Component {
   }
   render() {
     var item = this.props.route.params
-    const { locations, selectedLocations, selectedValues} = this.state
     return (
       <View>
-        <Image source={{uri: `https://vuonnhatoi.odoo.com/web/content/x_dot_mb/${item.id}/x_image_512`,
-                               method: "GET",
-                               headers: {
-                                 "Content-Type": "application/x-www-form-urlencoded",
-                                 "X_Openerp": "e962ad24d1f1a6caaa094c30351d7f73d78476cc"
-                               }
+        <Image source={{uri: `${URL_IMAGE}/x_dot_mb/${item.id}/x_image_512`,
+                                method: "GET",
+                                headers: {
+                                  "Content-Type": "application/x-www-form-urlencoded",
+                                  "X_Openerp": this.props.sessionID,
+                                }
                       }}
                 style={styles.imageView}
         />
@@ -56,6 +57,20 @@ export default class DatHang extends React.Component {
           </View>
           <View>
             <Paragraph style={styles.totalprice}>Tạm tính: {this._formatCurency(this.state.tamTinh)}</Paragraph>
+            <Select2
+              isSelectSingle
+              style={{ borderRadius: 5 }}
+              colorTheme="blue"
+              popupTitle="Chọn khách hàng"
+              title="Chọn khách hàng"
+              data={this.state.mockData}
+              onSelect={partner => {
+                this.setState({ partner })
+              }}
+              onRemoveItem={partner => {
+                this.setState({ partner })
+              }}
+            />
             <Button mode="contained" 
                     onPress={this._order}>Đặt hàng</Button>
           </View>
@@ -64,6 +79,19 @@ export default class DatHang extends React.Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    userName: state.auth.userName,
+    name: state.auth.name,
+    uid : state.auth.uid,
+    password: state.auth.password,
+    sessionID: state.auth.sessionID,
+    expiresDate: state.auth.expiresDate,
+  };
+}
+
+export default connect(mapStateToProps)(DatHang);
 
 const styles = StyleSheet.create({
   container:{
