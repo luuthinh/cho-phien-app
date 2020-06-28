@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, Dimensions, StyleSheet, Image, Alert} from 'react-native';
 import {Paragraph, IconButton, Colors, Button} from 'react-native-paper';
 import {connect} from 'react-redux';
-import {URL_IMAGE} from '../constants/API';
+import {URL_IMAGE,DB, URL_RPC} from '../constants/API';
 import Select2 from '../component/Select-Two/index';
 
 const {width} = Dimensions.get('window')
@@ -15,20 +15,82 @@ class DatHang extends React.Component {
     this.state = {
       soLuong : 1,
       tamTinh : this.props.route.params.x_gia_hien_tai,
-      mockData: [
-        { id: 1, name: "React Native Developer", checked: true }, // set default checked for render option item
-        { id: 2, name: "Android Developer" },
-        { id: 3, name: "iOS Developer" }
-      ],
-      partner: {}, 
+      mockData: [],
+      customerID: [], 
     }
   }
+	componentDidMount() {
+    fetch(URL_RPC, {
+      method: 'POST',
+      headers:{
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        jsonrpc: '2.0',
+        params:{
+          "service":"object",
+          "method":"execute_kw",
+          "args":[DB,
+                  this.props.uid,this.props.password,
+                  "res.partner","name_search",[]]
+        }
+      })
+      })
+      .then((response) => response.json())
+      .then((json) => {
+        let mockData = []
+        json.result.map((data) => {
+          mockData.push({id:data[0],name:data[1]})
+        })
+        this.setState({mockData:mockData})
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+        this.setState({ isLoading: false });
+      });
+}
   _formatCurency = (money) => {
     money = money.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.") + 'đ';
     return money;
   }
   _order = () => {
-    Alert.alert("đặt hàng")
+    if (this.state.customerID === []){
+      Alert.alert("Chưa chọn khách hàng")
+    }
+    fetch(URL_RPC, {
+      method: 'POST',
+      headers:{
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        jsonrpc: '2.0',
+        params:{
+          "service":"object",
+          "method":"execute_kw",
+          "args":[DB,
+                  this.props.uid,this.props.password,
+                  "x_dot_mb_don_hang","create",[{
+                    "x_name":this.state.customerID[0],
+                    "x_ctv_id":this.props.partnerID,
+                    "x_product_id": this.props.route.params.x_product_id[0],
+                    "x_so_luong": this.state.soLuong,
+                    "x_trang_thai": "don_hang",
+                    "x_dot_mb_id": this.props.route.params.id 
+                  }]]
+        }
+      })
+    })
+    .then((response) => response.json())
+    .then((json) => {
+        console.log("lỗi")
+        console.log(json.error)
+        Alert.alert("Đặt hàng thành công")
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+      });
   }
   render() {
     var item = this.props.route.params
@@ -59,19 +121,20 @@ class DatHang extends React.Component {
             <Paragraph style={styles.totalprice}>Tạm tính: {this._formatCurency(this.state.tamTinh)}</Paragraph>
             <Select2
               isSelectSingle
-              style={{ borderRadius: 5 }}
+              style={{ borderRadius: 5, marginTop:30}}
               colorTheme="blue"
               popupTitle="Chọn khách hàng"
               title="Chọn khách hàng"
               data={this.state.mockData}
-              onSelect={partner => {
-                this.setState({ partner })
+              onSelect={customerID => {
+                this.setState({ customerID })
               }}
-              onRemoveItem={partner => {
-                this.setState({ partner })
+              onRemoveItem={customerID => {
+                this.setState({ customerID })
               }}
             />
-            <Button mode="contained" 
+            <Button mode="contained"
+                    style={{marginTop:20}} 
                     onPress={this._order}>Đặt hàng</Button>
           </View>
         </View>
@@ -88,6 +151,7 @@ function mapStateToProps(state) {
     password: state.auth.password,
     sessionID: state.auth.sessionID,
     expiresDate: state.auth.expiresDate,
+    partnerID: state.auth.partnerID
   };
 }
 
