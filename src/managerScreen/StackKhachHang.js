@@ -3,8 +3,8 @@ import { View} from 'react-native';
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 import { Appbar } from 'react-native-paper';
 
-import ChoPhien from '../screen/ChoPhien';
-import DatHang from '../screen/DatHang';
+import KhachHang from '../screen/KhachHang';
+
 
 
 const Stack = createStackNavigator();
@@ -53,10 +53,10 @@ const Header = ({ scene, previous, navigation }) => {
   );
 };
 
-export default function StackCho()  {
+export default function StackKhachHang()  {
   return (
     <Stack.Navigator
-      initialRouteName="Sản phẩm"
+      initialRouteName="Danh sách khách hàng"
       headerMode="screen"
       screenOptions={{
         header: ({ scene, previous, navigation }) => (
@@ -66,21 +66,14 @@ export default function StackCho()  {
       }}
     >
       <Stack.Screen
-        name="Sản phẩm"
-        component={ChoPhien}
+        name="Danh sách khách hàng"
+        component={KhachHang}
         options={{ 
-          headerTitle: 'Chợ', 
+          headerTitle: 'Khách hàng', 
           transitionSpec:{
             open: config,
             close: config,
           }
-        }}
-      />
-      <Stack.Screen
-        name="Đặt hàng"
-        component={DatHang}
-        options={{ 
-          headerTitle: 'Đặt hàng'        
         }}
       />
     </Stack.Navigator>

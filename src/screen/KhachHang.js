@@ -1,15 +1,14 @@
 import React from 'react';
-import { View, FlatList, StyleSheet, RefreshControl} from 'react-native';
-import {ActivityIndicator,} from 'react-native-paper';
-import DotMoBan from '../component/DotMoBan';
+import {View,Text , FlatList, StyleSheet, RefreshControl} from 'react-native';
 import {connect} from 'react-redux';
-import {DB} from '../constants/API';
+import {ActivityIndicator, Card, Avatar, IconButton} from 'react-native-paper'
+import {URL_RPC,DB} from '../constants/API';
 
 const PRODUCT_ITEM_HEIGHT = 255;
 const PRODUCT_ITEM_OFFSET = 5;
 const PRODUCT_ITEM_MARGIN = PRODUCT_ITEM_OFFSET * 2;
 
-class ChoPhien extends React.Component {
+class KhachHang extends React.Component {
 	constructor(props) {
     super(props);
 		this.state = {
@@ -20,7 +19,7 @@ class ChoPhien extends React.Component {
 		};
   }
 	componentDidMount() {
-		  	fetch('https://vuonnhatoi.odoo.com/jsonrpc', {
+		  	fetch(URL_RPC, {
 					method: 'POST',
 					headers:{
 						Accept: 'application/json',
@@ -33,9 +32,8 @@ class ChoPhien extends React.Component {
               "method":"execute_kw",
               "args":[DB,
                       this.props.uid,this.props.password,
-                      "x_dot_mb","search_read",[],{
-                        "fields":["x_name","x_product_id","x_to_date","x_from_date","x_uom_id",
-                                  "x_gia_khoi_diem", "x_gia_hien_tai","x_tong_so_dh"]
+                      "res.partner","search_read",[],{
+                      "fields":["name","mobile","email"]
                       }]
             }
 					})
@@ -57,8 +55,14 @@ class ChoPhien extends React.Component {
     return money;
   }
   _renderItem = data => {
+		console.log(data)
     return (
-		<DotMoBan {...this.props} data={data}/>
+			<Card.Title
+			title={data.item.name}
+			subtitle={data.item.email}
+			left={(props) => <Avatar.Icon {...props} icon="folder" />}
+			right={(props) => <IconButton {...props} icon="dots-horizontal" onPress={() => {}} />}
+		/>
     );
   };
 
@@ -73,7 +77,7 @@ class ChoPhien extends React.Component {
 
   _onRefresh = () => {
     this.setState({isRefreshing: true});
-    fetch('https://vuonnhatoi.odoo.com/jsonrpc', {
+    fetch(URL_RPC, {
       method: 'POST',
       headers:{
         Accept: 'application/json',
@@ -86,9 +90,8 @@ class ChoPhien extends React.Component {
           "method":"execute_kw",
           "args":[DB,
                   this.props.uid,this.props.password,
-                  "x_dot_mb","search_read",[],{
-                    "fields":["x_name","x_product_id","x_to_date","x_from_date",
-                              "x_gia_khoi_diem", "x_gia_hien_tai","x_tong_so_dh"]
+                  "res.partner","search_read",[],{
+                    "fields":["name","mobile","email"]
                   }]
         }
       })
@@ -140,7 +143,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(ChoPhien); 
+export default connect(mapStateToProps)(KhachHang); 
 
 const styles = StyleSheet.create({
   container:{

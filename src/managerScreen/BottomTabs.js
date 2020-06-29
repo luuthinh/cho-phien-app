@@ -4,6 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import  Notifications  from '../Notification';
 import StackCho from './StackCho';
 import StackCaNhan from './StackCaNhan';
+import StackKhachHang from './StackKhachHang';
 
 const Tab = createBottomTabNavigator();
 
@@ -19,7 +20,15 @@ export default function BottomTab() {
             <MaterialCommunityIcons name="home" color={color} size={size} />
           ),
         }}        
-        />
+      />
+      <Tab.Screen
+        name="Khách hàng"
+        component={StackKhachHang}
+        options={{
+          tabBarLabel: "Khách hàng",
+          tabBarIcon: ({color, size}) => (<MaterialCommunityIcons name="account-group" color={color} size={size}/>)
+        }}
+      />
       <Tab.Screen
         name="Thông báo"
         component={Notifications}
