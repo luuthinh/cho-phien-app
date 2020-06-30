@@ -1,12 +1,8 @@
 import React from 'react';
-import {View,Text , FlatList, StyleSheet, RefreshControl} from 'react-native';
+import {View,Text , Dimensions, FlatList, StyleSheet, RefreshControl} from 'react-native';
 import {connect} from 'react-redux';
-import {ActivityIndicator, Card, Avatar, IconButton} from 'react-native-paper'
-import {URL_RPC,DB} from '../constants/API';
-
-const PRODUCT_ITEM_HEIGHT = 255;
-const PRODUCT_ITEM_OFFSET = 5;
-const PRODUCT_ITEM_MARGIN = PRODUCT_ITEM_OFFSET * 2;
+import {ActivityIndicator, Card, Avatar, IconButton, Paragraph} from 'react-native-paper'
+import {URL_RPC,DB,URL_IMAGE} from '../constants/API';
 
 class KhachHang extends React.Component {
 	constructor(props) {
@@ -57,22 +53,26 @@ class KhachHang extends React.Component {
   _renderItem = data => {
 		console.log(data)
     return (
-			<Card.Title
-			title={data.item.name}
-			subtitle={data.item.email}
-			left={(props) => <Avatar.Icon {...props} icon="folder" />}
-			right={(props) => <IconButton {...props} icon="dots-horizontal" onPress={() => {}} />}
-		/>
+      <Card>
+        <Card.Content style={styles.containerList}>
+          <Avatar.Image size={64} style={styles.image}                         
+                        source={{uri: `${URL_IMAGE}/res.partner/${data.item.id}/image_128/64x64`,
+                                  method: "GET",
+                                  headers: {
+                                  "Content-Type": "application/x-www-form-urlencoded",
+                                  "X_Openerp": this.props.sessionID,
+                                  }
+                          }}
+          />
+          <View style={styles.details}>
+            <Paragraph style={styles.itemName}>{data.item.name}</Paragraph>
+            <Paragraph>{data.item.email}</Paragraph>
+            <Paragraph>Số ĐT: {data.item.mobile}</Paragraph>
+          </View>
+        
+        </Card.Content>
+      </Card>
     );
-  };
-
-  _getItemLayout = (data, index) => {
-    const productHeight = PRODUCT_ITEM_HEIGHT + PRODUCT_ITEM_MARGIN;
-    return {
-      length: productHeight,
-      offset: productHeight * index,
-      index,
-    };
   };
 
   _onRefresh = () => {
@@ -111,7 +111,7 @@ class KhachHang extends React.Component {
     if (this.state.isLoading) {
       return (
         <View style={styles.container}>
-          <ActivityIndicator animating={true} style={styles.center} size='small'/>
+          <ActivityIndicator animating={true} size='small'/>
         </View>
       )
     }  
@@ -148,6 +148,23 @@ export default connect(mapStateToProps)(KhachHang);
 const styles = StyleSheet.create({
   container:{
     flex:1,
-    backgroundColor: 'white'
+  },
+  containerList:{
+    flex:1,
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    borderColor: 'black',
+    borderStyle: 'solid',
+    borderBottomWidth: 1
+  },
+  image:{
+  },
+  details: {
+    marginLeft: 10
+  },
+  itemName:{
+    fontWeight: '300',
+    fontSize: 20
   }
+
 });

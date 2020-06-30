@@ -39,7 +39,7 @@ class Dangnhap extends Component {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.loginScreenContainer}>
           <View style={styles.loginFormView}>
-          <Text style={styles.logoText}>Vườn Nhà</Text>
+          <Text style={styles.logoText}>FUFA</Text>
             <TextInput
               autoCapitalize="none" 
               label="Email" 
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   logoText: {
     fontSize: 40,
     fontWeight: "800",
-    marginTop: 150,
+    marginTop: 100,
     marginBottom: 30,
     textAlign: 'center',
   },

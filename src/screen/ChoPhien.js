@@ -3,7 +3,7 @@ import { View, FlatList, StyleSheet, RefreshControl} from 'react-native';
 import {ActivityIndicator,} from 'react-native-paper';
 import DotMoBan from '../component/DotMoBan';
 import {connect} from 'react-redux';
-import {DB} from '../constants/API';
+import {DB, URL_RPC} from '../constants/API';
 
 const PRODUCT_ITEM_HEIGHT = 255;
 const PRODUCT_ITEM_OFFSET = 5;
@@ -20,7 +20,7 @@ class ChoPhien extends React.Component {
 		};
   }
 	componentDidMount() {
-		  	fetch('https://vuonnhatoi.odoo.com/jsonrpc', {
+		  	fetch(URL_RPC, {
 					method: 'POST',
 					headers:{
 						Accept: 'application/json',
@@ -73,7 +73,7 @@ class ChoPhien extends React.Component {
 
   _onRefresh = () => {
     this.setState({isRefreshing: true});
-    fetch('https://vuonnhatoi.odoo.com/jsonrpc', {
+    fetch(URL_RPC, {
       method: 'POST',
       headers:{
         Accept: 'application/json',

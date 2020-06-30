@@ -83,9 +83,9 @@ class DotMoBan extends React.Component {
               <Paragraph style={styles.itemPrice}>Giá hiện tại: {this._formatCurency(item.x_gia_hien_tai)}</Paragraph>
               <Paragraph style={styles.itemPriceClearance}>Giá khởi điểm: {this._formatCurency(item.x_gia_khoi_diem)}</Paragraph>
               <Paragraph >Đã bán: {item.x_tong_so_dh}</Paragraph>
-              <Text>
-                {`Thời gian còn: ${this.state.days} ngày ${this.state.hours} : ${this.state.mins} : ${this.state.secs}`}
-              </Text>
+              <Paragraph style={{fontSize:12}}>
+                {`Thời gian: ${this.state.days} ngày ${this.state.hours} : ${this.state.mins} : ${this.state.secs}`}
+              </Paragraph>
             </View>
           </TouchableOpacity>
     );
