@@ -1,7 +1,7 @@
 import React from 'react';
 import {View,Text , Dimensions, FlatList, StyleSheet, RefreshControl} from 'react-native';
 import {connect} from 'react-redux';
-import {ActivityIndicator, Card, Avatar, IconButton, Paragraph} from 'react-native-paper'
+import {ActivityIndicator, Card, Avatar, IconButton, Paragraph, FAB, Portal} from 'react-native-paper'
 import {URL_RPC,DB,URL_IMAGE} from '../constants/API';
 
 class KhachHang extends React.Component {
@@ -28,8 +28,8 @@ class KhachHang extends React.Component {
               "method":"execute_kw",
               "args":[DB,
                       this.props.uid,this.props.password,
-                      "res.partner","search_read",[],{
-                      "fields":["name","mobile","email"]
+                      "res.partner","search_read",[[["type", "=","contact"]]],{
+                      "fields":["name","mobile","email","state_id","x_quan_huyen_id","x_phuong_xa_id","street"]
                       }]
             }
 					})
@@ -51,7 +51,6 @@ class KhachHang extends React.Component {
     return money;
   }
   _renderItem = data => {
-		console.log(data)
     return (
       <Card>
         <Card.Content style={styles.containerList}>
@@ -66,8 +65,9 @@ class KhachHang extends React.Component {
           />
           <View style={styles.details}>
             <Paragraph style={styles.itemName}>{data.item.name}</Paragraph>
-            <Paragraph>{data.item.email}</Paragraph>
             <Paragraph>Số ĐT: {data.item.mobile}</Paragraph>
+            <Paragraph>{data.item.street},{data.item.x_phuong_xa_id[1]},{data.item.x_quan_huyen_id[1]},{data.item.state_id[1]}</Paragraph>
+            
           </View>
         
         </Card.Content>
@@ -90,8 +90,8 @@ class KhachHang extends React.Component {
           "method":"execute_kw",
           "args":[DB,
                   this.props.uid,this.props.password,
-                  "res.partner","search_read",[],{
-                    "fields":["name","mobile","email"]
+                  "res.partner","search_read",[[["type", "=","contact"]]],{
+                    "fields":["name","mobile","email","state_id","x_quan_huyen_id","x_phuong_xa_id","street"]
                   }]
         }
       })
@@ -106,7 +106,14 @@ class KhachHang extends React.Component {
       });    
 
   }
-
+  _getItemLayout = (data, index) => {
+    console.log(index)
+    return {
+      length: 255,
+      offset: 260 * index,
+      index,
+    };
+  };
   render() {
     if (this.state.isLoading) {
       return (
@@ -127,6 +134,18 @@ class KhachHang extends React.Component {
                                           onRefresh={this._onRefresh}
                           />}
         />
+        <Portal>
+          <FAB
+            icon="feather"
+            style={{
+              position: 'absolute',
+              margin: 16,
+              bottom: 40,
+              right: 0,
+            }}
+            onPress={() => {return this.props.navigation.navigate("Thông tin khách hàng")}}
+          />
+        </Portal>
       </View>
     );
   }
@@ -165,6 +184,11 @@ const styles = StyleSheet.create({
   itemName:{
     fontWeight: '300',
     fontSize: 20
+  },
+  fab:{
+    position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: 0,
   }
-
 });

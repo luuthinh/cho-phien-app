@@ -4,6 +4,7 @@ import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/
 import { Appbar } from 'react-native-paper';
 
 import KhachHang from '../screen/KhachHang';
+import KhachHangChiTiet from '../screen/KhachHangChiTiet';
 
 
 
@@ -76,6 +77,17 @@ export default function StackKhachHang()  {
           }
         }}
       />
+      <Stack.Screen
+        name="Thông tin khách hàng"
+        component={KhachHangChiTiet}
+        options={{ 
+          headerTitle: 'Thông tin khách hàng', 
+          transitionSpec:{
+            open: config,
+            close: config,
+          }
+        }}
+      />      
     </Stack.Navigator>
   );
 };
