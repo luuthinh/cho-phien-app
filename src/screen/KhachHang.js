@@ -4,6 +4,8 @@ import {connect} from 'react-redux';
 import {ActivityIndicator, Card, Paragraph, FAB} from 'react-native-paper'
 import {URL_RPC,DB,URL_IMAGE} from '../constants/API';
 
+const {width, height} = Dimensions.get('window')
+
 class KhachHang extends React.Component {
 	constructor(props) {
     super(props);
@@ -28,7 +30,7 @@ class KhachHang extends React.Component {
               "method":"execute_kw",
               "args":[DB,
                       this.props.uid,this.props.password,
-                      "res.partner","search_read",[[["type", "=","contact"]]],{
+                      "res.partner","search_read",[[["type", "=","contact"],['is_company','=',false]]],{
                       "fields":["name","mobile","email","state_id","x_quan_huyen_id","x_phuong_xa_id","street"]
                       }]
             }
@@ -53,19 +55,20 @@ class KhachHang extends React.Component {
   _renderItem = data => {
     return (
       <View style={styles.containerList}>
-          <Card.Cover style={styles.imageView}                         
+          <Card.Cover style={styles.imageView} key={(new Date()).getTime()}                         
                         source={{uri: `${URL_IMAGE}/res.partner/${data.item.id}/image_128/64x64`,
-                                  method: "GET",
+                                  method: "POST",
                                   headers: {
-                                  "Content-Type": "application/x-www-form-urlencoded",
-                                  "X_Openerp": this.props.sessionID,
+                                    Pragma: 'no-cache',
+                                    "Content-Type": "application/x-www-form-urlencoded",
+                                    "X_Openerp": this.props.sessionID,
                                   }
                           }}
           />
           <View style={styles.details}>
             <Paragraph style={styles.itemName}>{data.item.name}</Paragraph>
             <Paragraph>Số ĐT: {data.item.mobile}</Paragraph>
-            <Paragraph>{data.item.street},{data.item.x_phuong_xa_id[1]},{data.item.x_quan_huyen_id[1]},{data.item.state_id[1]}</Paragraph>
+            <Paragraph>{data.item.street}, {data.item.x_phuong_xa_id[1]}, {data.item.x_quan_huyen_id[1]}, {data.item.state_id[1]}</Paragraph>
           </View>
       </View>
     );
@@ -86,7 +89,7 @@ class KhachHang extends React.Component {
           "method":"execute_kw",
           "args":[DB,
                   this.props.uid,this.props.password,
-                  "res.partner","search_read",[[["type", "=","contact"]]],{
+                  "res.partner","search_read",[[["type", "=","contact"],['is_company','=',false]]],{
                     "fields":["name","mobile","email","state_id","x_quan_huyen_id","x_phuong_xa_id","street"]
                   }]
         }
@@ -103,10 +106,9 @@ class KhachHang extends React.Component {
 
   }
   _getItemLayout = (data, index) => {
-    console.log(index)
     return {
-      length: 255,
-      offset: 260 * index,
+      length: 100,
+      offset: 100 * index,
       index,
     };
   };
@@ -162,6 +164,7 @@ export default connect(mapStateToProps)(KhachHang);
 const styles = StyleSheet.create({
   container:{
     flex:1,
+    backgroundColor: 'white',
   },
   containerList:{
     flex:1,
@@ -169,15 +172,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderColor: '#cccccc',
     borderStyle: 'solid',
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
+    margin: 5,
+    borderRadius: 3,
   },
   imageView:{
 	  borderRadius: 3,
-	  width:64,
-      height:64,
-    },
+	  width:96,
+    height:96 ,
+  },
   details: {
-    marginLeft: 10
+    marginLeft: 10,
+    overflow: 'visible',
+    width: width - 96,
   },
   itemName:{
     fontWeight: '300',
