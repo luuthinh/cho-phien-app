@@ -1,7 +1,7 @@
 import React from 'react';
-import {View,Text , Dimensions, FlatList, StyleSheet, RefreshControl} from 'react-native';
+import {View,Text , Dimensions, FlatList, StyleSheet, RefreshControl, Image} from 'react-native';
 import {connect} from 'react-redux';
-import {ActivityIndicator, Card, Avatar, IconButton, Paragraph, FAB, Portal} from 'react-native-paper'
+import {ActivityIndicator, Card, Paragraph, FAB} from 'react-native-paper'
 import {URL_RPC,DB,URL_IMAGE} from '../constants/API';
 
 class KhachHang extends React.Component {
@@ -52,9 +52,8 @@ class KhachHang extends React.Component {
   }
   _renderItem = data => {
     return (
-      <Card>
-        <Card.Content style={styles.containerList}>
-          <Avatar.Image size={64} style={styles.image}                         
+      <View style={styles.containerList}>
+          <Card.Cover style={styles.imageView}                         
                         source={{uri: `${URL_IMAGE}/res.partner/${data.item.id}/image_128/64x64`,
                                   method: "GET",
                                   headers: {
@@ -67,11 +66,8 @@ class KhachHang extends React.Component {
             <Paragraph style={styles.itemName}>{data.item.name}</Paragraph>
             <Paragraph>Số ĐT: {data.item.mobile}</Paragraph>
             <Paragraph>{data.item.street},{data.item.x_phuong_xa_id[1]},{data.item.x_quan_huyen_id[1]},{data.item.state_id[1]}</Paragraph>
-            
           </View>
-        
-        </Card.Content>
-      </Card>
+      </View>
     );
   };
 
@@ -134,18 +130,17 @@ class KhachHang extends React.Component {
                                           onRefresh={this._onRefresh}
                           />}
         />
-        <Portal>
-          <FAB
+        <FAB
+            small
             icon="feather"
             style={{
               position: 'absolute',
               margin: 16,
-              bottom: 40,
+              bottom: 16,
               right: 0,
             }}
             onPress={() => {return this.props.navigation.navigate("Thông tin khách hàng")}}
-          />
-        </Portal>
+        />
       </View>
     );
   }
@@ -172,12 +167,15 @@ const styles = StyleSheet.create({
     flex:1,
     backgroundColor: 'white',
     flexDirection: 'row',
-    borderColor: 'black',
+    borderColor: '#cccccc',
     borderStyle: 'solid',
     borderBottomWidth: 1
   },
-  image:{
-  },
+  imageView:{
+	  borderRadius: 3,
+	  width:64,
+      height:64,
+    },
   details: {
     marginLeft: 10
   },
