@@ -35,6 +35,7 @@ const Header = ({ scene, previous, navigation }) => {
         <Appbar.Content
         title={title}
         style={{alignItems:'center'}}
+        titleStyle={{color: 'white', fontSize:25}}
       />
       }    
     </Appbar.Header>

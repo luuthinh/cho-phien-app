@@ -1,7 +1,7 @@
 import React from 'react';
 import { View} from 'react-native';
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
-import { Appbar } from 'react-native-paper';
+import { Appbar, useTheme } from 'react-native-paper';
 
 import ChoPhien from '../screen/ChoPhien';
 import DatHang from '../screen/DatHang';
@@ -43,11 +43,10 @@ const Header = ({ scene, previous, navigation }) => {
             onPress={() => console.log('Pressed archive')} />           
           </View>
         )
-       : 
-        <Appbar.Content
-        title={title}
-        style={{alignItems:'center'}}
-      />
+       :
+       <Appbar.Content title={title} style={{alignItems:'center'}} titleStyle={{color: 'white', fontSize:25}}>
+       </Appbar.Content>
+
       }    
     </Appbar.Header>
   );
@@ -69,7 +68,7 @@ export default function StackCho()  {
         name="Sản phẩm"
         component={ChoPhien}
         options={{ 
-          headerTitle: 'Chợ', 
+          headerTitle: 'Nông trại', 
           transitionSpec:{
             open: config,
             close: config,

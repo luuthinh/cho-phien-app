@@ -39,7 +39,7 @@ class Dangnhap extends Component {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.loginScreenContainer}>
           <View style={styles.loginFormView}>
-          <Text style={styles.logoText}>FUFA</Text>
+          <Text style={styles.logoText}>FunFarm</Text>
             <TextInput
               autoCapitalize="none" 
               label="Email" 

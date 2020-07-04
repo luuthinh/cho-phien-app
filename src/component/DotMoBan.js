@@ -13,7 +13,7 @@ const { width, height } = Dimensions.get('window');
 const SCREEN_WIDTH = width < height ? width : height;
 
 // item size
-const PRODUCT_ITEM_OFFSET = 5;
+const PRODUCT_ITEM_OFFSET = 3;
 
 class DotMoBan extends React.Component {
   constructor(props){
@@ -64,13 +64,14 @@ class DotMoBan extends React.Component {
 
   render() {
     const item = this.props.data.item
+    const RandomNumber = (Math.floor(Math.random() * 100) + 1).toString() ;
     return (
         <TouchableOpacity
 			activeOpacity= {1}
           	style={styles.container} 
           	onPress={() => {return this.props.navigation.navigate('Đặt hàng',item)}}>
             <Card.Cover style={styles.imageView} 
-                        source={{uri: `${URL_IMAGE}/x_dot_mb/${item.id}/x_image_512/200x200`,
+                        source={{uri: `${URL_IMAGE}/x_dot_mb/${item.id}/x_image_512/128x128/`,
                                 method: "GET",
                                 headers: {
                                   "Content-Type": "application/x-www-form-urlencoded",
@@ -129,22 +130,22 @@ const styles = StyleSheet.create({
       }),
     },
     imageView:{
-	  borderRadius: 3,
-	  width:150,
-      height:150,
+	  borderRadius: 10,
+	  width:128,
+    height:128,
     },
     detailView:{
 	  flex:2,
-	  height:150,
-	  padding:10,
+    height:128,
+    marginLeft: 10
     },
     itemTitle: {
 	  fontSize: 20,
-	  fontWeight: 'bold',
+	  fontWeight: '300',
 	  overflow: 'hidden',
     },
     itemPrice: {
-      fontWeight: 'bold',
+      fontWeight: '700',
       color: 'red',
     },
     itemPriceClearance: {

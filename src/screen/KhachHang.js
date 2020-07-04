@@ -55,8 +55,8 @@ class KhachHang extends React.Component {
   _renderItem = data => {
     return (
       <View style={styles.containerList}>
-          <Card.Cover style={styles.imageView} key={(new Date()).getTime()}                         
-                        source={{uri: `${URL_IMAGE}/res.partner/${data.item.id}/image_128/64x64`,
+          <Card.Cover style={styles.imageView}                       
+                        source={{uri: `${URL_IMAGE}/res.partner/${data.item.id}/image_128/96x96`,
                                   method: "POST",
                                   headers: {
                                     Pragma: 'no-cache',
@@ -67,8 +67,8 @@ class KhachHang extends React.Component {
           />
           <View style={styles.details}>
             <Paragraph style={styles.itemName}>{data.item.name}</Paragraph>
-            <Paragraph>Số ĐT: {data.item.mobile}</Paragraph>
-            <Paragraph>{data.item.street}, {data.item.x_phuong_xa_id[1]}, {data.item.x_quan_huyen_id[1]}, {data.item.state_id[1]}</Paragraph>
+            <Paragraph style={styles.itemDetail}>Số ĐT: {data.item.mobile}</Paragraph>
+            <Paragraph style={styles.itemDetail}>{data.item.street}, {data.item.x_phuong_xa_id[1]}, {data.item.x_quan_huyen_id[1]}, {data.item.state_id[1]}</Paragraph>
           </View>
       </View>
     );
@@ -170,14 +170,14 @@ const styles = StyleSheet.create({
     flex:1,
     backgroundColor: 'white',
     flexDirection: 'row',
-    borderColor: '#cccccc',
+    borderColor: '#eeeeee',
     borderStyle: 'solid',
     borderBottomWidth: 1,
     margin: 5,
     borderRadius: 3,
   },
   imageView:{
-	  borderRadius: 3,
+	  borderRadius: 10,
 	  width:96,
     height:96 ,
   },
@@ -189,6 +189,10 @@ const styles = StyleSheet.create({
   itemName:{
     fontWeight: '300',
     fontSize: 20
+  },
+  itemDetail:{
+    fontWeight: '100',
+    color: '#666666'
   },
   fab:{
     position: 'absolute',
