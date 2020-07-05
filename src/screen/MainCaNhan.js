@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { Card, Avatar, Button} from 'react-native-paper';
+import { Card, Avatar, Button, Appbar} from 'react-native-paper';
 import {connect} from 'react-redux';
 import {logout} from '../redux/actions';
 import {URL_IMAGE} from '../constants/API';
@@ -19,6 +19,13 @@ class MainCaNhan extends React.Component {
         console.log(this.props)
         return (
             <View style={{ flex: 1}}>
+                <Appbar.Header>
+                    <Appbar.Content
+                        title="Cá Nhân"
+                        style={{alignItems:'center'}}
+                        titleStyle={{color: 'white', fontSize:25}}
+                /> 
+          </Appbar.Header>  
                 <Card>
                     <Card.Title 
                     title={this.props.name}

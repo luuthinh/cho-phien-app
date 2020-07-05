@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, FlatList, StyleSheet, RefreshControl} from 'react-native';
-import {ActivityIndicator,} from 'react-native-paper';
+import {ActivityIndicator,Appbar} from 'react-native-paper';
 import DotMoBan from '../component/DotMoBan';
 import {connect} from 'react-redux';
 import {DB, URL_RPC} from '../constants/API';
@@ -108,12 +108,26 @@ class ChoPhien extends React.Component {
     if (this.state.isLoading) {
       return (
         <View style={styles.container}>
+          <Appbar.Header>
+              <Appbar.Content
+              title="Chợ"
+              style={{alignItems:'center'}}
+              titleStyle={{color: 'white', fontSize:25}}
+            /> 
+          </Appbar.Header>          
           <ActivityIndicator animating={true} style={styles.center} size='small'/>
         </View>
       )
     }  
     return (
       <View style={styles.container}>
+        <Appbar.Header>
+            <Appbar.Content
+            title="Chợ"
+            style={{alignItems:'center'}}
+            titleStyle={{color: 'white', fontSize:25}}
+          /> 
+        </Appbar.Header>
         <FlatList
           extraData={this.state}
           data={this.state.data}

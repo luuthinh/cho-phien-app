@@ -33,14 +33,13 @@ class Dangnhap extends Component {
   render() {
     const { loggingIn } = this.props;
     const { username, password } = this.state;
-    console.log(this.props)
     return (
       <KeyboardAvoidingView style={styles.containerView} behavior="padding">
 
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.loginScreenContainer}>
           <View style={styles.loginFormView}>
-          <Text style={styles.logoText}>FunFarm</Text>
+          <Text style={styles.logoText}>Nông Trại Xanh</Text>
             <TextInput
               autoCapitalize="none" 
               label="Email" 

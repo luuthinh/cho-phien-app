@@ -1,5 +1,6 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import color from 'color';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import  Notifications  from '../Notification';
 import {useTheme} from 'react-native-paper';
@@ -7,7 +8,7 @@ import ChoPhien from '../screen/ChoPhien';
 import KhachHang from '../screen/KhachHang';
 import MainCaNhan from '../screen/MainCaNhan';
 
-const Tab = createBottomTabNavigator();
+const Tab = createMaterialBottomTabNavigator();
 
 export default function BottomTab() {
   const theme = useTheme();
@@ -15,6 +16,11 @@ export default function BottomTab() {
     <Tab.Navigator 
       initialRouteName="Chợ"        
       shifting={true}
+      activeColor={theme.colors.primary}
+      inactiveColor={color(theme.colors.text)
+        .alpha(0.6)
+        .rgb()
+        .string()}      
       sceneAnimationEnabled={false}>
       <Tab.Screen
         name="Chợ"
@@ -23,13 +29,14 @@ export default function BottomTab() {
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="home" color={color} size={size} />
           ),
+          tabBarColor:'white'
         }}        
       />
       <Tab.Screen
         name="Khách hàng"
         component={KhachHang}
         options={{
-          tabBarLabel: "Khách hàng",
+          tabBarColor:'white',
           tabBarIcon: ({color, size}) => (<MaterialCommunityIcons name="account-group" color={color} size={size}/>)
         }}
       />
@@ -40,6 +47,7 @@ export default function BottomTab() {
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="bell" color={color} size={size} />
           ),
+          tabBarColor:'white'
         }}        
       />
       <Tab.Screen
@@ -49,6 +57,7 @@ export default function BottomTab() {
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account" color={color} size={size} />
           ),
+          tabBarColor:'white'
         }}        
       />
     </Tab.Navigator>

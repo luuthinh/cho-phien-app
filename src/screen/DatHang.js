@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, Dimensions, StyleSheet, Image, Alert} from 'react-native';
-import {Paragraph, IconButton, Colors, Button} from 'react-native-paper';
+import {Paragraph, IconButton, Button, Appbar} from 'react-native-paper';
 import {connect} from 'react-redux';
 import {URL_IMAGE,DB, URL_RPC} from '../constants/API';
 import Select2 from '../component/Select-Two/index';
@@ -96,6 +96,16 @@ class DatHang extends React.Component {
     var item = this.props.route.params
     return (
       <View>
+        <Appbar.Header>
+          <Appbar.BackAction onPress={this.props.navigation.goBack} color="white" size={30}/>
+          <Appbar.Content title="Đặt hàng" color='white' titleStyle={{fontSize:20}}/>
+          <Appbar.Action 
+            style={{position: 'absolute', right: 0}}
+            icon="cart-outline"
+            color='white'
+            size={30}
+            onPress={() => console.log('Pressed archive')} />
+        </Appbar.Header>
         <Image source={{uri: `${URL_IMAGE}/x_dot_mb/${item.id}/x_image_512`,
                                 method: "GET",
                                 headers: {

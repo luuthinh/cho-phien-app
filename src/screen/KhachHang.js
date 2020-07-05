@@ -1,7 +1,7 @@
 import React from 'react';
 import {View,Text , Dimensions, FlatList, StyleSheet, RefreshControl, Image} from 'react-native';
 import {connect} from 'react-redux';
-import {ActivityIndicator, Card, Paragraph, FAB, useTheme} from 'react-native-paper'
+import {ActivityIndicator, Card, Paragraph, FAB, useTheme, Appbar} from 'react-native-paper'
 import {URL_RPC,DB,URL_IMAGE} from '../constants/API';
 
 const {width, height} = Dimensions.get('window')
@@ -118,12 +118,26 @@ class KhachHang extends React.Component {
     if (this.state.isLoading) {
       return (
         <View>
+          <Appbar.Header>
+              <Appbar.Content
+              title="Khách hàng"
+              style={{alignItems:'center'}}
+              titleStyle={{color: 'white', fontSize:22}}
+            /> 
+          </Appbar.Header>          
           <ActivityIndicator animating={true} size='small'/>
         </View>
       )
     }  
     return (
       <View>
+        <Appbar.Header>
+            <Appbar.Content
+            title="Khách hàng"
+            style={{alignItems:'center'}}
+            titleStyle={{color: 'white', fontSize:22}}
+          /> 
+        </Appbar.Header>
         <FlatList
           extraData={this.state}
           data={this.state.data}
