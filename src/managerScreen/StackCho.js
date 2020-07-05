@@ -36,10 +36,14 @@ const Header = ({ scene, previous, navigation }) => {
         <View style={{flex:1}}>
           <Appbar.BackAction
           onPress={navigation.goBack}
+          color='white'
+          size={30}
           />
           <Appbar.Action 
             style={{position: 'absolute', right: 0}}
-            icon="cart"
+            icon="cart-outline"
+            color='white'
+            size={30}
             onPress={() => console.log('Pressed archive')} />           
           </View>
         )

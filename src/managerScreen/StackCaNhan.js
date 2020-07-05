@@ -3,7 +3,6 @@ import { View} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Appbar} from 'react-native-paper';
 
-import DangNhap from '../screen/DangNhap';
 import MainCaNhan from '../screen/MainCaNhan';
 
 

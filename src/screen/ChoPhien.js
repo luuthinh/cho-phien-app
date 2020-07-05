@@ -87,7 +87,7 @@ class ChoPhien extends React.Component {
           "args":[DB,
                   this.props.uid,this.props.password,
                   "x_dot_mb","search_read",[[['x_state_id', '=', 2]]],{
-                    "fields":["x_name","x_product_id","x_to_date","x_from_date",
+                    "fields":["x_name","x_product_id","x_to_date","x_from_date","x_uom_id",
                               "x_gia_khoi_diem", "x_gia_hien_tai","x_tong_so_dh"]
                   }]
         }
@@ -145,6 +145,5 @@ export default connect(mapStateToProps)(ChoPhien);
 const styles = StyleSheet.create({
   container:{
     flex:1,
-    backgroundColor: 'white'
   }
 });

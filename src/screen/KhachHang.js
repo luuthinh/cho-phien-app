@@ -54,23 +54,26 @@ class KhachHang extends React.Component {
   }
   _renderItem = data => {
     return (
-      <View style={styles.containerList}>
+      <Card style={styles.container}>
+        <Card.Content style={styles.content}>
           <Card.Cover style={styles.imageView}                       
-                        source={{uri: `${URL_IMAGE}/res.partner/${data.item.id}/image_128/96x96`,
-                                  method: "POST",
-                                  headers: {
-                                    Pragma: 'no-cache',
-                                    "Content-Type": "application/x-www-form-urlencoded",
-                                    "X_Openerp": this.props.sessionID,
-                                  }
-                          }}
-          />
-          <View style={styles.details}>
-            <Paragraph style={styles.itemName}>{data.item.name}</Paragraph>
-            <Paragraph style={styles.itemDetail}>Số ĐT: {data.item.mobile}</Paragraph>
-            <Paragraph style={styles.itemDetail}>{data.item.street}, {data.item.x_phuong_xa_id[1]}, {data.item.x_quan_huyen_id[1]}, {data.item.state_id[1]}</Paragraph>
-          </View>
-      </View>
+                          source={{uri: `${URL_IMAGE}/res.partner/${data.item.id}/image_128/96x96`,
+                                    method: "POST",
+                                    headers: {
+                                      Pragma: 'no-cache',
+                                      "Content-Type": "application/x-www-form-urlencoded",
+                                      "X_Openerp": this.props.sessionID,
+                                    }
+                            }}
+            />
+            <View style={styles.detailView}>
+              <Paragraph style={styles.itemName}>{data.item.name}</Paragraph>
+              <Paragraph style={styles.itemDetail}>Số ĐT: {data.item.mobile}</Paragraph>
+              <Paragraph style={styles.itemDetail}>{data.item.street}, {data.item.x_phuong_xa_id[1]}, {data.item.x_quan_huyen_id[1]}, {data.item.state_id[1]}</Paragraph>
+            </View>
+        </Card.Content>
+
+      </Card>
     );
   };
 
@@ -115,13 +118,13 @@ class KhachHang extends React.Component {
   render() {
     if (this.state.isLoading) {
       return (
-        <View style={styles.container}>
+        <View>
           <ActivityIndicator animating={true} size='small'/>
         </View>
       )
     }  
     return (
-      <View style={styles.container}>
+      <View>
         <FlatList
           extraData={this.state}
           data={this.state.data}
@@ -135,6 +138,7 @@ class KhachHang extends React.Component {
         <FAB
             small
             icon="feather"
+            color='white'
             style={{
               position: 'absolute',
               margin: 16,
@@ -164,16 +168,12 @@ export default connect(mapStateToProps)(KhachHang);
 const styles = StyleSheet.create({
   container:{
     flex:1,
-    backgroundColor: 'white',
+    marginTop: 3
   },
-  containerList:{
+  content:{
     flex:1,
-    backgroundColor: 'white',
     flexDirection: 'row',
-    borderColor: '#eeeeee',
-    borderStyle: 'solid',
-    borderBottomWidth: 1,
-    margin: 5,
+    margin: -12,
     borderRadius: 3,
   },
   imageView:{
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
 	  width:96,
     height:96 ,
   },
-  details: {
+  detailView: {
     marginLeft: 10,
     overflow: 'visible',
     width: width - 96,

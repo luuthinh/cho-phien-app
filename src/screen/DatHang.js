@@ -7,7 +7,7 @@ import Select2 from '../component/Select-Two/index';
 
 const {width} = Dimensions.get('window')
 const SCREEN_WIDTH = parseInt(width)
-const IMAGE_HEIGHT = parseInt(SCREEN_WIDTH / 1.2)
+const IMAGE_HEIGHT = parseInt(SCREEN_WIDTH)
 
 class DatHang extends React.Component {
   constructor(props){
@@ -111,18 +111,18 @@ class DatHang extends React.Component {
           </View>
           <View style={styles.containerOrder}>
             <IconButton icon="minus" 
-                        color={Colors.blueA700} 
+                        color='#5CAA0E'
                         size={20} 
                         onPress={()=> this.setState({soLuong:this.state.soLuong -1, tamTinh:(this.state.soLuong -1)*item.x_gia_hien_tai})}/>
             <Text style={{fontSize:20}}>{this.state.soLuong} {item.x_uom_id[1]}</Text>
-            <IconButton icon="plus" color={Colors.blueA700} size={20} onPress={()=> this.setState({soLuong:this.state.soLuong +1, tamTinh:(this.state.soLuong +1)*item.x_gia_hien_tai})}/>
+            <IconButton icon="plus" color='#5CAA0E' size={20} onPress={()=> this.setState({soLuong:this.state.soLuong +1, tamTinh:(this.state.soLuong +1)*item.x_gia_hien_tai})}/>
           </View>
           <View>
             <Paragraph style={styles.totalprice}>Tạm tính: {this._formatCurency(this.state.tamTinh)}</Paragraph>
             <Select2
               isSelectSingle
               style={{ borderRadius: 5, marginTop:30}}
-              colorTheme="blue"
+              colorTheme='#5CAA0E'
               popupTitle="Chọn khách hàng"
               title="Chọn khách hàng"
               data={this.state.mockData}
@@ -134,7 +134,8 @@ class DatHang extends React.Component {
               }}
             />
             <Button mode="contained"
-                    style={{marginTop:20}} 
+                    style={{marginTop:20}}
+                    labelStyle={{color:'white'}} 
                     onPress={this._order}>Đặt hàng</Button>
           </View>
         </View>

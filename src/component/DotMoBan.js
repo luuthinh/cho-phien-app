@@ -64,31 +64,31 @@ class DotMoBan extends React.Component {
 
   render() {
     const item = this.props.data.item
-    const RandomNumber = (Math.floor(Math.random() * 100) + 1).toString() ;
     return (
-        <TouchableOpacity
-			activeOpacity= {1}
-          	style={styles.container} 
-          	onPress={() => {return this.props.navigation.navigate('Đặt hàng',item)}}>
+        <Card
+          style={styles.container}
+          onPress={() => {return this.props.navigation.navigate('Đặt hàng',item)}}>
+          <Card.Content style={styles.content} >
             <Card.Cover style={styles.imageView} 
-                        source={{uri: `${URL_IMAGE}/x_dot_mb/${item.id}/x_image_512/128x128/`,
-                                method: "GET",
-                                headers: {
-                                  "Content-Type": "application/x-www-form-urlencoded",
-                                  "X_Openerp": this.props.sessionID,
-                                }
-                        }}
-            />
-            <View style={styles.detailView}>
-              <Paragraph style={styles.itemTitle}>{item.x_product_id[1]}</Paragraph>
-              <Paragraph style={styles.itemPrice}>Giá hiện tại: {this._formatCurency(item.x_gia_hien_tai)}</Paragraph>
-              <Paragraph style={styles.itemPriceClearance}>Giá khởi điểm: {this._formatCurency(item.x_gia_khoi_diem)}</Paragraph>
-              <Paragraph >Đã bán: {item.x_tong_so_dh}</Paragraph>
-              <Paragraph style={{fontSize:12}}>
-                {`Thời gian: ${this.state.days} ngày ${this.state.hours} : ${this.state.mins} : ${this.state.secs}`}
-              </Paragraph>
-            </View>
-          </TouchableOpacity>
+                          source={{uri: `${URL_IMAGE}/x_dot_mb/${item.id}/x_image_512/128x128`,
+                                  method: "GET",
+                                  headers: {
+                                    "Content-Type": "application/x-www-form-urlencoded",
+                                    "X_Openerp": this.props.sessionID,
+                                  }
+                          }}
+              />
+              <View style={styles.detailView}>
+                <Paragraph style={styles.itemTitle}>{item.x_product_id[1]}</Paragraph>
+                <Paragraph style={styles.itemPrice}>Giá: {this._formatCurency(item.x_gia_hien_tai)}</Paragraph>
+                <Paragraph style={styles.itemPriceClearance}>Giá thị trường: {this._formatCurency(item.x_gia_khoi_diem)}</Paragraph>
+                <Paragraph >Đã bán: {item.x_tong_so_dh}</Paragraph>
+                <Paragraph style={{fontSize:12}}>
+                  {`Thời gian: ${this.state.days} ngày ${this.state.hours} : ${this.state.mins} : ${this.state.secs}`}
+                </Paragraph>
+              </View>            
+          </Card.Content>
+          </Card>
     );
   }
 }
@@ -106,42 +106,32 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(DotMoBan);
 
 const styles = StyleSheet.create({
-    center:{
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
     container: {
-      margin: PRODUCT_ITEM_OFFSET,
+      marginTop: 3,
+      flex:1
+    },
+    content:{
       overflow: 'hidden',
       borderRadius: 3,
-	  flex: 1,
+	    flex: 1,
       flexDirection: 'row',
-      backgroundColor: 'white',
-      ...Platform.select({
-        ios: {
-          shadowColor: 'rgba(0,0,0, 0)',
-          shadowOffset: { height: 0, width: 0 },
-          shadowOpacity: 1,
-          shadowRadius: 1,
-        },
-        android: {
-          elevation: 1,
-        },
-      }),
+      margin: -12,
+      padding: 5
     },
     imageView:{
 	  borderRadius: 10,
-	  width:128,
+	  width:150,
     height:128,
     },
     detailView:{
-	  flex:2,
+	  flex:1,
     height:128,
     marginLeft: 10
     },
     itemTitle: {
-	  fontSize: 20,
-	  fontWeight: '300',
+	  fontSize: 16,
+    fontWeight: '600',
+    color: '#000000',
 	  overflow: 'hidden',
     },
     itemPrice: {
@@ -149,15 +139,6 @@ const styles = StyleSheet.create({
       color: 'red',
     },
     itemPriceClearance: {
-      textDecorationLine: 'line-through'
-    },
-    day:{
-      fontSize: 12,
-      color: "#ff0",
-      textAlign:"right"
-     },
-     small:{
-      fontSize: 16,
-      color: "#faa"
-     }   
+      textDecorationLine: 'line-through',
+    }
 });

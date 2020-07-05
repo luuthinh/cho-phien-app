@@ -33,6 +33,7 @@ class Dangnhap extends Component {
   render() {
     const { loggingIn } = this.props;
     const { username, password } = this.state;
+    console.log(this.props)
     return (
       <KeyboardAvoidingView style={styles.containerView} behavior="padding">
 
@@ -55,12 +56,14 @@ class Dangnhap extends Component {
             <Button
               style={styles.loginButton}
               loading = {loggingIn}
-              mode="contained"
+              mode = 'contained'
+              labelStyle={{color:'white'}}
               onPress={this.signInAsync}
             >Đăng nhập</Button>
             <Button
               style={styles.fbLoginButton}
               onPress={() => this.onFbLoginPress()}
+              raised theme={{ roundness: 3 }}
             >Facebook</Button>
           </View>
         </View>
@@ -96,6 +99,7 @@ const styles = StyleSheet.create({
     marginTop: 100,
     marginBottom: 30,
     textAlign: 'center',
+    color:'#5CAA0E'
   },
   loginFormView: {
     flex: 1
@@ -115,7 +119,6 @@ const styles = StyleSheet.create({
   
   },
   loginButton: {
-    backgroundColor: '#3897f1',
     borderRadius: 5,
     height: 45,
     marginTop: 10,

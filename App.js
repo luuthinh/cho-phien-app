@@ -1,5 +1,5 @@
 import React from 'react';
-import {DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import {DefaultTheme, Provider as PaperProvider, colors } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import StackDangNhap from './src/managerScreen/StackDangNhap';
 import { Provider} from 'react-redux';
@@ -9,8 +9,11 @@ const theme = {...DefaultTheme,
               roundness:2, 
               colors: {
                 ...DefaultTheme.colors,
-                primary: '#3498db',
+                primary: '#5CAA0E',
                 accent: '#f1c40f',
+                background: '#ffffff',
+                text: '#404040',
+                surface: '#ffffff',
           }
 }
 

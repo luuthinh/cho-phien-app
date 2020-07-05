@@ -5,17 +5,21 @@ import  Notifications  from '../Notification';
 import StackCho from './StackCho';
 import StackCaNhan from './StackCaNhan';
 import StackKhachHang from './StackKhachHang';
+import {useTheme} from 'react-native-paper';
 
 const Tab = createBottomTabNavigator();
 
 export default function BottomTab() {
+  const theme = useTheme();
   return (
-    <Tab.Navigator initialRouteName="Chợ">
+    <Tab.Navigator 
+      initialRouteName="Chợ"        
+      shifting={true}
+      sceneAnimationEnabled={false}>
       <Tab.Screen
         name="Chợ"
         component={StackCho}
         options={{
-          tabBarLabel: 'Chợ',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="home" color={color} size={size} />
           ),
@@ -33,7 +37,6 @@ export default function BottomTab() {
         name="Thông báo"
         component={Notifications}
         options={{
-          tabBarLabel: 'Thông báo',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="bell" color={color} size={size} />
           ),
@@ -43,7 +46,6 @@ export default function BottomTab() {
         name="Cá nhân"
         component={StackCaNhan}
         options={{
-          tabBarLabel: 'Cá nhân',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account" color={color} size={size} />
           ),
