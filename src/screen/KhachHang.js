@@ -1,11 +1,10 @@
 import React from 'react';
 import {View,Text , Dimensions, FlatList, StyleSheet, RefreshControl, Image} from 'react-native';
 import {connect} from 'react-redux';
-import {ActivityIndicator, Card, Paragraph, FAB} from 'react-native-paper'
+import {ActivityIndicator, Card, Paragraph, FAB, useTheme} from 'react-native-paper'
 import {URL_RPC,DB,URL_IMAGE} from '../constants/API';
 
 const {width, height} = Dimensions.get('window')
-
 class KhachHang extends React.Component {
 	constructor(props) {
     super(props);

@@ -2,10 +2,10 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import  Notifications  from '../Notification';
-import StackCho from './StackCho';
-import StackCaNhan from './StackCaNhan';
-import StackKhachHang from './StackKhachHang';
 import {useTheme} from 'react-native-paper';
+import ChoPhien from '../screen/ChoPhien';
+import KhachHang from '../screen/KhachHang';
+import MainCaNhan from '../screen/MainCaNhan';
 
 const Tab = createBottomTabNavigator();
 
@@ -18,7 +18,7 @@ export default function BottomTab() {
       sceneAnimationEnabled={false}>
       <Tab.Screen
         name="Chợ"
-        component={StackCho}
+        component={ChoPhien}
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="home" color={color} size={size} />
@@ -27,7 +27,7 @@ export default function BottomTab() {
       />
       <Tab.Screen
         name="Khách hàng"
-        component={StackKhachHang}
+        component={KhachHang}
         options={{
           tabBarLabel: "Khách hàng",
           tabBarIcon: ({color, size}) => (<MaterialCommunityIcons name="account-group" color={color} size={size}/>)
@@ -44,7 +44,7 @@ export default function BottomTab() {
       />
       <Tab.Screen
         name="Cá nhân"
-        component={StackCaNhan}
+        component={MainCaNhan}
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account" color={color} size={size} />
