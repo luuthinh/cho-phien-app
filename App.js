@@ -1,12 +1,11 @@
 import React from 'react';
-import {DefaultTheme, Provider as PaperProvider, colors } from 'react-native-paper';
+import {DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import StackDangNhap from './src/managerScreen/StackDangNhap';
 import { Provider} from 'react-redux';
 import store from './src/redux/store';
 
 const theme = {...DefaultTheme, 
-              roundness:2, 
               colors: {
                 ...DefaultTheme.colors,
                 primary: '#5CAA0E',
@@ -14,6 +13,7 @@ const theme = {...DefaultTheme,
                 background: '#ffffff',
                 text: '#404040',
                 surface: '#ffffff',
+                title: '#ffffff'
           }
 }
 

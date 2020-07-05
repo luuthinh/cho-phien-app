@@ -1,7 +1,7 @@
 import React from 'react';
 import {View,Text , Dimensions, FlatList, StyleSheet, RefreshControl, Image} from 'react-native';
 import {connect} from 'react-redux';
-import {ActivityIndicator, Card, Paragraph, FAB, useTheme, Appbar} from 'react-native-paper'
+import {ActivityIndicator, Card, Paragraph, FAB, withTheme, Appbar} from 'react-native-paper'
 import {URL_RPC,DB,URL_IMAGE} from '../constants/API';
 
 const {width, height} = Dimensions.get('window')
@@ -115,6 +115,7 @@ class KhachHang extends React.Component {
     };
   };
   render() {
+    const theme = this.props.theme;
     if (this.state.isLoading) {
       return (
         <View>
@@ -122,7 +123,7 @@ class KhachHang extends React.Component {
               <Appbar.Content
               title="Khách hàng"
               style={{alignItems:'center'}}
-              titleStyle={{color: 'white', fontSize:22}}
+              titleStyle={{color: theme.colors.title, fontSize:22}}
             /> 
           </Appbar.Header>          
           <ActivityIndicator animating={true} size='small'/>
@@ -135,7 +136,7 @@ class KhachHang extends React.Component {
             <Appbar.Content
             title="Khách hàng"
             style={{alignItems:'center'}}
-            titleStyle={{color: 'white', fontSize:22}}
+            titleStyle={{color: theme.colors.title, fontSize:22}}
           /> 
         </Appbar.Header>
         <FlatList
@@ -176,7 +177,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(KhachHang); 
+export default connect(mapStateToProps)(withTheme(KhachHang)); 
 
 const styles = StyleSheet.create({
   container:{

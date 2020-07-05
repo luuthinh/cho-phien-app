@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, Dimensions, StyleSheet, Image, Alert} from 'react-native';
-import {Paragraph, IconButton, Button, Appbar} from 'react-native-paper';
+import {Paragraph, IconButton, Button, Appbar, withTheme} from 'react-native-paper';
 import {connect} from 'react-redux';
 import {URL_IMAGE,DB, URL_RPC} from '../constants/API';
 import Select2 from '../component/Select-Two/index';
@@ -93,16 +93,18 @@ class DatHang extends React.Component {
       });
   }
   render() {
-    var item = this.props.route.params
+    const item = this.props.route.params
+    const theme = this.props.theme
+    console.log(this.props)
     return (
       <View>
         <Appbar.Header>
-          <Appbar.BackAction onPress={this.props.navigation.goBack} color="white" size={30}/>
-          <Appbar.Content title="Đặt hàng" color='white' titleStyle={{fontSize:20}}/>
+          <Appbar.BackAction onPress={this.props.navigation.goBack} color={theme.colors.title} size={30}/>
+          <Appbar.Content title="Đặt hàng" color={theme.colors.title} titleStyle={{fontSize:20}}/>
           <Appbar.Action 
             style={{position: 'absolute', right: 0}}
             icon="cart-outline"
-            color='white'
+            color={theme.colors.title}
             size={30}
             onPress={() => console.log('Pressed archive')} />
         </Appbar.Header>
@@ -121,18 +123,18 @@ class DatHang extends React.Component {
           </View>
           <View style={styles.containerOrder}>
             <IconButton icon="minus" 
-                        color='#5CAA0E'
+                        color={theme.colors.primary}
                         size={20} 
                         onPress={()=> this.setState({soLuong:this.state.soLuong -1, tamTinh:(this.state.soLuong -1)*item.x_gia_hien_tai})}/>
             <Text style={{fontSize:20}}>{this.state.soLuong} {item.x_uom_id[1]}</Text>
-            <IconButton icon="plus" color='#5CAA0E' size={20} onPress={()=> this.setState({soLuong:this.state.soLuong +1, tamTinh:(this.state.soLuong +1)*item.x_gia_hien_tai})}/>
+            <IconButton icon="plus" color={theme.colors.primary} size={20} onPress={()=> this.setState({soLuong:this.state.soLuong +1, tamTinh:(this.state.soLuong +1)*item.x_gia_hien_tai})}/>
           </View>
           <View>
             <Paragraph style={styles.totalprice}>Tạm tính: {this._formatCurency(this.state.tamTinh)}</Paragraph>
             <Select2
               isSelectSingle
               style={{ borderRadius: 5, marginTop:30}}
-              colorTheme='#5CAA0E'
+              colorTheme={theme.colors.primary}
               popupTitle="Chọn khách hàng"
               title="Chọn khách hàng"
               data={this.state.mockData}
@@ -145,7 +147,8 @@ class DatHang extends React.Component {
             />
             <Button mode="contained"
                     style={{marginTop:20}}
-                    labelStyle={{color:'white'}} 
+                    labelStyle={{color:'white'}}
+                    color={theme.colors.primary} 
                     onPress={this._order}>Đặt hàng</Button>
           </View>
         </View>
@@ -166,7 +169,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(DatHang);
+export default connect(mapStateToProps)(withTheme(DatHang));
 
 const styles = StyleSheet.create({
   container:{

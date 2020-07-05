@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, FlatList, StyleSheet, RefreshControl} from 'react-native';
-import {ActivityIndicator,Appbar} from 'react-native-paper';
+import {ActivityIndicator,Appbar, withTheme} from 'react-native-paper';
 import DotMoBan from '../component/DotMoBan';
 import {connect} from 'react-redux';
 import {DB, URL_RPC} from '../constants/API';
@@ -105,6 +105,7 @@ class ChoPhien extends React.Component {
   }
 
   render() {
+    const theme = this.props.theme;
     if (this.state.isLoading) {
       return (
         <View style={styles.container}>
@@ -112,7 +113,7 @@ class ChoPhien extends React.Component {
               <Appbar.Content
               title="Chợ"
               style={{alignItems:'center'}}
-              titleStyle={{color: 'white', fontSize:25}}
+              titleStyle={{color:theme.colors.title, fontSize:25}}
             /> 
           </Appbar.Header>          
           <ActivityIndicator animating={true} style={styles.center} size='small'/>
@@ -125,7 +126,7 @@ class ChoPhien extends React.Component {
             <Appbar.Content
             title="Chợ"
             style={{alignItems:'center'}}
-            titleStyle={{color: 'white', fontSize:25}}
+            titleStyle={{color: theme.colors.title, fontSize:22}}
           /> 
         </Appbar.Header>
         <FlatList
@@ -154,7 +155,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(ChoPhien); 
+export default connect(mapStateToProps)(withTheme(ChoPhien)); 
 
 const styles = StyleSheet.create({
   container:{
