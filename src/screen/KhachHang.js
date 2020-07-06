@@ -30,7 +30,7 @@ class KhachHang extends React.Component {
               "args":[DB,
                       this.props.uid,this.props.password,
                       "res.partner","search_read",[[["type", "=","contact"],['is_company','=',false]]],{
-                      "fields":["name","mobile","email","state_id","x_quan_huyen_id","x_phuong_xa_id","street"]
+                      "fields":["name","mobile","email","state_id","x_quan_huyen_id","x_phuong_xa_id","street","write_date"]
                       }]
             }
 					})
@@ -56,10 +56,9 @@ class KhachHang extends React.Component {
       <Card style={styles.container}>
         <Card.Content style={styles.content}>
           <Card.Cover style={styles.imageView}                       
-                          source={{uri: `${URL_IMAGE}/res.partner/${data.item.id}/image_128/96x96`,
-                                    method: "POST",
+                          source={{uri: `https://vuonnhatoi.odoo.com/web/partner_image/${data.item.id}#time=${data.item.write_date}`,
+                                    method: "GET",
                                     headers: {
-                                      Pragma: 'no-cache',
                                       "Content-Type": "application/x-www-form-urlencoded",
                                       "X_Openerp": this.props.sessionID,
                                     }
@@ -92,7 +91,7 @@ class KhachHang extends React.Component {
           "args":[DB,
                   this.props.uid,this.props.password,
                   "res.partner","search_read",[[["type", "=","contact"],['is_company','=',false]]],{
-                    "fields":["name","mobile","email","state_id","x_quan_huyen_id","x_phuong_xa_id","street"]
+                    "fields":["name","mobile","email","state_id","x_quan_huyen_id","x_phuong_xa_id","street","write_date"]
                   }]
         }
       })
