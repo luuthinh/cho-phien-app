@@ -4,6 +4,7 @@ import {Paragraph, IconButton, Button, Appbar, withTheme} from 'react-native-pap
 import {connect} from 'react-redux';
 import {URL_IMAGE,DB, URL_RPC} from '../constants/API';
 import Select2 from '../component/Select-Two/index';
+import Many2one from '../component/Many2one';
 
 const {width} = Dimensions.get('window')
 const SCREEN_WIDTH = parseInt(width)
@@ -95,7 +96,7 @@ class DatHang extends React.Component {
   render() {
     const item = this.props.route.params
     const theme = this.props.theme
-    console.log(this.props)
+    // console.log(this.props)
     return (
       <View>
         <Appbar.Header>
@@ -131,6 +132,7 @@ class DatHang extends React.Component {
           </View>
           <View>
             <Paragraph style={styles.totalprice}>Tạm tính: {this._formatCurency(this.state.tamTinh)}</Paragraph>
+            <Many2one />
             <Select2
               isSelectSingle
               style={{ borderRadius: 5, marginTop:30}}
@@ -145,6 +147,7 @@ class DatHang extends React.Component {
                 this.setState({ customerID })
               }}
             />
+            
             <Button mode="contained"
                     style={{marginTop:20}}
                     labelStyle={{color:'white'}}
