@@ -9,11 +9,12 @@ const theme = {...DefaultTheme,
               colors: {
                 ...DefaultTheme.colors,
                 primary: '#5CAA0E',
-                accent: '#f1c40f',
-                background: '#ffffff',
-                text: '#404040',
-                surface: '#ffffff',
-                title: '#ffffff'
+                accent: '#ffd700',
+                background: '#f9f9f9',
+                text: '#9f9f9f',
+                textbold: '#67696c',
+                title: '#ffffff',
+                card: '#ffffff'
           }
 }
 

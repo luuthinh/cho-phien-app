@@ -7,16 +7,26 @@ const SCREEN_WIDTH = width
 const SCREEN_HEIGHT = height
 
 class Many2one extends React.Component {
+    static defaultProps = {
+        cancelButtonText: 'Hủy',
+        selectButtonText: 'Chọn',
+        searchPlaceHolderText: "Nhập vào từ khóa",
+        listEmptyTitle: "Không tìm thấy lựa chọn phù hợp",
+    }
     constructor(props){
         super(props);
         this.state = {
             visible: false,
-            selectItem: null,
+            preSelectedItem: null,
+            selectedItem: null,
             data: [
                 {id:1, name:"Thịnh"}
             ],
             keyword: ''
         }
+    }
+    cancelSelection = () => {
+
     }
     componentDidUpdate(prevProps){
 
@@ -34,6 +44,7 @@ class Many2one extends React.Component {
      };    
 
     render(){
+        let {cancelButtonText,selectButtonText} = this.props
         return(
             <TouchableOpacity onPress={this.showDialog}>
                 <Text>123</Text>
@@ -56,7 +67,8 @@ class Many2one extends React.Component {
                         />
                         </Dialog.ScrollArea>
                         <Dialog.Actions>
-                            <Button onPress={this.hideDialog}>Done</Button>
+                            <Button onPress={this.hideDialog}>{selectButtonText}</Button>
+                            <Button onPress={this.hideDialog}>{cancelButtonText}</Button>
                         </Dialog.Actions>
                     </Dialog>
                 </Portal>

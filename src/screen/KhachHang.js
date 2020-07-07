@@ -205,7 +205,6 @@ const styles = StyleSheet.create({
   },
   itemDetail:{
     fontWeight: '100',
-    color: '#666666'
   },
   fab:{
     position: 'absolute',
