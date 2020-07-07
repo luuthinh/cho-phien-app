@@ -132,7 +132,14 @@ class DatHang extends React.Component {
           </View>
           <View>
             <Paragraph style={styles.totalprice}>Tạm tính: {this._formatCurency(this.state.tamTinh)}</Paragraph>
-            <Many2one />
+            <Many2one 
+              model="res.parner"
+              uid={this.props.uid}
+              password={this.props.password}
+              db={DB}
+              url={URL_RPC}
+              title='Chọn khách hàng'
+            />
             <Select2
               isSelectSingle
               style={{ borderRadius: 5, marginTop:30}}

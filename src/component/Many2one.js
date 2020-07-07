@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, TouchableOpacity, Dimensions, StyleSheet, FlatList} from 'react-native';
-import { Portal, Dialog, Text, Button, Paragraph} from 'react-native-paper';
+import { Portal, Dialog, Text, Button, Divider, Searchbar} from 'react-native-paper';
+import PropsTypes from 'prop-types';
 
 const {width, height} = Dimensions.get('window');
 const SCREEN_WIDTH = width
@@ -17,8 +18,8 @@ class Many2one extends React.Component {
         super(props);
         this.state = {
             visible: false,
-            preSelectedItem: null,
-            selectedItem: null,
+            preSelectedItem: {},
+            selectedItem: {},
             data: [
                 {id:1, name:"Thịnh"}
             ],
@@ -28,8 +29,39 @@ class Many2one extends React.Component {
     cancelSelection = () => {
 
     }
+    _onchangeSearch = (keyword) => {
+        this.setState({keyword: keyword})
+        fetch(this.props.url, {
+            method: 'POST',
+            headers:{
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                jsonrpc: '2.0',
+                params:{
+                "service":"object",
+                "method":"execute_kw",
+                "args":[this.props.db,
+                        this.props.uid,this.props.password,
+                        "res.partner","name_search",[keyword]]
+                }
+            })
+            })
+            .then((response) => response.json())
+            .then((json) => {
+                let mockData = []
+                json.result.map((data) => {
+                mockData.push({id:data[0],name:data[1]})
+                })
+                this.setState({data:mockData})
+            })
+            .catch((error) => console.error(error))
+            .finally(() => {
+            });    
+    }
     componentDidUpdate(prevProps){
-
+        console.log(this.props)
     }
     showDialog = () => this.setState({'visible':true})
     hideDialog = () => this.setState({'visible': false})
@@ -45,10 +77,17 @@ class Many2one extends React.Component {
 
     render(){
         let {cancelButtonText,selectButtonText} = this.props
+        let { visible, selectedItem, preSelectedItem} = this.state
         return(
             <TouchableOpacity onPress={this.showDialog}>
-                <Text>123</Text>
-                <Button onPress={this.showDialog}>Show Dialog</Button>
+                {
+                    preSelectedItem.length > 0 
+                        ? (
+                            <View>
+                                <Text>{preSelectedItem.name}</Text>
+                           </View>)
+                        : <Text>Chọn khách hàng</Text>
+                }
                 <Portal>
                     <Dialog
                         onDismiss={this.hideDialog}
@@ -56,7 +95,10 @@ class Many2one extends React.Component {
                         visible={this.state.visible}>
                         <Dialog.Title>Chọn khách hàng</Dialog.Title>
                         <Dialog.Content>
-                            <Paragraph>THis is Dialog</Paragraph>
+                            <Searchbar 
+                                onChangeText={this._onchangeSearch}
+                                value={this.state.keyword}
+                            />
                         </Dialog.Content>
                         <Dialog.ScrollArea>
                         <FlatList
@@ -90,3 +132,12 @@ const styles = StyleSheet.create({
         // justifyContent: 'center'
     }
 })
+
+Many2one.propsTypes = {
+    model: PropsTypes.string.isRequired,
+    uid: PropsTypes.number.isRequired,
+    password: PropsTypes.string,
+    db: PropsTypes.string,
+    url: PropsTypes.string,
+    title: PropsTypes.string,
+}
