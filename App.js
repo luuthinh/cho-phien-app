@@ -1,6 +1,8 @@
 import React from 'react';
 import {DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
+import { SafeAreaProvider} from 'react-native-safe-area-context';
+import { AppearanceProvider} from 'react-native-appearance';
 import StackDangNhap from './src/managerScreen/StackDangNhap';
 import { Provider} from 'react-redux';
 import store from './src/redux/store';
@@ -20,12 +22,17 @@ const theme = {...DefaultTheme,
 
 export default function App() {
   return (
-      <PaperProvider theme={theme}>
-          <Provider store={store}>
-            <NavigationContainer>
-              <StackDangNhap/>
-            </NavigationContainer>
-          </Provider>
-      </PaperProvider>
+    <SafeAreaProvider>
+      <AppearanceProvider>
+        <PaperProvider theme={theme}>
+            <Provider store={store}>
+              <NavigationContainer>
+                <StackDangNhap/>
+              </NavigationContainer>
+            </Provider>
+        </PaperProvider>
+      </AppearanceProvider>
+    </SafeAreaProvider>
+
   );
 }

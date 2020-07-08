@@ -1,11 +1,12 @@
 import React from 'react';
 import {View, TouchableOpacity, Dimensions, StyleSheet, FlatList} from 'react-native';
-import { Portal, Dialog, Text, Button, Divider, Searchbar} from 'react-native-paper';
+import { Portal, Dialog, Text, Button, Divider, Searchbar, Paragraph} from 'react-native-paper';
 import PropsTypes from 'prop-types';
 
 const {width, height} = Dimensions.get('window');
 const SCREEN_WIDTH = width
 const SCREEN_HEIGHT = height
+const INIT_HEIGHT = height * 0.6;
 
 class Many2one extends React.Component {
     static defaultProps = {
@@ -57,11 +58,10 @@ class Many2one extends React.Component {
                 this.setState({data:mockData})
             })
             .catch((error) => console.error(error))
-            .finally(() => {
+            .finally(() => { console.log("load xong")
             });    
     }
     componentDidUpdate(prevProps){
-        console.log(this.props)
     }
     showDialog = () => this.setState({'visible':true})
     hideDialog = () => this.setState({'visible': false})
@@ -93,8 +93,8 @@ class Many2one extends React.Component {
                         onDismiss={this.hideDialog}
                         style={styles.containerDialog} 
                         visible={this.state.visible}>
-                        <Dialog.Title>Chọn khách hàng</Dialog.Title>
-                        <Dialog.Content>
+                        <Dialog.Content style={{marginTop:-20}}>
+                            <Paragraph>Chọn khách hàng</Paragraph>
                             <Searchbar 
                                 onChangeText={this._onchangeSearch}
                                 value={this.state.keyword}
@@ -124,12 +124,11 @@ export default Many2one;
 
 const styles = StyleSheet.create({
     containerDialog: {
-        width: SCREEN_WIDTH - 60,
-        height: SCREEN_HEIGHT - 140,
-        marginTop: 70,
-        marginLeft: 30
-        // alignItems: 'center',
-        // justifyContent: 'center'
+        paddingTop: 0,
+        backgroundColor: '#fff', 
+        borderTopLeftRadius: 8, 
+        borderTopRightRadius: 8,
+        height: INIT_HEIGHT,
     }
 })
 
