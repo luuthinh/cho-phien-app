@@ -64,10 +64,38 @@ class Many2one extends React.Component {
                 this.setState({data:mockData})
             })
             .catch((error) => console.error(error))
-            .finally(() => { console.log("load xong")
-            });    
+            .finally(() => {});    
     }
     componentDidUpdate(prevProps){
+    }
+    componentDidMount(){
+        fetch(this.props.url, {
+            method: 'POST',
+            headers:{
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                jsonrpc: '2.0',
+                params:{
+                "service":"object",
+                "method":"execute_kw",
+                "args":[this.props.db,
+                        this.props.uid,this.props.password,
+                        "res.partner","name_search",["",[],"ilike",8]]
+                }
+            })
+            })
+            .then((response) => response.json())
+            .then((json) => {
+                let mockData = []
+                json.result.map((data) => {
+                mockData.push({id:data[0],name:data[1]})
+                })
+                this.setState({data:mockData})
+            })
+            .catch((error) => console.error(error))
+            .finally(() => {});          
     }
     showDialog = () => this.setState({'visible':true})
 
@@ -110,13 +138,12 @@ class Many2one extends React.Component {
      };    
 
     render(){
-        let {cancelButtonText,selectButtonText} = this.props
+        let {cancelButtonText,selectButtonText,onSelect} = this.props
         let { visible, selectedItem, preSelectedItem} = this.state
-        console.log(preSelectedItem)
         return(
             <TouchableOpacity onPress={this.showDialog}>
                 {
-                    preSelectedItem
+                    Object.keys(preSelectedItem).length
                         ? (
                             <View>
                                 <Text>{preSelectedItem.name}</Text>
@@ -153,6 +180,7 @@ class Many2one extends React.Component {
                             </Button>
                             <Button 
                                 onPress={()=>{
+                                    onSelect && onSelect(selectedItem);
                                     this.setState({visible:false,keyword:'',preSelectedItem:selectedItem})
                                 }}
                                 mode='contained'
@@ -227,4 +255,5 @@ Many2one.propsTypes = {
     db: PropsTypes.string,
     url: PropsTypes.string,
     title: PropsTypes.string,
+    onSelect: PropsTypes.func
 }

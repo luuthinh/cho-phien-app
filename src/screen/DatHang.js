@@ -3,7 +3,6 @@ import { Text, View, Dimensions, StyleSheet, Image, Alert} from 'react-native';
 import {Paragraph, IconButton, Button, Appbar, withTheme} from 'react-native-paper';
 import {connect} from 'react-redux';
 import {URL_IMAGE,DB, URL_RPC} from '../constants/API';
-import Select2 from '../component/Select-Two/index';
 import Many2one from '../component/Many2one';
 
 const {width} = Dimensions.get('window')
@@ -16,40 +15,10 @@ class DatHang extends React.Component {
     this.state = {
       soLuong : 1,
       tamTinh : this.props.route.params.x_gia_hien_tai,
-      mockData: [],
-      customerID: [], 
+      customer: {}, 
     }
   }
 	componentDidMount() {
-    fetch(URL_RPC, {
-      method: 'POST',
-      headers:{
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        jsonrpc: '2.0',
-        params:{
-          "service":"object",
-          "method":"execute_kw",
-          "args":[DB,
-                  this.props.uid,this.props.password,
-                  "res.partner","name_search",[]]
-        }
-      })
-      })
-      .then((response) => response.json())
-      .then((json) => {
-        let mockData = []
-        json.result.map((data) => {
-          mockData.push({id:data[0],name:data[1]})
-        })
-        this.setState({mockData:mockData})
-      })
-      .catch((error) => console.error(error))
-      .finally(() => {
-        this.setState({ isLoading: false });
-      });
 }
   _formatCurency = (money) => {
     money = money.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.") + 'đ';
@@ -96,7 +65,7 @@ class DatHang extends React.Component {
   render() {
     const item = this.props.route.params
     const theme = this.props.theme
-    // console.log(this.props)
+    console.log(this.state)
     return (
       <View>
         <Appbar.Header>
@@ -139,22 +108,8 @@ class DatHang extends React.Component {
               db={DB}
               url={URL_RPC}
               title='Chọn khách hàng'
+              onSelect={(item) => this.setState({customer:item})}
             />
-            <Select2
-              isSelectSingle
-              style={{ borderRadius: 5, marginTop:30}}
-              colorTheme={theme.colors.primary}
-              popupTitle="Chọn khách hàng"
-              title="Chọn khách hàng"
-              data={this.state.mockData}
-              onSelect={customerID => {
-                this.setState({ customerID })
-              }}
-              onRemoveItem={customerID => {
-                this.setState({ customerID })
-              }}
-            />
-            
             <Button mode="contained"
                     style={{marginTop:20}}
                     labelStyle={{color:'white'}}
