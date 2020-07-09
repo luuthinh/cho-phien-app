@@ -13,7 +13,7 @@ const theme = {...DefaultTheme,
                 primary: '#5CAA0E',
                 accent: '#ffd700',
                 background: '#f9f9f9',
-                text: '#9f9f9f',
+                text: '#545454',
                 textbold: '#67696c',
                 title: '#ffffff',
                 card: '#ffffff'

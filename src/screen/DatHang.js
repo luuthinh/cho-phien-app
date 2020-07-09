@@ -1,13 +1,14 @@
 import React from 'react';
 import { Text, View, Dimensions, StyleSheet, Image, Alert} from 'react-native';
-import {Paragraph, IconButton, Button, Appbar, withTheme} from 'react-native-paper';
+import {Paragraph, IconButton, Button, Appbar, withTheme, Card} from 'react-native-paper';
 import {connect} from 'react-redux';
 import {URL_IMAGE,DB, URL_RPC} from '../constants/API';
 import Many2one from '../component/Many2one';
 
 const {width} = Dimensions.get('window')
 const SCREEN_WIDTH = parseInt(width)
-const IMAGE_HEIGHT = parseInt(SCREEN_WIDTH)
+const IMAGE_HEIGHT = 256
+const IMAGE_WIDTH = 256
 
 class DatHang extends React.Component {
   constructor(props){
@@ -78,28 +79,29 @@ class DatHang extends React.Component {
             size={30}
             onPress={() => console.log('Pressed archive')} />
         </Appbar.Header>
-        <Image source={{uri: `${URL_IMAGE}/x_dot_mb/${item.id}/x_image_512`,
-                                method: "GET",
-                                headers: {
-                                  "Content-Type": "application/x-www-form-urlencoded",
-                                  "X_Openerp": this.props.sessionID,
-                                }
-                      }}
-                style={styles.imageView}
-        />
-        <View style={styles.detailView}>
-          <View>
-            <Paragraph style={styles.itemTitle}>{item.x_product_id[1]} - Giá: {this._formatCurency(item.x_gia_hien_tai)}</Paragraph>
-          </View>
-          <View style={styles.containerOrder}>
-            <IconButton icon="minus" 
-                        color={theme.colors.primary}
-                        size={20} 
-                        onPress={()=> this.setState({soLuong:this.state.soLuong -1, tamTinh:(this.state.soLuong -1)*item.x_gia_hien_tai})}/>
-            <Text style={{fontSize:20}}>{this.state.soLuong} {item.x_uom_id[1]}</Text>
-            <IconButton icon="plus" color={theme.colors.primary} size={20} onPress={()=> this.setState({soLuong:this.state.soLuong +1, tamTinh:(this.state.soLuong +1)*item.x_gia_hien_tai})}/>
-          </View>
-          <View>
+        <Card>
+          <Card.Cover source={{uri: `${URL_IMAGE}/x_dot_mb/${item.id}/x_image_512#time=${item.write_date}`,
+                                  method: "GET",
+                                  headers: {
+                                    "Content-Type": "application/x-www-form-urlencoded",
+                                    "X_Openerp": this.props.sessionID,
+                                  }
+                        }}
+                  style={styles.imageView}
+          /> 
+          <View style={styles.detailView}></View>
+            <View>
+              <Paragraph style={styles.itemTitle}>{item.x_product_id[1]} - Giá: {this._formatCurency(item.x_gia_hien_tai)}</Paragraph>
+            </View>   
+            <View style={styles.containerOrder}>
+              <IconButton icon="minus" 
+                          color={theme.colors.primary}
+                          size={25} 
+                          onPress={()=> this.setState({soLuong:this.state.soLuong -1, tamTinh:(this.state.soLuong -1)*item.x_gia_hien_tai})}/>
+              <Text style={{fontSize:20}}>{this.state.soLuong} {item.x_uom_id[1]}</Text>
+              <IconButton icon="plus" color={theme.colors.primary} size={20} onPress={()=> this.setState({soLuong:this.state.soLuong +1, tamTinh:(this.state.soLuong +1)*item.x_gia_hien_tai})}/>
+            </View>  
+            <View>
             <Paragraph style={styles.totalprice}>Tạm tính: {this._formatCurency(this.state.tamTinh)}</Paragraph>
             <Many2one 
               model="res.parner"
@@ -115,8 +117,8 @@ class DatHang extends React.Component {
                     labelStyle={{color:'white'}}
                     color={theme.colors.primary} 
                     onPress={this._order}>Đặt hàng</Button>
-          </View>
-        </View>
+          </View>                        
+        </Card>
       </View>  
     );
   }
@@ -141,27 +143,26 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   imageView:{
-    margin: 5,
     borderRadius:10,
-    width:SCREEN_WIDTH -10,
+    width: IMAGE_WIDTH,
     height:IMAGE_HEIGHT,
     resizeMode: 'stretch',
-    alignItems: 'center',
-    justifyContent: 'center'
+    marginLeft: (SCREEN_WIDTH - IMAGE_WIDTH) /2
   },
   detailView:{
     marginTop:10,
   },
   itemTitle: {
-  fontSize: 20,
+  fontSize: 16,
   overflow: 'hidden',
   },
   containerOrder:{
     flexDirection: 'row',
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
+    alignItems: 'center'
   },
   totalprice:{
-    fontSize: 20,
+    fontSize: 16,
     padding: 5,
   }
 });

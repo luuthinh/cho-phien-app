@@ -2,6 +2,7 @@ import React from 'react';
 import {View, TouchableOpacity, Dimensions, StyleSheet, FlatList} from 'react-native';
 import { Portal, Dialog, Text, Button, Checkbox, Searchbar, Paragraph} from 'react-native-paper';
 import PropsTypes from 'prop-types';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const {width, height} = Dimensions.get('window');
 const SCREEN_WIDTH = width
@@ -12,6 +13,7 @@ class Many2one extends React.Component {
     static defaultProps = {
         cancelButtonText: 'Hủy',
         selectButtonText: 'Chọn',
+        colorTheme: '#16a45f',
         searchPlaceHolderText: "Nhập vào từ khóa",
         listEmptyTitle: "Không tìm thấy lựa chọn phù hợp",
     }
@@ -129,16 +131,17 @@ class Many2one extends React.Component {
                 style={styles.itemWrapper}
             >
                 <Text style={styles.itemText}>{data.item.name}</Text>
-                <Checkbox.Item
+                <Icon
                     style={styles.itemIcon} 
-                    status={data.item.checked ? 'checked':'unchecked'}
+                    name={data.item.checked ? 'check-circle-outline' : 'radiobox-blank'}
+                    color={data.item.checked ? this.props.colorTheme : '#777777'} size={20}
                 />
             </TouchableOpacity>
         );
      };    
 
     render(){
-        let {cancelButtonText,selectButtonText,onSelect} = this.props
+        let {cancelButtonText,selectButtonText,onSelect,colorTheme} = this.props
         let { visible, selectedItem, preSelectedItem} = this.state
         return(
             <TouchableOpacity 
@@ -165,12 +168,12 @@ class Many2one extends React.Component {
                             />
                         </Dialog.Content>
                         <Dialog.ScrollArea>
-                        <FlatList
-                            extraData={this.state}
-                            data={this.state.data}
-                            keyExtractor={this._keyExtractor}
-                            renderItem={this._renderItem}
-                        />
+                            <FlatList
+                                extraData={this.state}
+                                data={this.state.data}
+                                keyExtractor={this._keyExtractor}
+                                renderItem={this._renderItem}
+                            />
                         </Dialog.ScrollArea>
                         <Dialog.Actions>
                             <Button 
@@ -242,10 +245,11 @@ const styles = StyleSheet.create({
     },
     itemWrapper: {
         borderBottomWidth: 1, borderBottomColor: '#eaeaea',
-        paddingVertical: 12, flexDirection: 'row', alignItems:'center'
+        paddingVertical: 12, flexDirection: 'row', alignItems:'center',
+        height: 40
     },
     itemText: {
-        fontSize: 16, color: '#333', flex: 4
+        fontSize: 16, flex:1,
     },
     itemIcon: {
         width: 30, textAlign: 'right'

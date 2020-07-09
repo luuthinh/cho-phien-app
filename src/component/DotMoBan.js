@@ -70,7 +70,7 @@ class DotMoBan extends React.Component {
           onPress={() => {return this.props.navigation.navigate('Đặt hàng',item)}}>
           <Card.Content style={styles.content} >
             <Card.Cover style={styles.imageView} 
-                          source={{uri: `${URL_IMAGE}/x_dot_mb/${item.id}/x_image_512/128x128`,
+                          source={{uri: `${URL_IMAGE}/x_dot_mb/${item.id}/x_image_512/128x128#time=${item.write_date}`,
                                   method: "GET",
                                   headers: {
                                     "Content-Type": "application/x-www-form-urlencoded",
