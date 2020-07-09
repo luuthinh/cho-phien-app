@@ -128,7 +128,7 @@ class Many2one extends React.Component {
                 activeOpacity={0.7}
                 style={styles.itemWrapper}
             >
-                <Text>{data.item.name}</Text>
+                <Text style={styles.itemText}>{data.item.name}</Text>
                 <Checkbox.Item
                     style={styles.itemIcon} 
                     status={data.item.checked ? 'checked':'unchecked'}
@@ -141,7 +141,9 @@ class Many2one extends React.Component {
         let {cancelButtonText,selectButtonText,onSelect} = this.props
         let { visible, selectedItem, preSelectedItem} = this.state
         return(
-            <TouchableOpacity onPress={this.showDialog}>
+            <TouchableOpacity 
+                style={styles.container}
+                onPress={this.showDialog}>
                 {
                     Object.keys(preSelectedItem).length
                         ? (
@@ -155,8 +157,8 @@ class Many2one extends React.Component {
                         onDismiss={this.hideDialog}
                         style={styles.containerDialog} 
                         visible={this.state.visible}>
-                        <Dialog.Content style={{marginTop:-20}}>
-                            <Paragraph>Chọn khách hàng</Paragraph>
+                        <Dialog.Content style={{marginTop:-15}}>
+                            <Paragraph style={styles.title}>Chọn khách hàng</Paragraph>
                             <Searchbar 
                                 onChangeText={this._onchangeSearch}
                                 value={this.state.keyword}
@@ -200,6 +202,11 @@ class Many2one extends React.Component {
 export default Many2one;
 
 const styles = StyleSheet.create({
+    container: {
+        width: '100%', minHeight: 45, borderRadius: 2, paddingHorizontal: 16,
+        flexDirection: 'row', alignItems: 'center', borderWidth: 1,
+        borderColor: '#cacaca', paddingVertical: 4
+    },
     containerDialog: {
         paddingTop: 0,
         backgroundColor: '#fff', 
@@ -235,10 +242,10 @@ const styles = StyleSheet.create({
     },
     itemWrapper: {
         borderBottomWidth: 1, borderBottomColor: '#eaeaea',
-        paddingVertical: 12, flexDirection: 'row', alignItems: 'center'
+        paddingVertical: 12, flexDirection: 'row', alignItems:'center'
     },
     itemText: {
-        fontSize: 16, color: '#333', flex: 1
+        fontSize: 16, color: '#333', flex: 4
     },
     itemIcon: {
         width: 30, textAlign: 'right'
