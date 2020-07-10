@@ -141,19 +141,24 @@ class Many2one extends React.Component {
      };    
 
     render(){
-        let {cancelButtonText,selectButtonText,onSelect,colorTheme} = this.props
-        let { visible, selectedItem, preSelectedItem} = this.state
+        let {cancelButtonText,selectButtonText,onSelect,label,placeholder} = this.props
+        let { selectedItem, preSelectedItem} = this.state
         return(
+            <View>
+                <Text style={styles.label}>{label}</Text>
             <TouchableOpacity 
                 style={styles.container}
                 onPress={this.showDialog}>
                 {
                     Object.keys(preSelectedItem).length
                         ? (
-                            <View>
+                            <View>  
                                 <Text>{preSelectedItem.name}</Text>
                            </View>)
-                        : <Text>Chọn khách hàng</Text>
+                        : (
+                            <View>
+                                <Text>{placeholder}</Text>
+                           </View>)
                 }
                 <Portal>
                     <Dialog
@@ -161,7 +166,6 @@ class Many2one extends React.Component {
                         style={styles.containerDialog} 
                         visible={this.state.visible}>
                         <Dialog.Content style={{marginTop:-15}}>
-                            <Paragraph style={styles.title}>Chọn khách hàng</Paragraph>
                             <Searchbar 
                                 onChangeText={this._onchangeSearch}
                                 value={this.state.keyword}
@@ -197,9 +201,21 @@ class Many2one extends React.Component {
                     </Dialog>
                 </Portal>
             </TouchableOpacity>
-
+            </View>
         )
     }
+}
+
+Many2one.propsTypes = {
+    model: PropsTypes.string.isRequired,
+    uid: PropsTypes.number.isRequired,
+    password: PropsTypes.string,
+    db: PropsTypes.string,
+    url: PropsTypes.string,
+    placeholder: PropsTypes.string,
+    onSelect: PropsTypes.func,
+    label: PropsTypes.string.isRequired,
+    domain: PropsTypes.array
 }
 
 export default Many2one;
@@ -217,31 +233,11 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 8,
         height: INIT_HEIGHT,
     },
-    title: {
-        fontSize: 16, marginBottom: 16, width: '100%', textAlign: 'center'
-    },
     line: {
         height: 1, width: '100%', backgroundColor: '#cacaca'
     },
-    inputKeyword: {
-        height: 40, borderRadius: 5, borderWidth: 1, borderColor: '#cacaca',
-        paddingLeft: 8, marginHorizontal: 24, marginTop: 16
-    },
-    buttonWrapper: {
-        marginVertical: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'
-    },
     button: {
         height: 36, flex: 1
-    },
-    selectedTitlte: {
-        fontSize: 14, color: 'gray', flex: 1
-    },
-    tagWrapper: {
-        flexDirection: 'row', flexWrap: 'wrap'
-    },
-    listOption: {
-        paddingHorizontal: 24,
-        paddingTop: 1, marginTop: 16
     },
     itemWrapper: {
         borderBottomWidth: 1, borderBottomColor: '#eaeaea',
@@ -254,17 +250,9 @@ const styles = StyleSheet.create({
     itemIcon: {
         width: 30, textAlign: 'right'
     },
-    empty: {
-        fontSize: 16, color: 'gray', alignSelf: 'center', textAlign: 'center', paddingTop: 16
+    label:{
+        fontSize: 16,
+        fontWeight: '700',
+        marginBottom: 5,
     }    
 })
-
-Many2one.propsTypes = {
-    model: PropsTypes.string.isRequired,
-    uid: PropsTypes.number.isRequired,
-    password: PropsTypes.string,
-    db: PropsTypes.string,
-    url: PropsTypes.string,
-    title: PropsTypes.string,
-    onSelect: PropsTypes.func
-}

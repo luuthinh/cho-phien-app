@@ -119,20 +119,20 @@ const styles = StyleSheet.create({
       padding: 5
     },
     imageView:{
-	  borderRadius: 10,
-	  width:150,
-    height:128,
+      borderRadius: 10,
+      width:150,
+      height:128,
     },
     detailView:{
-	  flex:1,
-    height:128,
-    marginLeft: 10
+      flex:1,
+      height:128,
+      marginLeft: 10
     },
     itemTitle: {
-	  fontSize: 16,
-    fontWeight: '600',
-    color: '#000000',
-	  overflow: 'hidden',
+      fontSize: 16,
+      fontWeight: '600',
+      color: '#000000',
+      overflow: 'hidden',
     },
     itemPrice: {
       fontWeight: '700',

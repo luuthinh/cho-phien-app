@@ -26,7 +26,7 @@ class DatHang extends React.Component {
     return money;
   }
   _order = () => {
-    if (this.state.customerID === []){
+    if (Object.keys(this.state.customer).length){
       Alert.alert("Chưa chọn khách hàng")
     }
     fetch(URL_RPC, {
@@ -43,7 +43,7 @@ class DatHang extends React.Component {
           "args":[DB,
                   this.props.uid,this.props.password,
                   "x_dot_mb_don_hang","create",[{
-                    "x_name":this.state.customerID[0],
+                    "x_name":this.state.customer.id,
                     "x_ctv_id":this.props.partnerID,
                     "x_product_id": this.props.route.params.x_product_id[0],
                     "x_so_luong": this.state.soLuong,
@@ -54,14 +54,15 @@ class DatHang extends React.Component {
       })
     })
     .then((response) => response.json())
-    .then((json) => {
-        console.log("lỗi")
-        console.log(json.error)
+    .then((results) => {
+      if ('result' in results){
         Alert.alert("Đặt hàng thành công")
-      })
-      .catch((error) => console.error(error))
-      .finally(() => {
-      });
+      }
+      else if ('error' in results){
+        Alert.alert("Đặt hàng thất bại")
+      }
+    })
+    .catch((error) => Alert.alert("Đặt hàng thất bại"))
   }
   render() {
     const item = this.props.route.params
@@ -93,13 +94,18 @@ class DatHang extends React.Component {
             <View>
               <Paragraph style={styles.itemTitle}>{item.x_product_id[1]} - Giá: {this._formatCurency(item.x_gia_hien_tai)}</Paragraph>
             </View>   
-            <View style={styles.containerOrder}>
+            <View style={[styles.containerOrder, {borderColor: theme.colors.primary}]}>
               <IconButton icon="minus" 
-                          color={theme.colors.primary}
-                          size={25} 
+                          color={theme.colors.accent}
+                          size={27}
+                          style={{backgroundColor: theme.colors.primary, marginLeft:0}}
                           onPress={()=> this.setState({soLuong:this.state.soLuong -1, tamTinh:(this.state.soLuong -1)*item.x_gia_hien_tai})}/>
-              <Text style={{fontSize:20}}>{this.state.soLuong} {item.x_uom_id[1]}</Text>
-              <IconButton icon="plus" color={theme.colors.primary} size={20} onPress={()=> this.setState({soLuong:this.state.soLuong +1, tamTinh:(this.state.soLuong +1)*item.x_gia_hien_tai})}/>
+              <Text style={{fontSize:20, color:theme.colors.text}}>{this.state.soLuong} {item.x_uom_id[1]}</Text>
+              <IconButton 
+                icon="plus" 
+                style={{backgroundColor: theme.colors.primary, marginRight:0}}
+                color={theme.colors.accent} size={27} 
+                onPress={()=> this.setState({soLuong:this.state.soLuong +1, tamTinh:(this.state.soLuong +1)*item.x_gia_hien_tai})}/>
             </View>  
             <View>
             <Paragraph style={styles.totalprice}>Tạm tính: {this._formatCurency(this.state.tamTinh)}</Paragraph>
@@ -109,7 +115,9 @@ class DatHang extends React.Component {
               password={this.props.password}
               db={DB}
               url={URL_RPC}
-              title='Chọn khách hàng'
+              placeholder='Chọn khách hàng'
+              label='Khách hàng'
+              domain={[[["type", "=","contact"],['is_company','=',false]]]}
               onSelect={(item) => this.setState({customer:item})}
             />
             <Button mode="contained"
@@ -155,14 +163,21 @@ const styles = StyleSheet.create({
   itemTitle: {
   fontSize: 16,
   overflow: 'hidden',
+  marginLeft: 10
   },
   containerOrder:{
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center'
+    justifyContent: 'space-between',
+    alignSelf: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    width: "60%",
+    height: 40,
+    backgroundColor: 'white',
+    borderRadius: 20
   },
   totalprice:{
     fontSize: 16,
-    padding: 5,
+    marginLeft: 10
   }
 });
