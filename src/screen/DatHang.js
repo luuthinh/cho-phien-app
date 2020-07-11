@@ -18,7 +18,7 @@ class DatHang extends React.Component {
       soLuong : 1,
       tamTinh : this.props.route.params.x_gia_hien_tai,
       customerID: {},
-      enableAddress: false,
+      disabledAddress: true,
       addressData: [],
       addressID: {} 
     }
@@ -68,6 +68,50 @@ class DatHang extends React.Component {
     })
     .catch((error) => Alert.alert("Đặt hàng thất bại"))
   }
+
+  _onselect = (item) => {
+    this.setState({customerID:item})
+    if (Object.keys(item).length) {
+      this.setState({disabledAddress:false})
+      fetch(URL_RPC, {
+        method: 'POST',
+        headers:{
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          params:{
+            "service":"object",
+            "method":"execute_kw",
+            "args":[DB,
+                    this.props.uid,this.props.password,
+                    "res.partner","search_read",[[["type", "=","delivery"]]],{
+                      "fields":["state_id","x_quan_huyen_id","x_phuong_xa_id","street"]
+                    }]
+          }
+        })
+        })
+        .then((response) => response.json())
+        .then((json) => {
+          let data = []
+          json.result.map(delivery => {
+            let temp = {}
+            temp.label = `${delivery.street},${delivery.x_phuong_xa_id[1] },${delivery.x_quan_huyen_id[1] },${delivery.state_id[1]}`
+            temp.value = delivery.id
+            data.push(temp)
+          })
+          this.setState({ addressData: data });
+        })
+        .catch((error) => console.error(error))
+        .finally(() => {
+        });       
+    }
+    else{
+      this.setState({disabledAddress:true})
+    }
+  }
+
   render() {
     const item = this.props.route.params
     const theme = this.props.theme
@@ -121,12 +165,13 @@ class DatHang extends React.Component {
               url={URL_RPC}
               placeholder='Chọn khách hàng'
               label='Khách hàng'
-              onSelect={(item) => this.setState({customerID:item})}
+              onSelect={this._onselect}
             />
+            <Text style={{fontSize: 16,fontWeight: '700',marginTop: 10,color:theme.colors.text}}>Địa chỉ</Text>
             <RNPickerSelect 
               onValueChange={(value) => console.log(value)}
               placeholder={{label:"Chọn địa chỉ", value:null}}
-              disabled={this.state.enableAddress}
+              disabled={this.state.disabledAddress}
               items={this.state.addressData}/>
             <Button mode="contained"
                     style={{marginTop:20}}
