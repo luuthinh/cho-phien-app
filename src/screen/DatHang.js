@@ -4,6 +4,7 @@ import {Paragraph, IconButton, Button, Appbar, withTheme, Card} from 'react-nati
 import {connect} from 'react-redux';
 import {URL_IMAGE,DB, URL_RPC} from '../constants/API';
 import Many2one from '../component/Many2one';
+import RNPickerSelect from 'react-native-picker-select';
 
 const {width} = Dimensions.get('window')
 const SCREEN_WIDTH = parseInt(width)
@@ -16,7 +17,10 @@ class DatHang extends React.Component {
     this.state = {
       soLuong : 1,
       tamTinh : this.props.route.params.x_gia_hien_tai,
-      customer: {}, 
+      customerID: {},
+      enableAddress: false,
+      addressData: [],
+      addressID: {} 
     }
   }
 	componentDidMount() {
@@ -26,7 +30,7 @@ class DatHang extends React.Component {
     return money;
   }
   _order = () => {
-    if (Object.keys(this.state.customer).length){
+    if (Object.keys(this.state.customerID).length){
       Alert.alert("Chưa chọn khách hàng")
     }
     fetch(URL_RPC, {
@@ -43,7 +47,7 @@ class DatHang extends React.Component {
           "args":[DB,
                   this.props.uid,this.props.password,
                   "x_dot_mb_don_hang","create",[{
-                    "x_name":this.state.customer.id,
+                    "x_name":this.state.customerID.id,
                     "x_ctv_id":this.props.partnerID,
                     "x_product_id": this.props.route.params.x_product_id[0],
                     "x_so_luong": this.state.soLuong,
@@ -117,9 +121,13 @@ class DatHang extends React.Component {
               url={URL_RPC}
               placeholder='Chọn khách hàng'
               label='Khách hàng'
-              domain={[[["type", "=","contact"],['is_company','=',false]]]}
-              onSelect={(item) => this.setState({customer:item})}
+              onSelect={(item) => this.setState({customerID:item})}
             />
+            <RNPickerSelect 
+              onValueChange={(value) => console.log(value)}
+              placeholder={{label:"Chọn địa chỉ", value:null}}
+              disabled={this.state.enableAddress}
+              items={this.state.addressData}/>
             <Button mode="contained"
                     style={{marginTop:20}}
                     labelStyle={{color:'white'}}
