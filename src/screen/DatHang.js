@@ -1,10 +1,10 @@
 import React from 'react';
-import { Text, View, Dimensions, StyleSheet, Image, Alert} from 'react-native';
+import { Text, View, Dimensions, StyleSheet, Alert, SafeAreaView} from 'react-native';
 import {Paragraph, IconButton, Button, Appbar, withTheme, Card} from 'react-native-paper';
 import {connect} from 'react-redux';
 import {URL_IMAGE,DB, URL_RPC} from '../constants/API';
 import Many2one from '../component/Many2one';
-import RNPickerSelect from 'react-native-picker-select';
+import Selection from '../component/Selection';
 
 const {width} = Dimensions.get('window')
 const SCREEN_WIDTH = parseInt(width)
@@ -20,7 +20,7 @@ class DatHang extends React.Component {
       customerID: {},
       disabledAddress: true,
       addressData: [],
-      addressID: {} 
+      addressID: null
     }
   }
 	componentDidMount() {
@@ -30,9 +30,10 @@ class DatHang extends React.Component {
     return money;
   }
   _order = () => {
-    if (Object.keys(this.state.customerID).length){
+    if (!Object.keys(this.state.customerID).length){
       Alert.alert("Chưa chọn khách hàng")
     }
+    else {
     fetch(URL_RPC, {
       method: 'POST',
       headers:{
@@ -52,7 +53,8 @@ class DatHang extends React.Component {
                     "x_product_id": this.props.route.params.x_product_id[0],
                     "x_so_luong": this.state.soLuong,
                     "x_trang_thai": "don_hang",
-                    "x_dot_mb_id": this.props.route.params.id 
+                    "x_dot_mb_id": this.props.route.params.id,
+                    "x_dia_chi_id": this.state.addressID
                   }]]
         }
       })
@@ -67,6 +69,7 @@ class DatHang extends React.Component {
       }
     })
     .catch((error) => Alert.alert("Đặt hàng thất bại"))
+    }
   }
 
   _onselect = (item) => {
@@ -86,8 +89,8 @@ class DatHang extends React.Component {
             "method":"execute_kw",
             "args":[DB,
                     this.props.uid,this.props.password,
-                    "res.partner","search_read",[[["type", "=","delivery"]]],{
-                      "fields":["state_id","x_quan_huyen_id","x_phuong_xa_id","street"]
+                    "res.partner","search_read",[[["type", "=","delivery"],["parent_id", "=", item.id]]],{
+                      "fields":["state_id","x_quan_huyen_id","x_phuong_xa_id","street","name","mobile"]
                     }]
           }
         })
@@ -99,6 +102,8 @@ class DatHang extends React.Component {
             let temp = {}
             temp.label = `${delivery.street},${delivery.x_phuong_xa_id[1] },${delivery.x_quan_huyen_id[1] },${delivery.state_id[1]}`
             temp.value = delivery.id
+            temp.name = delivery.name
+            temp.mobile = delivery.mobile
             data.push(temp)
           })
           this.setState({ addressData: data });
@@ -128,58 +133,58 @@ class DatHang extends React.Component {
             size={30}
             onPress={() => console.log('Pressed archive')} />
         </Appbar.Header>
-        <Card>
-          <Card.Cover source={{uri: `${URL_IMAGE}/x_dot_mb/${item.id}/x_image_512#time=${item.write_date}`,
-                                  method: "GET",
-                                  headers: {
-                                    "Content-Type": "application/x-www-form-urlencoded",
-                                    "X_Openerp": this.props.sessionID,
-                                  }
-                        }}
-                  style={styles.imageView}
-          /> 
-          <View style={styles.detailView}></View>
-            <View>
-              <Paragraph style={styles.itemTitle}>{item.x_product_id[1]} - Giá: {this._formatCurency(item.x_gia_hien_tai)}</Paragraph>
-            </View>   
-            <View style={[styles.containerOrder, {borderColor: theme.colors.primary}]}>
-              <IconButton icon="minus" 
-                          color={theme.colors.accent}
-                          size={27}
-                          style={{backgroundColor: theme.colors.primary, marginLeft:0}}
-                          onPress={()=> this.setState({soLuong:this.state.soLuong -1, tamTinh:(this.state.soLuong -1)*item.x_gia_hien_tai})}/>
-              <Text style={{fontSize:20, color:theme.colors.text}}>{this.state.soLuong} {item.x_uom_id[1]}</Text>
-              <IconButton 
-                icon="plus" 
-                style={{backgroundColor: theme.colors.primary, marginRight:0}}
-                color={theme.colors.accent} size={27} 
-                onPress={()=> this.setState({soLuong:this.state.soLuong +1, tamTinh:(this.state.soLuong +1)*item.x_gia_hien_tai})}/>
-            </View>  
-            <View>
-            <Paragraph style={styles.totalprice}>Tạm tính: {this._formatCurency(this.state.tamTinh)}</Paragraph>
-            <Many2one 
-              model="res.parner"
-              uid={this.props.uid}
-              password={this.props.password}
-              db={DB}
-              url={URL_RPC}
-              placeholder='Chọn khách hàng'
-              label='Khách hàng'
-              onSelect={this._onselect}
-            />
-            <Text style={{fontSize: 16,fontWeight: '700',marginTop: 10,color:theme.colors.text}}>Địa chỉ</Text>
-            <RNPickerSelect 
-              onValueChange={(value) => console.log(value)}
-              placeholder={{label:"Chọn địa chỉ", value:null}}
-              disabled={this.state.disabledAddress}
-              items={this.state.addressData}/>
-            <Button mode="contained"
-                    style={{marginTop:20}}
-                    labelStyle={{color:'white'}}
-                    color={theme.colors.primary} 
-                    onPress={this._order}>Đặt hàng</Button>
-          </View>                        
-        </Card>
+        <SafeAreaView>
+          <Card>
+            <Card.Cover source={{uri: `${URL_IMAGE}/x_dot_mb/${item.id}/x_image_512#time=${item.write_date}`,
+                                    method: "GET",
+                                    headers: {
+                                      "Content-Type": "application/x-www-form-urlencoded",
+                                      "X_Openerp": this.props.sessionID,
+                                    }
+                          }}
+                    style={styles.imageView}
+            /> 
+            <View style={styles.detailView}></View>
+              <View>
+                <Paragraph style={styles.itemTitle}>{item.x_product_id[1]} - Giá: {this._formatCurency(item.x_gia_hien_tai)}</Paragraph>
+              </View>   
+              <View style={[styles.containerOrder, {borderColor: theme.colors.primary}]}>
+                <IconButton icon="minus" 
+                            color={theme.colors.accent}
+                            size={27}
+                            style={{backgroundColor: theme.colors.primary, marginLeft:0}}
+                            onPress={()=> this.setState({soLuong:this.state.soLuong -1, tamTinh:(this.state.soLuong -1)*item.x_gia_hien_tai})}/>
+                <Text style={{fontSize:20, color:theme.colors.text}}>{this.state.soLuong} {item.x_uom_id[1]}</Text>
+                <IconButton 
+                  icon="plus" 
+                  style={{backgroundColor: theme.colors.primary, marginRight:0}}
+                  color={theme.colors.accent} size={27} 
+                  onPress={()=> this.setState({soLuong:this.state.soLuong +1, tamTinh:(this.state.soLuong +1)*item.x_gia_hien_tai})}/>
+              </View>  
+              <View>
+              <Paragraph style={styles.totalprice}>Tạm tính: {this._formatCurency(this.state.tamTinh)}</Paragraph>
+              <Many2one 
+                model="res.parner"
+                uid={this.props.uid}
+                password={this.props.password}
+                db={DB}
+                url={URL_RPC} 
+                placeholder='Chọn khách hàng'
+                label='Khách hàng'
+                onSelect={this._onselect}
+              />
+              <Selection
+                label="Chọn địa chỉ"
+                onSelect={(item) => this.setState({addressID:item.value})}
+                items={this.state.addressData}/>
+              <Button mode="contained"
+                      style={{marginTop:20}}
+                      labelStyle={{color:'white'}}
+                      color={theme.colors.primary} 
+                      onPress={this._order}>Đặt hàng</Button>
+            </View>                        
+          </Card>
+        </SafeAreaView>
       </View>  
     );
   }
