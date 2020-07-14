@@ -120,7 +120,6 @@ class DatHang extends React.Component {
   render() {
     const item = this.props.route.params
     const theme = this.props.theme
-    console.log(this.state)
     return (
       <View>
         <Appbar.Header>
