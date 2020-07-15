@@ -30,7 +30,7 @@ class KhachHang extends React.Component {
               "args":[DB,
                       this.props.uid,this.props.password,
                       "res.partner","search_read",[[["type", "=","contact"],['is_company','=',false]]],{
-                      "fields":["name","mobile","email","state_id","x_quan_huyen_id","x_phuong_xa_id","street","write_date"]
+                      "fields":["name","mobile","email","write_date"]
                       }]
             }
 					})
@@ -53,7 +53,8 @@ class KhachHang extends React.Component {
   }
   _renderItem = data => {
     return (
-      <Card style={styles.container}>
+      <Card style={styles.container} 
+        onPress={() => {return this.props.navigation.navigate("Thông tin khách hàng",data.item)}}>
         <Card.Content style={styles.content}>
           <Card.Cover style={styles.imageView}                       
                           source={{uri: `https://vuonnhatoi.odoo.com/web/partner_image/${data.item.id}#time=${data.item.write_date}`,
@@ -66,8 +67,8 @@ class KhachHang extends React.Component {
             />
             <View style={styles.detailView}>
               <Paragraph style={styles.itemName}>{data.item.name}</Paragraph>
+              <Paragraph style={styles.itemDetail}>Email: {data.item.email}</Paragraph>
               <Paragraph style={styles.itemDetail}>Số ĐT: {data.item.mobile}</Paragraph>
-              <Paragraph style={styles.itemDetail}>{data.item.street}, {data.item.x_phuong_xa_id[1]}, {data.item.x_quan_huyen_id[1]}, {data.item.state_id[1]}</Paragraph>
             </View>
         </Card.Content>
 
@@ -91,7 +92,7 @@ class KhachHang extends React.Component {
           "args":[DB,
                   this.props.uid,this.props.password,
                   "res.partner","search_read",[[["type", "=","contact"],['is_company','=',false]]],{
-                    "fields":["name","mobile","email","state_id","x_quan_huyen_id","x_phuong_xa_id","street","write_date"]
+                    "fields":["name","mobile","email","write_date"]
                   }]
         }
       })
@@ -106,13 +107,6 @@ class KhachHang extends React.Component {
       });    
 
   }
-  _getItemLayout = (data, index) => {
-    return {
-      length: 100,
-      offset: 100 * index,
-      index,
-    };
-  };
   render() {
     const theme = this.props.theme;
     if (this.state.isLoading) {
@@ -130,7 +124,7 @@ class KhachHang extends React.Component {
       )
     }  
     return (
-      <View>
+      <View style={{flex:1}}>
         <Appbar.Header>
             <Appbar.Content
             title="Khách hàng"
@@ -143,7 +137,6 @@ class KhachHang extends React.Component {
           data={this.state.data}
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}
-          getItemLayout={this._getItemLayout}
           refreshControl={<RefreshControl refreshing={this.state.isRefreshing}
                                           onRefresh={this._onRefresh}
                           />}

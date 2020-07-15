@@ -1,8 +1,8 @@
 import React from 'react';
-import {View, StyleSheet, Dimensions, SafeAreaView, FlatList} from 'react-native';
+import {View, StyleSheet, Dimensions, SafeAreaView, FlatList, Alert} from 'react-native';
 import {connect} from 'react-redux';
 import {Appbar, TextInput, withTheme, Button, List, Text, IconButton, Colors} from 'react-native-paper';
-
+import {URL_RPC,DB} from '../constants/API';
 // Lấy kích thước màn hình thiết bị
 const { width, height } = Dimensions.get('window');
 const SCREEN_WIDTH = width
@@ -10,20 +10,14 @@ const SCREEN_WIDTH = width
 class KhachHangChiTiet extends React.Component {
   constructor(props){
     super(props)
+    console.log(props.route)
+    let {params} = props.route;
     this.state = {
+      id: params.id,
+      name: params.name,
+      email: params.email,
+      mobile: params.mobile,
       addressData:[
-        {
-          id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-          title: 'First Item',
-        },
-        {
-          id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-          title: 'Second Item',
-        },
-        {
-          id: '58694a0f-3da1-471f-bd96-145571e29d72',
-          title: 'Third Item',
-        },
       ]
     }
   }
@@ -33,6 +27,7 @@ class KhachHangChiTiet extends React.Component {
   _renderItem = ({ item }) => (
     <List.Item
     title={item.title}
+    style={{backgroundColor:'white'}}
     description="Item description"
     left={props => <List.Icon {...props} icon="account"/>}
     right={props => <IconButton
@@ -46,13 +41,57 @@ class KhachHangChiTiet extends React.Component {
   _footer= () => {
     return(
       <List.Item
+      style={{backgroundColor:'white'}}
       title="Thêm địa chỉ giao hàng"
       onPress={()=> console.log("Nhan")}
       left={props => <List.Icon {...props} icon="plus" />}
       />
     )
   }
-
+  _createCustomer = () => {
+    if (this.state.name == ''){
+      Alert.alert("Chưa có tên khách hàng")
+    }
+    else {
+    fetch(URL_RPC, {
+      method: 'POST',
+      headers:{
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        jsonrpc: '2.0',
+        params:{
+          "service":"object",
+          "method":"execute_kw",
+          "args":[DB,
+                  this.props.uid,this.props.password,
+                  "res.partner","create",[{
+                    "name":this.state.name,
+                    "email":this.state.email,
+                    "mobile": this.state.mobile,
+                    "parent_id": this.props.partnerID,
+                  }]]
+        }
+      })
+    })
+    .then((response) => response.json())
+    .then((results) => {
+      console.log(results)
+      if ('result' in results){
+        this.setState({id:results.result})
+        Alert.alert("Tạo khách hàng thành công")
+      }
+      else if ('error' in results){
+        Alert.alert("Tạo khách hàng thất bại")
+      }
+    })
+    .catch((error) => Alert.alert("Tạo khách hàng thất bại"))
+    }
+  }
+  _saveCustomer = () => {
+    console.log("lưu khách hàng")
+  }  
   render() {
     const theme = this.props.theme
     return (
@@ -68,11 +107,18 @@ class KhachHangChiTiet extends React.Component {
             onPress={() => console.log('Pressed archive')} />
         </Appbar.Header>
         <View style={styles.container}>
-          <TextInput style={styles.customerForm}
+          <TextInput
+            onChangeText={(name) => this.setState({name})} 
+            style={styles.customerForm}
             label="Họ tên"/>
-          <TextInput style={styles.customerForm}
+          <TextInput
+            autoCapitalize="none" 
+            onChangeText={(email) => this.setState({email})}
+            style={styles.customerForm}
             label="Email"/>
-          <TextInput style={styles.customerForm}
+          <TextInput 
+            onChangeText={(mobile) => this.setState({mobile})}
+            style={styles.customerForm}
             label="Số điện thoại"/>
           <Text style={styles.titleAddress} >Sổ địa chỉ</Text>
           <FlatList
@@ -80,12 +126,24 @@ class KhachHangChiTiet extends React.Component {
             renderItem={this._renderItem}
             ListFooterComponent={this._footer}
             keyExtractor={item => item.id}
-          />  
-          <Button
-            style={styles.saveButton}
-            mode = 'contained'
-            labelStyle={{color:'white'}}
-          >Lưu thông tin</Button>                      
+          />
+          {
+            this.state.id == null ?           
+              <Button
+              style={styles.saveButton}
+              mode = 'contained'
+              onPress = {this._createCustomer}
+              labelStyle={{color:'white'}}
+              >Tạo mới khách hàng</Button>
+            :
+              <Button
+              style={styles.saveButton}
+              mode = 'contained'
+              onPress={this._saveCustomer}
+              labelStyle={{color:'white'}}
+              >Lưu thông tin</Button>
+          }  
+                      
         </View>
       </SafeAreaView>
     );
@@ -96,6 +154,7 @@ function mapStateToProps(state) {
     userName: state.auth.userName,
     name: state.auth.name,
     uid : state.auth.uid,
+    partnerID: state.auth.partnerID,
     password: state.auth.password,
     sessionID: state.auth.sessionID,
     expiresDate: state.auth.expiresDate,
