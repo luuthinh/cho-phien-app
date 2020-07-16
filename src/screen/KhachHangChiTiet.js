@@ -8,18 +8,38 @@ const { width, height } = Dimensions.get('window');
 const SCREEN_WIDTH = width
 
 class KhachHangChiTiet extends React.Component {
+  static defaultProps = {
+    cancelButtonText: 'Hủy',
+    selectButtonText: 'Chọn',
+    colorTheme: '#16a45f',
+    searchPlaceHolderText: "Nhập vào từ khóa",
+    listEmptyTitle: "Không tìm thấy lựa chọn phù hợp",
+}  
   constructor(props){
     super(props)
     console.log(props.route)
-    let {params} = props.route;
-    this.state = {
-      id: params.id,
-      name: params.name,
-      email: params.email,
-      mobile: params.mobile,
-      addressData:[
-      ]
+    if (props.route.params !== undefined){
+      let {params} = props.route;
+      this.state = {
+        id: params.id,
+        name: params.name,
+        email: params.email,
+        mobile: params.mobile,
+        addressData:[
+        ]
+      }
     }
+    else {
+      this.state = {
+        id: null,
+        name: '',
+        email: '',
+        mobile: '',
+        addressData:[
+        ]
+      }      
+    }
+
   }
   componentDidMount(){
   }
@@ -44,6 +64,7 @@ class KhachHangChiTiet extends React.Component {
       style={{backgroundColor:'white'}}
       title="Thêm địa chỉ giao hàng"
       onPress={()=> console.log("Nhan")}
+      disabled={this.state.id == null ? true : false}
       left={props => <List.Icon {...props} icon="plus" />}
       />
     )
@@ -110,15 +131,18 @@ class KhachHangChiTiet extends React.Component {
           <TextInput
             onChangeText={(name) => this.setState({name})} 
             style={styles.customerForm}
+            defaultValue={this.state.name}
             label="Họ tên"/>
           <TextInput
             autoCapitalize="none" 
             onChangeText={(email) => this.setState({email})}
             style={styles.customerForm}
+            defaultValue={this.state.email}
             label="Email"/>
           <TextInput 
             onChangeText={(mobile) => this.setState({mobile})}
             style={styles.customerForm}
+            defaultValue={this.state.mobile}
             label="Số điện thoại"/>
           <Text style={styles.titleAddress} >Sổ địa chỉ</Text>
           <FlatList
@@ -172,7 +196,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     borderColor: '#eaeaea',
-    backgroundColor: '#fafafa',
+    backgroundColor: '#ffffff',
     paddingLeft: 10,
     marginTop: 5,
   },
