@@ -121,7 +121,7 @@ class DatHang extends React.Component {
     const item = this.props.route.params
     const theme = this.props.theme
     return (
-      <View>
+      <SafeAreaView style={{flex:1}}>
         <Appbar.Header>
           <Appbar.BackAction onPress={this.props.navigation.goBack} color={theme.colors.title} size={30}/>
           <Appbar.Content title="Đặt hàng" color={theme.colors.title} titleStyle={{fontSize:20}}/>
@@ -132,7 +132,7 @@ class DatHang extends React.Component {
             size={30}
             onPress={() => console.log('Pressed archive')} />
         </Appbar.Header>
-        <SafeAreaView>
+        <View>
           <Card>
             <Card.Cover source={{uri: `${URL_IMAGE}/x_dot_mb/${item.id}/x_image_512#time=${item.write_date}`,
                                     method: "GET",
@@ -183,8 +183,8 @@ class DatHang extends React.Component {
                       onPress={this._order}>Đặt hàng</Button>
             </View>                        
           </Card>
-        </SafeAreaView>
-      </View>  
+        </View>
+      </SafeAreaView>  
     );
   }
 }

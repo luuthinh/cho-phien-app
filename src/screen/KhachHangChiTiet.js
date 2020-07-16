@@ -1,20 +1,13 @@
 import React from 'react';
 import {View, StyleSheet, Dimensions, SafeAreaView, FlatList, Alert} from 'react-native';
 import {connect} from 'react-redux';
-import {Appbar, TextInput, withTheme, Button, List, Text, IconButton, Colors} from 'react-native-paper';
+import {Appbar, TextInput, withTheme, Button, List, Text, IconButton, Colors, Paragraph} from 'react-native-paper';
 import {URL_RPC,DB} from '../constants/API';
 // Lấy kích thước màn hình thiết bị
 const { width, height } = Dimensions.get('window');
 const SCREEN_WIDTH = width
 
-class KhachHangChiTiet extends React.Component {
-  static defaultProps = {
-    cancelButtonText: 'Hủy',
-    selectButtonText: 'Chọn',
-    colorTheme: '#16a45f',
-    searchPlaceHolderText: "Nhập vào từ khóa",
-    listEmptyTitle: "Không tìm thấy lựa chọn phù hợp",
-}  
+class KhachHangChiTiet extends React.Component {  
   constructor(props){
     super(props)
     console.log(props.route)
@@ -25,8 +18,7 @@ class KhachHangChiTiet extends React.Component {
         name: params.name,
         email: params.email,
         mobile: params.mobile,
-        addressData:[
-        ]
+        addressData:[]
       }
     }
     else {
@@ -35,26 +27,102 @@ class KhachHangChiTiet extends React.Component {
         name: '',
         email: '',
         mobile: '',
-        addressData:[
-        ]
+        addressData:[]
       }      
     }
 
   }
   componentDidMount(){
+    if (this.state.id) {
+      fetch(URL_RPC, {
+        method: 'POST',
+        headers:{
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          params:{
+            "service":"object",
+            "method":"execute_kw",
+            "args":[DB,
+                    this.props.uid,this.props.password,
+                    "res.partner","search_read",[[["type", "=","delivery"],["parent_id", "=", this.state.id]]],{
+                      "fields":["state_id","x_quan_huyen_id","x_phuong_xa_id","street","name","mobile"]
+                    }]
+          }
+        })
+        })
+        .then((response) => response.json())
+        .then((json) => {
+          let data = []
+          json.result.map(delivery => {
+            let temp = {}
+            temp.address = `${delivery.street},${delivery.x_phuong_xa_id[1] },${delivery.x_quan_huyen_id[1] },${delivery.state_id[1]}`
+            temp.id = delivery.id
+            temp.name = delivery.name
+            temp.mobile = delivery.mobile
+            data.push(temp)
+          })
+          this.setState({ addressData: data });
+        })
+        .catch((error) => console.error(error))
+        .finally(() => {});       
+    }
   }
 
   _renderItem = ({ item }) => (
     <List.Item
-    title={item.title}
+    title={item.name}
     style={{backgroundColor:'white'}}
-    description="Item description"
+    description={() => 
+      (<View>
+        <Paragraph>Số ĐT: {item.mobile}</Paragraph>
+        <Paragraph>{item.address}</Paragraph>
+      </View>)}
     left={props => <List.Icon {...props} icon="account"/>}
     right={props => <IconButton
+      {...props}
       icon="trash-can-outline"
       color={Colors.red500}
       size={20}
-      onPress={() => console.log('Pressed')}
+      onPress={() => 
+      { 
+          fetch(URL_RPC, {
+            method: 'POST',
+            headers:{
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              jsonrpc: '2.0',
+              params:{
+                "service":"object",
+                "method":"execute_kw",
+                "args":[DB,
+                        this.props.uid,this.props.password,
+                        "res.partner","unlink",[[item.id,]]]
+              }
+            })
+          })
+          .then((response) => response.json())
+          .then((results) => {
+            console.log(results)
+            if ('result' in results){
+              let array = [...this.state.addressData]
+              let index = array.indexOf(item)
+              if (index !== -1){
+                array.splice(index, 1)
+                this.setState({addressData: array})
+              }
+            }
+            else if ('error' in results){
+              Alert.alert("Xóa địa chỉ thất bại")
+            }
+          })
+          .catch((error) => Alert.alert("Xóa địa chỉ thất bại"))       
+        }
+      }
   />}
   />
   )
@@ -149,7 +217,7 @@ class KhachHangChiTiet extends React.Component {
             data={this.state.addressData}
             renderItem={this._renderItem}
             ListFooterComponent={this._footer}
-            keyExtractor={item => item.id}
+            keyExtractor={item => item.id.toString()}
           />
           {
             this.state.id == null ?           
