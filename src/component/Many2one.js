@@ -53,7 +53,7 @@ class Many2one extends React.Component {
                 "method":"execute_kw",
                 "args":[this.props.db,
                         this.props.uid,this.props.password,
-                        "res.partner","name_search",[keyword]]
+                        this.props.model,"name_search",[keyword,[],"ilike",8]]
                 }
             })
             })
@@ -84,7 +84,7 @@ class Many2one extends React.Component {
                 "method":"execute_kw",
                 "args":[this.props.db,
                         this.props.uid,this.props.password,
-                        "res.partner","name_search",["",[],"ilike",8]]
+                        this.props.model,"name_search",["",[],"ilike",8]]
                 }
             })
             })

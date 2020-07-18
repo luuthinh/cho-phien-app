@@ -13,11 +13,12 @@ class KhachHangChiTiet extends React.Component {
     console.log(props.route)
     if (props.route.params !== undefined){
       let {params} = props.route;
+      console.log(params)
       this.state = {
         id: params.id,
         name: params.name,
-        email: params.email,
-        mobile: params.mobile,
+        email: (params.email !== false) ? params.email : '',
+        mobile: (params.mobile !== false) ? params.mobile : '',
         addressData:[]
       }
     }
@@ -131,7 +132,7 @@ class KhachHangChiTiet extends React.Component {
       <List.Item
       style={{backgroundColor:'white'}}
       title="Thêm địa chỉ giao hàng"
-      onPress={()=> console.log("Nhan")}
+      onPress={() => {return this.props.navigation.navigate("Sổ địa chỉ")}}
       disabled={this.state.id == null ? true : false}
       left={props => <List.Icon {...props} icon="plus" />}
       />
@@ -179,8 +180,41 @@ class KhachHangChiTiet extends React.Component {
     }
   }
   _saveCustomer = () => {
-    console.log("lưu khách hàng")
-  }  
+    if (this.state.name == ''){
+      Alert.alert("Chưa có tên khách hàng")
+    }
+    else {
+    fetch(URL_RPC, {
+      method: 'POST',
+      headers:{
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        jsonrpc: '2.0',
+        params:{
+          "service":"object",
+          "method":"execute_kw",
+          "args":[DB,
+                  this.props.uid,this.props.password,
+                  "res.partner","write",[[this.state.id],
+                  {"name":this.state.name,"email":this.state.email,"mobile":this.state.mobile}]]
+        }
+      })
+    })
+    .then((response) => response.json())
+    .then((results) => {
+      console.log(results)
+      if ('result' in results){
+        Alert.alert("Thay đổi thành công")
+      }
+      else if ('error' in results){
+        Alert.alert("Thay đổi thất bại")
+      }
+    })
+    .catch((error) => Alert.alert("Thay đổi thất bại"))
+    }
+  } 
   render() {
     const theme = this.props.theme
     return (
