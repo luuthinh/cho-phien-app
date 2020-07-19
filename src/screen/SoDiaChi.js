@@ -13,12 +13,18 @@ class SoDiaChi extends React.Component {
     super(props)
     this.state = {
         id: null,
-        street : ''
+        name: '',
+        mobile: '',
+        stateID: {},
+        districtID: {},
+        wardID: {},
+        street : '',
+        parentID: null,
     }
   }
-  _createCustomer = () => {
+  _createAddress = () => {
     if (this.state.name == ''){
-      Alert.alert("Chưa có tên khách hàng")
+      Alert.alert("Chưa có tên người nhận")
     }
     else {
     fetch(URL_RPC, {
@@ -36,9 +42,14 @@ class SoDiaChi extends React.Component {
                   this.props.uid,this.props.password,
                   "res.partner","create",[{
                     "name":this.state.name,
-                    "email":this.state.email,
                     "mobile": this.state.mobile,
-                    "parent_id": this.props.partnerID,
+                    "parent_id": this.props.route.params.parentID,
+                    "type": "delivery",
+                    "street": this.state.street,
+                    "state_id": this.state.stateID.id,
+                    "x_quan_huyen_id": this.state.districtID.id,
+                    "x_phuong_xa_id": this.state.wardID.id,
+
                   }]]
         }
       })
@@ -48,13 +59,13 @@ class SoDiaChi extends React.Component {
       console.log(results)
       if ('result' in results){
         this.setState({id:results.result})
-        Alert.alert("Tạo khách hàng thành công")
+        Alert.alert("Tạo địa chỉ thành công")
       }
       else if ('error' in results){
-        Alert.alert("Tạo khách hàng thất bại")
+        Alert.alert("Tạo địa chỉ thất bại")
       }
     })
-    .catch((error) => Alert.alert("Tạo khách hàng thất bại"))
+    .catch((error) => Alert.alert("Tạo địa chỉ thất bại"))
     }
   }
   _saveCustomer = () => {
@@ -95,6 +106,8 @@ class SoDiaChi extends React.Component {
   } 
   render() {
     const theme = this.props.theme
+    console.log(this.state)
+    console.log(this.props.route.params)
     return (
       <SafeAreaView>
         <Appbar.Header>
@@ -107,7 +120,17 @@ class SoDiaChi extends React.Component {
             size={30}
             onPress={() => console.log('Pressed archive')} />
         </Appbar.Header>
-        <View style={styles.container}>          
+        <View style={styles.container}>
+            <TextInput
+                    onChangeText={(name) => this.setState({name})} 
+                    style={styles.customerForm}
+                    defaultValue={this.state.name}
+                    label="Người nhận"/>          
+            <TextInput
+                    onChangeText={(mobile) => this.setState({mobile})} 
+                    style={styles.customerForm}
+                    defaultValue={this.state.mobile}
+                    label="Số điện thoại"/>                    
             <TextInput
                 onChangeText={(street) => this.setState({street})} 
                 style={styles.customerForm}
@@ -121,17 +144,21 @@ class SoDiaChi extends React.Component {
                 url={URL_RPC} 
                 placeholder='Chọn tỉnh thành'
                 label='Tỉnh thành'
-                onSelect={this._onselect}
+                onSelect={(item) =>{
+                  this.setState({stateID:item})
+                }}
             /> 
             <Many2one 
                 model="x_quan_huyen"
                 uid={this.props.uid}
                 password={this.props.password}
                 db={DB}
-                url={URL_RPC} 
+                url={URL_RPC}
                 placeholder='Chọn quận huyện'
                 label='Quận huyện'
-                onSelect={this._onselect}
+                onSelect={(item) =>{
+                  this.setState({districtID:item})
+                }}
             />
             <Many2one 
                 model="x_phuong_xa"
@@ -141,7 +168,9 @@ class SoDiaChi extends React.Component {
                 url={URL_RPC} 
                 placeholder='Chọn phường xã'
                 label='Phường xã'
-                onSelect={this._onselect}
+                onSelect={(item) =>{
+                  this.setState({wardID:item})
+                }}
             />                          
 
           {
@@ -149,7 +178,7 @@ class SoDiaChi extends React.Component {
               <Button
               style={styles.saveButton}
               mode = 'contained'
-              onPress = {this._createCustomer}
+              onPress = {this._createAddress}
               labelStyle={{color:'white'}}
               >Tạo địa chỉ </Button>
             :

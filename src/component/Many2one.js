@@ -16,6 +16,7 @@ class Many2one extends React.Component {
         colorTheme: '#16a45f',
         searchPlaceHolderText: "Nhập vào từ khóa",
         listEmptyTitle: "Không tìm thấy lựa chọn phù hợp",
+        domain: [],
     }
     constructor(props){
         super(props);
@@ -53,7 +54,7 @@ class Many2one extends React.Component {
                 "method":"execute_kw",
                 "args":[this.props.db,
                         this.props.uid,this.props.password,
-                        this.props.model,"name_search",[keyword,[],"ilike",8]]
+                        this.props.model,"name_search",[keyword,this.props.domain,"ilike",8]]
                 }
             })
             })
@@ -84,13 +85,14 @@ class Many2one extends React.Component {
                 "method":"execute_kw",
                 "args":[this.props.db,
                         this.props.uid,this.props.password,
-                        this.props.model,"name_search",["",[],"ilike",8]]
+                        this.props.model,"name_search",["",this.props.domain,"ilike",8]]
                 }
             })
             })
             .then((response) => response.json())
             .then((json) => {
                 let mockData = []
+                console.log(json)
                 json.result.map((data) => {
                 mockData.push({id:data[0],name:data[1]})
                 })

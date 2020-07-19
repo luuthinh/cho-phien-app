@@ -163,11 +163,12 @@ class DatHang extends React.Component {
               <View>
               <Paragraph style={styles.totalprice}>Tạm tính: {this._formatCurency(this.state.tamTinh)}</Paragraph>
               <Many2one 
-                model="res.parner"
+                model="res.partner"
                 uid={this.props.uid}
                 password={this.props.password}
                 db={DB}
-                url={URL_RPC} 
+                url={URL_RPC}
+                domain={[['type', '=', 'contact']]} 
                 placeholder='Chọn khách hàng'
                 label='Khách hàng'
                 onSelect={this._onselect}

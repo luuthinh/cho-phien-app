@@ -132,7 +132,7 @@ class KhachHangChiTiet extends React.Component {
       <List.Item
       style={{backgroundColor:'white'}}
       title="Thêm địa chỉ giao hàng"
-      onPress={() => {return this.props.navigation.navigate("Sổ địa chỉ")}}
+      onPress={() => {return this.props.navigation.navigate("Sổ địa chỉ",{parentID:this.state.id})}}
       disabled={this.state.id == null ? true : false}
       left={props => <List.Icon {...props} icon="plus" />}
       />
