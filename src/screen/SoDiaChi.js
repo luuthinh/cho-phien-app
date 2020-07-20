@@ -24,8 +24,23 @@ class SoDiaChi extends React.Component {
   }
   _createAddress = () => {
     if (this.state.name == ''){
-      Alert.alert("Chưa có tên người nhận")
+      Alert.alert("Chưa nhập tên người nhận")
     }
+    else if (this.state.mobile == ''){
+      Alert.alert("Chưa nhập số điện thoại")
+    }
+    else if (this.state.street == ''){
+      Alert.alert("Chưa nhập số nhà")
+    }
+    else if (this.state.wardID == ''){
+      Alert.alert("Chưa nhập tên phường/xã")
+    }
+    else if (this.state.districtID == ''){
+      Alert.alert("Chưa nhập quận/huyện")
+    } 
+    else if (this.state.stateID == ''){
+      Alert.alert("Chưa nhập tỉnh/thành")
+    }               
     else {
     fetch(URL_RPC, {
       method: 'POST',

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Dimensions, SafeAreaView, FlatList, Alert} from 'react-native';
+import {View, StyleSheet, Dimensions, SafeAreaView, FlatList, Alert, RefreshControl} from 'react-native';
 import {connect} from 'react-redux';
 import {Appbar, TextInput, withTheme, Button, List, Text, IconButton, Colors, Paragraph} from 'react-native-paper';
 import {URL_RPC,DB} from '../constants/API';
@@ -19,7 +19,8 @@ class KhachHangChiTiet extends React.Component {
         name: params.name,
         email: (params.email !== false) ? params.email : '',
         mobile: (params.mobile !== false) ? params.mobile : '',
-        addressData:[]
+        addressData:[],
+        isRefreshing : false,
       }
     }
     else {
@@ -28,7 +29,8 @@ class KhachHangChiTiet extends React.Component {
         name: '',
         email: '',
         mobile: '',
-        addressData:[]
+        addressData:[],
+        isRefreshing : false,
       }      
     }
 
@@ -138,6 +140,47 @@ class KhachHangChiTiet extends React.Component {
       />
     )
   }
+
+  _onRefresh = () => {
+    this.setState({isRefreshing: true});   
+    if (this.state.id) {
+      fetch(URL_RPC, {
+        method: 'POST',
+        headers:{
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          params:{
+            "service":"object",
+            "method":"execute_kw",
+            "args":[DB,
+                    this.props.uid,this.props.password,
+                    "res.partner","search_read",[[["type", "=","delivery"],["parent_id", "=", this.state.id]]],{
+                      "fields":["state_id","x_quan_huyen_id","x_phuong_xa_id","street","name","mobile"]
+                    }]
+          }
+        })
+        })
+        .then((response) => response.json())
+        .then((json) => {
+          let data = []
+          json.result.map(delivery => {
+            let temp = {}
+            temp.address = `${delivery.street},${delivery.x_phuong_xa_id[1] },${delivery.x_quan_huyen_id[1] },${delivery.state_id[1]}`
+            temp.id = delivery.id
+            temp.name = delivery.name
+            temp.mobile = delivery.mobile
+            data.push(temp)
+          })
+          this.setState({ addressData: data, isRefreshing:false });
+        })
+        .catch((error) => console.error(error))
+        .finally(() => {});       
+    }
+  }
+
   _createCustomer = () => {
     if (this.state.name == ''){
       Alert.alert("Chưa có tên khách hàng")
@@ -218,7 +261,7 @@ class KhachHangChiTiet extends React.Component {
   render() {
     const theme = this.props.theme
     return (
-      <SafeAreaView>
+      <SafeAreaView style={{flex:1}}>
         <Appbar.Header>
           <Appbar.BackAction onPress={this.props.navigation.goBack} color={theme.colors.title} size={30}/>
           <Appbar.Content title="Thông tin khách hàng" color={theme.colors.title} titleStyle={{fontSize:20}}/>
@@ -252,6 +295,9 @@ class KhachHangChiTiet extends React.Component {
             renderItem={this._renderItem}
             ListFooterComponent={this._footer}
             keyExtractor={item => item.id.toString()}
+            refreshControl={<RefreshControl refreshing={this.state.isRefreshing}
+            onRefresh={this._onRefresh}
+/>}
           />
           {
             this.state.id == null ?           
@@ -291,6 +337,7 @@ export default connect(mapStateToProps)(withTheme(KhachHangChiTiet));
 
 const styles = StyleSheet.create({
   container: {
+    flex:1
   },
   customerForm: {
     height: 60,
