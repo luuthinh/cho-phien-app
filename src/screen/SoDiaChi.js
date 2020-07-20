@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {Appbar, TextInput, withTheme, Button, List, Text, IconButton, Colors, Paragraph} from 'react-native-paper';
 import {URL_RPC,DB} from '../constants/API';
 import Many2one from '../component/Many2one';
+import { object } from 'prop-types';
 // Lấy kích thước màn hình thiết bị
 const { width, height } = Dimensions.get('window');
 const SCREEN_WIDTH = width
@@ -11,15 +12,30 @@ const SCREEN_WIDTH = width
 class SoDiaChi extends React.Component {  
   constructor(props){
     super(props)
-    this.state = {
-        id: null,
-        name: '',
-        mobile: '',
-        stateID: {},
-        districtID: {},
-        wardID: {},
-        street : '',
-        parentID: null,
+    if (props.route.params.id !== undefined){
+      let {params} = props.route;
+      this.state = {
+        id: params.id,
+        name: params.name,
+        mobile: params.mobile,
+        stateID: params.stateID,
+        districtID: params.districtID,
+        wardID: params.wardID,
+        street : params.street,
+        parentID: params.parentID,
+    }    
+    }
+    else {    
+      this.state = {
+          id: null,
+          name: '',
+          mobile: '',
+          stateID: {},
+          districtID: {},
+          wardID: {},
+          street : '',
+          parentID: null,
+      }
     }
   }
   _createAddress = () => {
@@ -121,8 +137,8 @@ class SoDiaChi extends React.Component {
   } 
   render() {
     const theme = this.props.theme
+    console.log("state")
     console.log(this.state)
-    console.log(this.props.route.params)
     return (
       <SafeAreaView>
         <Appbar.Header>
@@ -156,7 +172,8 @@ class SoDiaChi extends React.Component {
                 uid={this.props.uid}
                 password={this.props.password}
                 db={DB}
-                url={URL_RPC} 
+                url={URL_RPC}
+                defaultItem = {this.state.stateID} 
                 placeholder='Chọn tỉnh thành'
                 label='Tỉnh thành'
                 onSelect={(item) =>{
@@ -169,6 +186,9 @@ class SoDiaChi extends React.Component {
                 password={this.props.password}
                 db={DB}
                 url={URL_RPC}
+                defaultItem = {this.state.districtID}
+                disabled = {Object.keys(this.state.stateID).length ? false : true}
+                domain = {[['x_country_state_id', '=', this.state.stateID.id]]}
                 placeholder='Chọn quận huyện'
                 label='Quận huyện'
                 onSelect={(item) =>{
@@ -181,6 +201,9 @@ class SoDiaChi extends React.Component {
                 password={this.props.password}
                 db={DB}
                 url={URL_RPC} 
+                defaultItem = {this.state.wardID}
+                disabled = {Object.keys(this.state.districtID).length ? false : true}
+                domain = {[['x_quan_huyen_id', '=', this.state.districtID.id]]}
                 placeholder='Chọn phường xã'
                 label='Phường xã'
                 onSelect={(item) =>{

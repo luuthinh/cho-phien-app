@@ -16,17 +16,27 @@ class Many2one extends React.Component {
         colorTheme: '#16a45f',
         searchPlaceHolderText: "Nhập vào từ khóa",
         listEmptyTitle: "Không tìm thấy lựa chọn phù hợp",
+        disabled: false,
         domain: [],
     }
     constructor(props){
         super(props);
-        this.state = {
-            visible: false,
-            preSelectedItem: {},
-            selectedItem: {},
-            data: [
-            ],
-            keyword: ''
+        if ('defaultItem' in props){
+            this.state = {
+                visible: false,
+                preSelectedItem: this.props.defaultItem,
+                selectedItem: {},
+                data: [],
+                keyword: ''
+            }            
+        }else{
+            this.state = {
+                visible: false,
+                preSelectedItem: {},
+                selectedItem: {},
+                data: [],
+                keyword: ''
+            }             
         }
     }
     _cancelSelection = () => {
@@ -92,7 +102,6 @@ class Many2one extends React.Component {
             .then((response) => response.json())
             .then((json) => {
                 let mockData = []
-                console.log(json)
                 json.result.map((data) => {
                 mockData.push({id:data[0],name:data[1]})
                 })
@@ -143,13 +152,14 @@ class Many2one extends React.Component {
      };    
 
     render(){
-        let {cancelButtonText,selectButtonText,onSelect,label,placeholder} = this.props
+        let {cancelButtonText,selectButtonText,onSelect,label,placeholder,disabled} = this.props
         let { selectedItem, preSelectedItem} = this.state
         return(
             <View>
                 <Text style={styles.label}>{label}</Text>
             <TouchableOpacity 
                 style={styles.container}
+                disabled={disabled}
                 onPress={this.showDialog}>
                 {
                     Object.keys(preSelectedItem).length

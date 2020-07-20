@@ -8,8 +8,8 @@ import Selection from '../component/Selection';
 
 const {width} = Dimensions.get('window')
 const SCREEN_WIDTH = parseInt(width)
-const IMAGE_HEIGHT = 256
-const IMAGE_WIDTH = 256
+const IMAGE_HEIGHT = 200
+const IMAGE_WIDTH = 200
 
 class DatHang extends React.Component {
   constructor(props){
@@ -132,7 +132,7 @@ class DatHang extends React.Component {
             size={30}
             onPress={() => console.log('Pressed archive')} />
         </Appbar.Header>
-        <View>
+        <View style={{flex:1}}>
           <Card>
             <Card.Cover source={{uri: `${URL_IMAGE}/x_dot_mb/${item.id}/x_image_512#time=${item.write_date}`,
                                     method: "GET",
@@ -217,6 +217,7 @@ const styles = StyleSheet.create({
   },
   detailView:{
     marginTop:10,
+    flex:1
   },
   itemTitle: {
   fontSize: 16,

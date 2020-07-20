@@ -65,6 +65,10 @@ class KhachHangChiTiet extends React.Component {
             temp.id = delivery.id
             temp.name = delivery.name
             temp.mobile = delivery.mobile
+            temp.stateID =  {"id":delivery.state_id[0],"name":delivery.state_id[1]}
+            temp.districtID =  {"id":delivery.x_quan_huyen_id[0],"name":delivery.x_quan_huyen_id[1]}
+            temp.wardID =  {"id":delivery.x_phuong_xa_id[0],"name":delivery.x_phuong_xa_id[1]}
+            temp.street =  delivery.street
             data.push(temp)
           })
           this.setState({ addressData: data });
@@ -84,6 +88,7 @@ class KhachHangChiTiet extends React.Component {
         <Paragraph>{item.address}</Paragraph>
       </View>)}
     left={props => <List.Icon {...props} icon="account"/>}
+    onPress={() => {return this.props.navigation.navigate("Sổ địa chỉ",{...item,partnerID:this.state.id})}}
     right={props => <IconButton
       {...props}
       icon="trash-can-outline"
