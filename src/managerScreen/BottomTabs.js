@@ -6,6 +6,7 @@ import {useTheme} from 'react-native-paper';
 import ChoPhien from '../screen/ChoPhien';
 import KhachHang from '../screen/KhachHang';
 import MainCaNhan from '../screen/MainCaNhan';
+import DonHang from '../screen/DonHang';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -37,6 +38,14 @@ export default function BottomTab() {
           tabBarIcon:"account-group",
         }}
       />
+      <Tab.Screen
+        name="Đơn hàng"
+        component={DonHang}
+        options={{
+          tabBarColor:'white',
+          tabBarIcon:"clipboard-text-outline",
+        }}
+      />      
       <Tab.Screen
         name="Thông báo"
         component={Notifications}

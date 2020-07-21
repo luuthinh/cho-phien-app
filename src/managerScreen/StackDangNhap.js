@@ -1,6 +1,5 @@
 import React from 'react';
 import { createStackNavigator,CardStyleInterpolators } from '@react-navigation/stack';
-import {Appbar} from 'react-native-paper';
 import DangNhap from '../screen/DangNhap';
 import BottomTabs from './BottomTabs';
 import DatHang from  '../screen/DatHang';
