@@ -101,8 +101,23 @@ class SoDiaChi extends React.Component {
   }
   _saveCustomer = () => {
     if (this.state.name == ''){
-      Alert.alert("Chưa có tên khách hàng")
+      Alert.alert("Chưa nhập tên người nhận")
     }
+    else if (this.state.mobile == ''){
+      Alert.alert("Chưa nhập số điện thoại")
+    }
+    else if (this.state.street == ''){
+      Alert.alert("Chưa nhập số nhà")
+    }
+    else if (this.state.wardID == ''){
+      Alert.alert("Chưa nhập tên phường/xã")
+    }
+    else if (this.state.districtID == ''){
+      Alert.alert("Chưa nhập quận/huyện")
+    } 
+    else if (this.state.stateID == ''){
+      Alert.alert("Chưa nhập tỉnh/thành")
+    }               
     else {
     fetch(URL_RPC, {
       method: 'POST',
@@ -117,8 +132,16 @@ class SoDiaChi extends React.Component {
           "method":"execute_kw",
           "args":[DB,
                   this.props.uid,this.props.password,
-                  "res.partner","write",[[this.state.id],
-                  {"name":this.state.name,"email":this.state.email,"mobile":this.state.mobile}]]
+                  "res.partner","write",[[this.state.id],{
+                    "name":this.state.name,
+                    "mobile": this.state.mobile,
+                    "parent_id": this.props.route.params.parentID,
+                    "street": this.state.street,
+                    "state_id": this.state.stateID.id,
+                    "x_quan_huyen_id": this.state.districtID.id,
+                    "x_phuong_xa_id": this.state.wardID.id,
+
+                  }]]
         }
       })
     })
@@ -126,13 +149,14 @@ class SoDiaChi extends React.Component {
     .then((results) => {
       console.log(results)
       if ('result' in results){
-        Alert.alert("Thay đổi thành công")
+        this.setState({id:results.result})
+        Alert.alert("Lưu thay đổi thành công")
       }
       else if ('error' in results){
-        Alert.alert("Thay đổi thất bại")
+        Alert.alert("Lưu thay đổi thất bại")
       }
     })
-    .catch((error) => Alert.alert("Thay đổi thất bại"))
+    .catch((error) => Alert.alert("Lưu thay đổi thất bại"))
     }
   } 
   render() {
