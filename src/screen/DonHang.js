@@ -1,8 +1,8 @@
 import React from 'react';
-import {View, StyleSheet, Dimensions, SafeAreaView, FlatList, Alert, RefreshControl} from 'react-native';
+import {View, StyleSheet, Dimensions, SafeAreaView, FlatList, Alert, RefreshControl, Image} from 'react-native';
 import {connect} from 'react-redux';
-import {Appbar, TextInput, withTheme, Button, List, Text, IconButton, Colors, Paragraph, ActivityIndicator} from 'react-native-paper';
-import {URL_RPC,DB} from '../constants/API';
+import {Appbar, TextInput, withTheme, Button, List, Text, IconButton, Colors, Paragraph, ActivityIndicator, Card} from 'react-native-paper';
+import {URL_RPC,DB, URL_IMAGE} from '../constants/API';
 class DonHang extends React.Component{
     constructor(props){
         super(props)
@@ -92,13 +92,22 @@ class DonHang extends React.Component{
       _renderItem = ({ item }) => (
         <List.Item
         title={item.customerID[1]}
-        style={{backgroundColor:'white'}}
+        style={styles.containerItem}
         description={() => 
           (<View>
             <Paragraph>{item.productID[1]}</Paragraph>
             <Paragraph>{item.qty}</Paragraph>
           </View>)}
-        left={props => <List.Icon {...props} icon="account"/>}
+        left={() => <Card.Cover 
+                        style={styles.imageView}
+                        source={{uri: `${URL_IMAGE}/product.product/${item.productID[0]}/image_128/96x96`,
+                                method: "GET",
+                                headers: {
+                                "Content-Type": "application/x-www-form-urlencoded",
+                                "X_Openerp": this.props.sessionID,
+                                }
+                            }}
+                    />}
         right={props => <IconButton
           {...props}
           icon="trash-can-outline"
@@ -160,3 +169,42 @@ function mapStateToProps(state) {
   }
   
 export default connect(mapStateToProps)(withTheme(DonHang));
+
+const styles = StyleSheet.create({
+    containerItem: {
+      marginTop: 3,
+      flex:1,
+      backgroundColor: 'white',
+    },
+    content:{
+        overflow: 'hidden',
+        borderRadius: 3,
+	    flex: 1,
+        flexDirection: 'row',
+        margin: -12,
+        padding: 5
+    },
+    imageView:{
+      borderRadius: 10,
+      width:96,
+      height:96,
+    },
+    detailView:{
+      flex:1,
+      height:128,
+      marginLeft: 10
+    },
+    itemTitle: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: '#000000',
+      overflow: 'hidden',
+    },
+    itemPrice: {
+      fontWeight: '700',
+      color: 'red',
+    },
+    itemPriceClearance: {
+      textDecorationLine: 'line-through',
+    }
+});
