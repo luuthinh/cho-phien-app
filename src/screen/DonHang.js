@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, Dimensions, SafeAreaView, FlatList, Alert, RefreshControl, Image} from 'react-native';
 import {connect} from 'react-redux';
-import {Appbar, TextInput, withTheme, Button, List, Text, IconButton, Colors, Paragraph, ActivityIndicator, Card} from 'react-native-paper';
+import {Appbar, withTheme, List, Surface, IconButton, Colors, Paragraph, ActivityIndicator, Card} from 'react-native-paper';
 import {URL_RPC,DB, URL_IMAGE} from '../constants/API';
 class DonHang extends React.Component{
     constructor(props){
@@ -76,6 +76,7 @@ class DonHang extends React.Component{
         .then((json) => {
             let data = []
             json.result.map(order => {
+            order.x_name[1] = order.x_name[1].split(",")[1]
             let temp = {}
             temp.id = order.id
             temp.customerID = order.x_name
@@ -110,9 +111,8 @@ class DonHang extends React.Component{
                     />}
         right={props => <IconButton
           {...props}
-          icon="trash-can-outline"
-          color={Colors.red500}
-          size={20}
+          icon="lead-pencil"
+          size={30}
       />}
       />
       )
