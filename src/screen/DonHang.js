@@ -1,8 +1,11 @@
 import React from 'react';
-import {View, StyleSheet, Dimensions, SafeAreaView, FlatList, Alert, RefreshControl, Image} from 'react-native';
+import {View, StyleSheet, Dimensions, SafeAreaView, FlatList,  RefreshControl, } from 'react-native';
 import {connect} from 'react-redux';
-import {Appbar, withTheme, List, Surface, IconButton, Colors, Paragraph, ActivityIndicator, Card} from 'react-native-paper';
+import {Appbar, withTheme, IconButton, Paragraph, ActivityIndicator, Card, Dialog, Button, Portal} from 'react-native-paper';
 import {URL_RPC,DB, URL_IMAGE} from '../constants/API';
+
+const {width, height} = Dimensions.get('window')
+
 class DonHang extends React.Component{
     constructor(props){
         super(props)
@@ -10,6 +13,8 @@ class DonHang extends React.Component{
             isLoading: true,
             isRefreshing : false,
             orderData: [],
+            visible: false,
+            dataDialog: {},
         }      
       }
 
@@ -37,12 +42,14 @@ class DonHang extends React.Component{
             .then((json) => {
                 let data = []
                 json.result.map(order => {
+                order.x_name[1] = order.x_name[1].split(",")[1]
                 let temp = {}
                 temp.id = order.id
                 temp.customerID = order.x_name
                 temp.productID = order.x_product_id
                 temp.qty = order.x_so_luong
                 temp.state = order.x_trang_thai
+                temp.menuVisible = false
                 data.push(temp)
                 })
                 this.setState({ orderData: data});
@@ -90,34 +97,39 @@ class DonHang extends React.Component{
         .catch((error) => console.error(error))
         .finally(() => {});       
       }
-      _renderItem = ({ item }) => (
-        <List.Item
-        title={item.customerID[1]}
-        style={styles.containerItem}
-        description={() => 
-          (<View>
-            <Paragraph>{item.productID[1]}</Paragraph>
-            <Paragraph>{item.qty}</Paragraph>
-          </View>)}
-        left={() => <Card.Cover 
-                        style={styles.imageView}
-                        source={{uri: `${URL_IMAGE}/product.product/${item.productID[0]}/image_128/96x96`,
-                                method: "GET",
-                                headers: {
-                                "Content-Type": "application/x-www-form-urlencoded",
-                                "X_Openerp": this.props.sessionID,
-                                }
-                            }}
-                    />}
-        right={props => <IconButton
-          {...props}
-          icon="lead-pencil"
-          size={30}
-      />}
-      />
-      )
+      _renderItem = ({ item }) => {
+          return (
+        <Card style={styles.container} 
+            onPress={() => {}}>
+            <Card.Content style={styles.content}>
+                <Card.Cover style={styles.imageView}                       
+                                source={{uri: `${URL_IMAGE}/product.product/${item.productID[0]}/image_128/96x96`,
+                                        method: "GET",
+                                        headers: {
+                                            "Content-Type": "application/x-www-form-urlencoded",
+                                            "X_Openerp": this.props.sessionID,
+                                        }
+                                }}
+                />
+                <View style={styles.detailView}>
+                    <Paragraph style={styles.itemName}>{item.customerID[1]}</Paragraph>
+                    <Paragraph style={styles.itemDetail}>{item.productID[1]}</Paragraph>
+                    <Paragraph style={styles.itemDetail}>Số lượng: {item.qty}</Paragraph>
+                </View>
+                <View style={styles.menuView}>
+                <IconButton
+                    icon="menu"
+                    color={this.props.theme.colors.text}
+                    size={30}
+                    onPress={() => {
+                        this.setState({visible:true, dataDialog:item})}}
+                    />
+                </View>
+            </Card.Content>
+        </Card>
+      );
+    }
     render() {
-        console.log(this.state.orderData)
         const theme = this.props.theme
         if (this.state.isLoading) {
             return (
@@ -150,7 +162,20 @@ class DonHang extends React.Component{
                         refreshControl={<RefreshControl refreshing={this.state.isRefreshing}
                         onRefresh={this._onRefresh}/>}
                     />  
-                </View>              
+                </View>
+                <Portal>
+                    {Object.keys(this.state.dataDialog).length ?
+                        <Dialog visible={this.state.visible} onDismiss={()=> {this.setState({visible:false})}}>
+                            <Dialog.Title>{this.state.dataDialog.productID[1]}</Dialog.Title>
+                        <Dialog.Content>
+                            <Paragraph>This is simple dialog</Paragraph>
+                        </Dialog.Content>
+                        <Dialog.Actions>
+                            <Button onPress={()=> {this.setState({visible:false})}}>Done</Button>
+                        </Dialog.Actions>
+                        </Dialog>
+                    : null}
+                </Portal>              
           </SafeAreaView>
         );
       }
@@ -171,40 +196,42 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(withTheme(DonHang));
 
 const styles = StyleSheet.create({
-    containerItem: {
-      marginTop: 3,
+    container:{
       flex:1,
-      backgroundColor: 'white',
+      marginTop: 3
     },
     content:{
-        overflow: 'hidden',
-        borderRadius: 3,
-	    flex: 1,
-        flexDirection: 'row',
-        margin: -12,
-        padding: 5
+      flex:1,
+      flexDirection: 'row',
+      margin: -12,
+      borderRadius: 3,
     },
     imageView:{
-      borderRadius: 10,
-      width:96,
-      height:96,
+        borderRadius: 10,
+        width:96,
+      height:96 ,
     },
-    detailView:{
-      flex:1,
-      height:128,
-      marginLeft: 10
+    detailView: {
+      marginLeft: 10,
+      overflow: 'visible',
+      width: width - 156,
     },
-    itemTitle: {
-      fontSize: 16,
-      fontWeight: '600',
-      color: '#000000',
-      overflow: 'hidden',
+    itemName:{
+      fontWeight: '300',
+      fontSize: 20
     },
-    itemPrice: {
-      fontWeight: '700',
-      color: 'red',
+    itemDetail:{
+      fontWeight: '100',
     },
-    itemPriceClearance: {
-      textDecorationLine: 'line-through',
+    fab:{
+      position: 'absolute',
+      margin: 16,
+      right: 0,
+      bottom: 0,
+    },
+    menuView:{
+        flex:1,
+        alignItems: 'center',
+        justifyContent: 'center'
     }
-});
+  });
