@@ -19,8 +19,8 @@ class DotMoBan extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      eventDate:moment.duration(moment(this.props.data.item.x_to_date).diff(moment())),
-      timeTotal: moment.duration(moment(this.props.data.item.x_to_date).diff(moment(this.props.data.item.x_from_date))),
+      eventDate:moment.duration(moment(this.props.data.item.x_ngay_kt).diff(moment())),
+      timeTotal: moment.duration(moment(this.props.data.item.x_ngay_kt).diff(moment(this.props.data.item.x_ngay_bd))),
       percent: 0,
       days:0,
       hours:"00",
@@ -64,14 +64,15 @@ class DotMoBan extends React.Component {
 
   render() {
     const item = this.props.data.item
+    console.log(this.props)
     return (
         <Card
           style={styles.container}
           onPress={() => {return this.props.navigation.navigate('Đặt hàng',item)}}>
           <Card.Content style={styles.content} >
             <Card.Cover style={styles.imageView} 
-                          source={{uri: `${URL_IMAGE}/x_dot_mb/${item.id}/x_image_512/128x128#time=${item.write_date}`,
-                                  method: "GET",
+                          source={{uri: `${URL_IMAGE}/x_dot_mb/${item.id}/x_anh_128#time=${item.write_date}`,
+                                  method: "POST",
                                   headers: {
                                     "Content-Type": "application/x-www-form-urlencoded",
                                     "X_Openerp": this.props.sessionID,
@@ -79,10 +80,9 @@ class DotMoBan extends React.Component {
                           }}
               />
               <View style={styles.detailView}>
-                <Paragraph style={styles.itemTitle}>{item.x_product_id[1]}</Paragraph>
-                <Paragraph style={styles.itemPrice}>Giá: {this._formatCurency(item.x_gia_hien_tai)}</Paragraph>
-                <Paragraph style={styles.itemPriceClearance}>Giá thị trường: {this._formatCurency(item.x_gia_khoi_diem)}</Paragraph>
-                <Paragraph >Đã bán: {item.x_tong_so_dh}</Paragraph>
+                <Paragraph style={styles.itemTitle}>{item.x_sp_id[1]}</Paragraph>
+                <Paragraph style={styles.itemPrice}>Giá: {this._formatCurency(item.x_gia_ban)}</Paragraph>
+                {/* <Paragraph >Đã bán: {item.x_tong_so_dh}</Paragraph> */}
                 <Paragraph style={{fontSize:12}}>
                   {`Thời gian: ${this.state.days} ngày ${this.state.hours} : ${this.state.mins} : ${this.state.secs}`}
                 </Paragraph>
@@ -120,12 +120,12 @@ const styles = StyleSheet.create({
     },
     imageView:{
       borderRadius: 10,
-      width:150,
-      height:128,
+      width:128,
+      height:96,
     },
     detailView:{
       flex:1,
-      height:128,
+      height:96,
       marginLeft: 10
     },
     itemTitle: {
