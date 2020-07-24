@@ -2,7 +2,7 @@ import React from 'react';
 import {View,Text , Dimensions, FlatList, StyleSheet, RefreshControl, Image} from 'react-native';
 import {connect} from 'react-redux';
 import {ActivityIndicator, Card, Paragraph, FAB, withTheme, Appbar} from 'react-native-paper'
-import {URL_RPC,DB,URL_IMAGE} from '../constants/API';
+import {URL_RPC,DB,URL_PARTNER} from '../constants/API';
 
 const {width, height} = Dimensions.get('window')
 class KhachHang extends React.Component {
@@ -57,7 +57,7 @@ class KhachHang extends React.Component {
         onPress={() => {return this.props.navigation.navigate("Thông tin khách hàng",data.item)}}>
         <Card.Content style={styles.content}>
           <Card.Cover style={styles.imageView}                       
-                          source={{uri: `https://vuonnhatoi.odoo.com/web/partner_image/${data.item.id}#time=${data.item.write_date}`,
+                          source={{uri: `${URL_PARTNER}/${data.item.id}#time=${data.item.write_date}`,
                                     method: "GET",
                                     headers: {
                                       "Content-Type": "application/x-www-form-urlencoded",
