@@ -1,8 +1,9 @@
 import React from 'react';
 import {View, StyleSheet, Dimensions, SafeAreaView, FlatList,  RefreshControl, } from 'react-native';
 import {connect} from 'react-redux';
-import {Appbar, withTheme, IconButton, Paragraph, ActivityIndicator, Card, Dialog, Button, Portal} from 'react-native-paper';
+import {Appbar, withTheme, IconButton, Paragraph, ActivityIndicator, Card, List, Dialog, Button, Portal, Text, RadioButton} from 'react-native-paper';
 import {URL_RPC,DB, URL_IMAGE} from '../constants/API';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const {width, height} = Dimensions.get('window')
 
@@ -33,7 +34,7 @@ class DonHang extends React.Component{
                 "args":[DB,
                         this.props.uid,this.props.password,
                         "x_dot_mb_don_hang","search_read",[],{
-                            "fields":["x_name","x_product_id","x_so_luong","x_trang_thai"]
+                            "fields":["x_name","x_product_id","x_so_luong","x_trang_thai","x_thanh_toan","x_price"]
                         }]
                 }
             })
@@ -74,7 +75,7 @@ class DonHang extends React.Component{
             "args":[DB,
                     this.props.uid,this.props.password,
                     "x_dot_mb_don_hang","search_read",[],{
-                        "fields":["x_name","x_product_id","x_so_luong","x_trang_thai"]
+                        "fields":["x_name","x_product_id","x_so_luong","x_trang_thai","x_thanh_toan","x_price"]
                     }]
             }
         })
@@ -90,6 +91,8 @@ class DonHang extends React.Component{
             temp.productID = order.x_product_id
             temp.qty = order.x_so_luong
             temp.state = order.x_trang_thai
+            temp.paid = order.x_thanh_toan,
+            temp.price = order.x_price
             data.push(temp)
             })
             this.setState({ orderData: data, isRefreshing:false });
@@ -115,6 +118,8 @@ class DonHang extends React.Component{
                     <Paragraph style={styles.itemName}>{item.customerID[1]}</Paragraph>
                     <Paragraph style={styles.itemDetail}>{item.productID[1]}</Paragraph>
                     <Paragraph style={styles.itemDetail}>Số lượng: {item.qty}</Paragraph>
+                    <Paragraph style={styles.itemDetail}>Giá: {item.price}</Paragraph>
+                    <Paragraph style={styles.itemDetail}>Thanh toán: {item.paid}</Paragraph>
                 </View>
                 <View style={styles.menuView}>
                 <IconButton
@@ -122,15 +127,21 @@ class DonHang extends React.Component{
                     color={this.props.theme.colors.text}
                     size={30}
                     onPress={() => {
-                        this.setState({visible:true, dataDialog:item})}}
+                        this.setState({visible:true, dataDialog:{...item,choose:"thu"}})}}
                     />
                 </View>
             </Card.Content>
         </Card>
       );
     }
+
+    _action_xac_nhan = (item) => {
+      
+    }
+
     render() {
-        const theme = this.props.theme
+        const {theme} = this.props
+        const {dataDialog, visible} = this.state
         if (this.state.isLoading) {
             return (
                 <View>
@@ -164,14 +175,50 @@ class DonHang extends React.Component{
                     />  
                 </View>
                 <Portal>
-                    {Object.keys(this.state.dataDialog).length ?
-                        <Dialog visible={this.state.visible} onDismiss={()=> {this.setState({visible:false})}}>
-                            <Dialog.Title>{this.state.dataDialog.productID[1]}</Dialog.Title>
+                    {Object.keys(dataDialog).length ?
+                        <Dialog visible={visible} onDismiss={()=> {this.setState({visible:false})}}>
+                            <Dialog.Title>
+                              <Paragraph>{dataDialog.customerID[1]}</Paragraph>
+                              <Paragraph>Sản phẩm: {dataDialog.productID[1]}</Paragraph>
+                              <Paragraph>Số lượng: {dataDialog.qty}</Paragraph>
+                            </Dialog.Title>
+
                         <Dialog.Content>
-                            <Paragraph>This is simple dialog</Paragraph>
+                            <RadioButton.Group 
+                              onValueChange={value=>{
+                                dataDialog.choose = value
+                                this.setState(dataDialog)
+                              }} 
+                              value={dataDialog.choose}>
+                              <List.Item 
+                                title="Thu tiền"
+                                left={props => <List.Icon {...props} icon="currency-usd"/>}
+                                disabled={true}
+                                right={props => <RadioButton value="thu"/>}
+                              />
+                              <List.Item 
+                                title="Hủy đơn hàng"
+                                left={props => <List.Icon {...props} icon="trash-can-outline"/>}
+                                disabled={true}
+                                right={props => <RadioButton value="huy"/>}
+                              /> 
+                            </RadioButton.Group>                           
                         </Dialog.Content>
                         <Dialog.Actions>
-                            <Button onPress={()=> {this.setState({visible:false})}}>Done</Button>
+                            <Button 
+                              mode='outlined'
+                              style={styles.button}
+                              onPress={()=> {this.setState({visible:false})}}>
+                                  Hủy
+                              </Button>
+                            <Button 
+                              mode='contained'
+                              style={styles.button}
+                              onPress={()=> {this._action_xac_nhan(dataDialog)}}>
+                                <Text style={{color:'white'}}>
+                                  Xác nhận
+                                </Text>                                
+                              </Button>
                         </Dialog.Actions>
                         </Dialog>
                     : null}
@@ -233,5 +280,8 @@ const styles = StyleSheet.create({
         flex:1,
         alignItems: 'center',
         justifyContent: 'center'
-    }
+    },
+    button: {
+      height: 36, flex: 1
+    },
   });

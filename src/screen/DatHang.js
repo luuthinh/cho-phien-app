@@ -55,7 +55,8 @@ class DatHang extends React.Component {
                     "x_trang_thai": "don_hang",
                     "x_dot_mb_id": this.props.route.params.id,
                     "x_dia_chi_id": this.state.addressID,
-                    "x_price": this.state.tamTinh
+                    "x_price": this.state.tamTinh,
+                    "x_thanh_toan": 'chua_tt',
                   }]]
         }
       })

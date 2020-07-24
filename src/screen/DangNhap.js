@@ -59,11 +59,6 @@ class Dangnhap extends Component {
               labelStyle={{color:'white'}}
               onPress={this.signInAsync}
             >Đăng nhập</Button>
-            <Button
-              style={styles.fbLoginButton}
-              onPress={() => this.onFbLoginPress()}
-              raised theme={{ roundness: 3 }}
-            >Facebook</Button>
           </View>
         </View>
       </TouchableWithoutFeedback>
