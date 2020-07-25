@@ -102,10 +102,12 @@ class Many2one extends React.Component {
             .then((response) => response.json())
             .then((json) => {
                 let mockData = []
-                json.result.map((data) => {
-                mockData.push({id:data[0],name:data[1]})
-                })
-                this.setState({data:mockData})
+                if (Array.isArray(json.result) && json.result.length){
+                    json.result.map((data) => {
+                        mockData.push({id:data[0],name:data[1]})
+                        })
+                        this.setState({data:mockData})
+                }
             })
             .catch((error) => console.error(error))
             .finally(() => {});          

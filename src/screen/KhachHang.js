@@ -52,6 +52,7 @@ class KhachHang extends React.Component {
     return money;
   }
   _renderItem = data => {
+    console.log(data)
     return (
       <Card style={styles.container} 
         onPress={() => {return this.props.navigation.navigate("Thông tin khách hàng",data.item)}}>

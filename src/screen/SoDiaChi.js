@@ -78,8 +78,8 @@ class SoDiaChi extends React.Component {
                     "type": "delivery",
                     "street": this.state.street,
                     "state_id": this.state.stateID.id,
-                    "x_quan_huyen_id": this.state.districtID.id,
-                    "x_phuong_xa_id": this.state.wardID.id,
+                    "x_qh_id": this.state.districtID.id,
+                    "x_px_id": this.state.wardID.id,
 
                   }]]
         }
@@ -138,8 +138,8 @@ class SoDiaChi extends React.Component {
                     "parent_id": this.props.route.params.parentID,
                     "street": this.state.street,
                     "state_id": this.state.stateID.id,
-                    "x_quan_huyen_id": this.state.districtID.id,
-                    "x_phuong_xa_id": this.state.wardID.id,
+                    "x_qh_id": this.state.districtID.id,
+                    "x_px_id": this.state.wardID.id,
 
                   }]]
         }
@@ -227,7 +227,7 @@ class SoDiaChi extends React.Component {
                 url={URL_RPC} 
                 defaultItem = {this.state.wardID}
                 disabled = {Object.keys(this.state.districtID).length ? false : true}
-                domain = {[['x_quan_huyen_id', '=', this.state.districtID.id]]}
+                domain = {[['x_qh_id', '=', this.state.districtID.id]]}
                 placeholder='Chọn phường xã'
                 label='Phường xã'
                 onSelect={(item) =>{

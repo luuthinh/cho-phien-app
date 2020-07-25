@@ -51,7 +51,7 @@ class KhachHangChiTiet extends React.Component {
             "args":[DB,
                     this.props.uid,this.props.password,
                     "res.partner","search_read",[[["type", "=","delivery"],["parent_id", "=", this.state.id]]],{
-                      "fields":["state_id","x_quan_huyen_id","x_phuong_xa_id","street","name","mobile"]
+                      "fields":["state_id","x_qh_id","x_px_id","street","name","mobile"]
                     }]
           }
         })
@@ -61,13 +61,14 @@ class KhachHangChiTiet extends React.Component {
           let data = []
           json.result.map(delivery => {
             let temp = {}
-            temp.address = `${delivery.street},${delivery.x_phuong_xa_id[1] },${delivery.x_quan_huyen_id[1] },${delivery.state_id[1]}`
+            console.log(delivery)
+            temp.address = `${delivery.street}, ${delivery.x_px_id[1] || ''}, ${delivery.x_qh_id[1] || ''}, ${delivery.state_id[1] || ''}`
             temp.id = delivery.id
             temp.name = delivery.name
             temp.mobile = delivery.mobile
-            temp.stateID =  {"id":delivery.state_id[0],"name":delivery.state_id[1]}
-            temp.districtID =  {"id":delivery.x_quan_huyen_id[0],"name":delivery.x_quan_huyen_id[1]}
-            temp.wardID =  {"id":delivery.x_phuong_xa_id[0],"name":delivery.x_phuong_xa_id[1]}
+            temp.stateID =  {"id":delivery.state_id[0],"name":delivery.state_id[1]} || {}
+            temp.districtID =  {"id":delivery.x_qh_id[0],"name":delivery.x_qh_id[1]} || {}
+            temp.wardID =  {"id":delivery.x_px_id[0],"name":delivery.x_px_id[1]} || {}
             temp.street =  delivery.street
             data.push(temp)
           })
@@ -163,7 +164,7 @@ class KhachHangChiTiet extends React.Component {
             "args":[DB,
                     this.props.uid,this.props.password,
                     "res.partner","search_read",[[["type", "=","delivery"],["parent_id", "=", this.state.id]]],{
-                      "fields":["state_id","x_quan_huyen_id","x_phuong_xa_id","street","name","mobile"]
+                      "fields":["state_id","x_qh_id","x_px_id","street","name","mobile"]
                     }]
           }
         })
@@ -173,7 +174,7 @@ class KhachHangChiTiet extends React.Component {
           let data = []
           json.result.map(delivery => {
             let temp = {}
-            temp.address = `${delivery.street},${delivery.x_phuong_xa_id[1] },${delivery.x_quan_huyen_id[1] },${delivery.state_id[1]}`
+            temp.address = `${delivery.street},${delivery.x_px_id[1] },${delivery.x_qh_id[1] },${delivery.state_id[1]}`
             temp.id = delivery.id
             temp.name = delivery.name
             temp.mobile = delivery.mobile

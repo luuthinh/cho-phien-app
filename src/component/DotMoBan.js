@@ -1,8 +1,7 @@
 import React from 'react';
-import { Text, View,StyleSheet,Dimensions,TouchableOpacity } from 'react-native';
+import {View,StyleSheet,Dimensions} from 'react-native';
 import {connect} from 'react-redux';
 import {Card, Paragraph} from 'react-native-paper';
-import * as Progress from 'react-native-progress';
 import moment from 'moment';
 
 import {URL_IMAGE} from '../constants/API';
@@ -64,15 +63,14 @@ class DotMoBan extends React.Component {
 
   render() {
     const item = this.props.data.item
-    console.log(this.props)
     return (
         <Card
           style={styles.container}
           onPress={() => {return this.props.navigation.navigate('Đặt hàng',item)}}>
           <Card.Content style={styles.content} >
             <Card.Cover style={styles.imageView} 
-                          source={{uri: `${URL_IMAGE}/x_dot_mb/${item.id}/x_anh_128#time=${item.write_date}`,
-                                  method: "POST",
+                          source={{uri: `${URL_IMAGE}/product.template/${item.x_sp_id[0]}/image_1920/96x96#time=${item.write_date}`,
+                                  method: "GET",
                                   headers: {
                                     "Content-Type": "application/x-www-form-urlencoded",
                                     "X_Openerp": this.props.sessionID,
