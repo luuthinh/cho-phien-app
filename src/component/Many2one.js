@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, TouchableOpacity, Dimensions, StyleSheet, FlatList} from 'react-native';
+import {View, TouchableOpacity, Dimensions, StyleSheet, FlatList, KeyboardAvoidingView} from 'react-native';
 import { Portal, Dialog, Text, Button, Checkbox, Searchbar, Paragraph} from 'react-native-paper';
 import PropsTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -179,7 +179,7 @@ class Many2one extends React.Component {
                         onDismiss={this.hideDialog}
                         style={styles.containerDialog} 
                         visible={this.state.visible}>
-                        <Dialog.Content style={{marginTop:-15}}>
+                        <Dialog.Content style={{marginTop:10}}>
                             <Searchbar 
                                 onChangeText={this._onchangeSearch}
                                 value={this.state.keyword}

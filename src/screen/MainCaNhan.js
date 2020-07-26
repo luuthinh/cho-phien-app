@@ -25,7 +25,7 @@ class MainCaNhan extends React.Component {
                         style={{alignItems:'center'}}
                         titleStyle={{color: 'white', fontSize:25}}
                 /> 
-          </Appbar.Header>  
+                </Appbar.Header>  
                 <Card>
                     <Card.Title 
                     title={this.props.name}

@@ -1,9 +1,10 @@
 import React from 'react';
-import {View, StyleSheet, Dimensions, SafeAreaView, FlatList,  RefreshControl, } from 'react-native';
+import {View, StyleSheet, Dimensions, SafeAreaView, FlatList, Alert, RefreshControl, } from 'react-native';
 import {connect} from 'react-redux';
 import {Appbar, withTheme, IconButton, Paragraph, ActivityIndicator, Card, List, Dialog, Button, Portal, Text, RadioButton} from 'react-native-paper';
 import {URL_RPC,DB, URL_IMAGE} from '../constants/API';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { or } from 'react-native-reanimated';
 
 const {width, height} = Dimensions.get('window')
 
@@ -33,27 +34,28 @@ class DonHang extends React.Component{
                 "method":"execute_kw",
                 "args":[DB,
                         this.props.uid,this.props.password,
-                        "x_dot_mb_don_hang","search_read",[],{
-                            "fields":["x_name","x_product_id","x_so_luong","x_trang_thai","x_thanh_toan","x_price"]
+                        "x_don_hang","search_read",[[['x_trang_thai', '=', 'don_hang']]],{
+                            "fields":["x_kh_id","x_sp_id","x_so_luong","x_thanh_toan","x_gia_ban","x_dvt_id"]
                         }]
                 }
             })
             })
             .then((response) => response.json())
             .then((json) => {
-                let data = []
-                json.result.map(order => {
-                order.x_name[1] = order.x_name[1].split(",")[1]
-                let temp = {}
-                temp.id = order.id
-                temp.customerID = order.x_name
-                temp.productID = order.x_product_id
-                temp.qty = order.x_so_luong
-                temp.state = order.x_trang_thai
-                temp.menuVisible = false
-                data.push(temp)
-                })
-                this.setState({ orderData: data});
+              let data = []
+              json.result.map(order => {
+              order.x_kh_id[1] = order.x_kh_id[1].split(",")[1]
+              let temp = {}
+              temp.id = order.id
+              temp.customerID = order.x_kh_id
+              temp.productID = order.x_sp_id
+              temp.qty = order.x_so_luong
+              temp.paid = order.x_thanh_toan
+              temp.price = order.x_gia_ban
+              temp.uom = order.x_dvt_id
+              data.push(temp)
+              })
+              this.setState({ orderData: data, isRefreshing:false });
             })
             .catch((error) => console.error(error))
             .finally(() => {this.setState({ isLoading: false });});        
@@ -74,8 +76,8 @@ class DonHang extends React.Component{
             "method":"execute_kw",
             "args":[DB,
                     this.props.uid,this.props.password,
-                    "x_dot_mb_don_hang","search_read",[],{
-                        "fields":["x_name","x_product_id","x_so_luong","x_trang_thai","x_thanh_toan","x_price"]
+                    "x_don_hang","search_read",[[['x_trang_thai', '=', 'don_hang']]],{
+                        "fields":["x_kh_id","x_sp_id","x_so_luong","x_thanh_toan","x_gia_ban","x_dvt_id"]
                     }]
             }
         })
@@ -84,15 +86,15 @@ class DonHang extends React.Component{
         .then((json) => {
             let data = []
             json.result.map(order => {
-            order.x_name[1] = order.x_name[1].split(",")[1]
+            order.x_kh_id[1] = order.x_kh_id[1].split(",")[1]
             let temp = {}
             temp.id = order.id
-            temp.customerID = order.x_name
-            temp.productID = order.x_product_id
+            temp.customerID = order.x_kh_id
+            temp.productID = order.x_sp_id
             temp.qty = order.x_so_luong
-            temp.state = order.x_trang_thai
-            temp.paid = order.x_thanh_toan,
-            temp.price = order.x_price
+            temp.paid = order.x_thanh_toan
+            temp.price = order.x_gia_ban
+            temp.uom = order.x_dvt_id
             data.push(temp)
             })
             this.setState({ orderData: data, isRefreshing:false });
@@ -101,6 +103,7 @@ class DonHang extends React.Component{
         .finally(() => {});       
       }
       _renderItem = ({ item }) => {
+          console.log(item)
           return (
         <Card style={styles.container} 
             onPress={() => {}}>
@@ -116,10 +119,14 @@ class DonHang extends React.Component{
                 />
                 <View style={styles.detailView}>
                     <Paragraph style={styles.itemName}>{item.customerID[1]}</Paragraph>
-                    <Paragraph style={styles.itemDetail}>{item.productID[1]}</Paragraph>
-                    <Paragraph style={styles.itemDetail}>Số lượng: {item.qty}</Paragraph>
-                    <Paragraph style={styles.itemDetail}>Giá: {item.price}</Paragraph>
-                    <Paragraph style={styles.itemDetail}>Thanh toán: {item.paid}</Paragraph>
+                    <Paragraph style={styles.itemDetail}>{item.productID[1]} Số lượng: {item.qty} {item.uom[1]}</Paragraph>
+                    <Paragraph style={styles.itemDetail}>Giá: {this._formatCurency(item.price)}</Paragraph>
+                    <Paragraph style={styles.itemDetail}>Thanh toán:   
+                      <Icon
+                      name="cash-multiple"
+                      color={item.paid == 'chua_tt' ? '#777777' : this.props.theme.colors.primary}
+                      size={20}/>
+                      </Paragraph>
                 </View>
                 <View style={styles.menuView}>
                 <IconButton
@@ -134,11 +141,83 @@ class DonHang extends React.Component{
         </Card>
       );
     }
-
+    _formatCurency = (money) => {
+      money = money.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.") + 'đ'
+      return money
+    }    
     _action_xac_nhan = (item) => {
-      
+      console.log(item)
+      if (item.choose == 'thu'){
+        fetch(URL_RPC, {
+          method: 'POST',
+          headers:{
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              jsonrpc: '2.0',
+              params:{
+              "service":"object",
+              "method":"execute_kw",
+              "args":[DB,
+                      this.props.uid,this.props.password,
+                      "x_don_hang","write",[[item.id],{
+                        'x_thanh_toan': 'da_tt'
+                      }]]
+              }
+          })
+          })
+          .then((response) => response.json())
+          .then((results) => {
+            if ('result' in results){
+              this.setState({visible:false})
+            }
+            else if ('error' in results){
+              Alert.alert("Lỗi thu tiền")
+            }            
+          })
+          .catch((error) => console.error(error))
+          .finally(() => {});
+      }
+      else if (item.choose == 'huy'){
+        fetch(URL_RPC, {
+          method: 'POST',
+          headers:{
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              jsonrpc: '2.0',
+              params:{
+              "service":"object",
+              "method":"execute_kw",
+              "args":[DB,
+                      this.props.uid,this.props.password,
+                      "x_don_hang","write",[[item.id],{
+                        'x_trang_thai': 'huy'
+                      }]]
+              }
+          })
+          })
+          .then((response) => response.json())
+          .then((results) => {
+            if ('result' in results){
+              this.setState({visible:false})
+              for (let index in orderData){
+                const orderData = this.state.orderData
+                if (orderData[index].id === item.id){
+                  const filteredItems = items.slice(0, i).concat(items.slice(i + 1, items.length))
+                }
+            }
+            }
+            else if ('error' in results){
+              Alert.alert("Lỗi hủy đơn hàng")
+            }            
+          })
+          .catch((error) => console.error(error))
+          .finally(() => {});        
+      }
     }
-
     render() {
         const {theme} = this.props
         const {dataDialog, visible} = this.state
@@ -256,7 +335,7 @@ const styles = StyleSheet.create({
     imageView:{
         borderRadius: 10,
         width:96,
-      height:96 ,
+        height:96 ,
     },
     detailView: {
       marginLeft: 10,

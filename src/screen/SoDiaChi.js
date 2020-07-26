@@ -212,7 +212,7 @@ class SoDiaChi extends React.Component {
                 url={URL_RPC}
                 defaultItem = {this.state.districtID}
                 disabled = {Object.keys(this.state.stateID).length ? false : true}
-                domain = {[['x_country_state_id', '=', this.state.stateID.id]]}
+                domain = {[['x_state_id', '=', this.state.stateID.id]]}
                 placeholder='Chọn quận huyện'
                 label='Quận huyện'
                 onSelect={(item) =>{

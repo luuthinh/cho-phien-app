@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     },
     imageView:{
       borderRadius: 10,
-      width:128,
+      width:96,
       height:96,
     },
     detailView:{
