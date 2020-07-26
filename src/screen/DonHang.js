@@ -119,13 +119,13 @@ class DonHang extends React.Component{
                 />
                 <View style={styles.detailView}>
                     <Paragraph style={styles.itemName}>{item.customerID[1]}</Paragraph>
-                    <Paragraph style={styles.itemDetail}>{item.productID[1]} Số lượng: {item.qty} {item.uom[1]}</Paragraph>
+                    <Paragraph style={styles.itemDetail}>{item.productID[1]}: {item.qty} {item.uom[1]}</Paragraph>
                     <Paragraph style={styles.itemDetail}>Giá: {this._formatCurency(item.price)}</Paragraph>
                     <Paragraph style={styles.itemDetail}>Thanh toán:   
                       <Icon
                       name="cash-multiple"
                       color={item.paid == 'chua_tt' ? '#777777' : this.props.theme.colors.primary}
-                      size={20}/>
+                      size={25}/>
                       </Paragraph>
                 </View>
                 <View style={styles.menuView}>
@@ -170,7 +170,13 @@ class DonHang extends React.Component{
           .then((response) => response.json())
           .then((results) => {
             if ('result' in results){
-              this.setState({visible:false})
+              let orderData = this.state.orderData
+              for (let index in orderData){
+                if (orderData[index].id === item.id){
+                  orderData[index].paid = 'da_tt'
+                }
+              this.setState({orderData, visible:false})
+              } 
             }
             else if ('error' in results){
               Alert.alert("Lỗi thu tiền")
@@ -202,13 +208,13 @@ class DonHang extends React.Component{
           .then((response) => response.json())
           .then((results) => {
             if ('result' in results){
-              this.setState({visible:false})
+              let orderData = this.state.orderData
               for (let index in orderData){
-                const orderData = this.state.orderData
                 if (orderData[index].id === item.id){
-                  const filteredItems = items.slice(0, i).concat(items.slice(i + 1, items.length))
+                  orderData = orderData.slice(0, index).concat(orderData.slice(index + 1, orderData.length))
                 }
-            }
+                this.setState({orderData, visible:false})
+              } 
             }
             else if ('error' in results){
               Alert.alert("Lỗi hủy đơn hàng")
@@ -256,13 +262,14 @@ class DonHang extends React.Component{
                 <Portal>
                     {Object.keys(dataDialog).length ?
                         <Dialog visible={visible} onDismiss={()=> {this.setState({visible:false})}}>
-                            <Dialog.Title>
-                              <Paragraph>{dataDialog.customerID[1]}</Paragraph>
-                              <Paragraph>Sản phẩm: {dataDialog.productID[1]}</Paragraph>
-                              <Paragraph>Số lượng: {dataDialog.qty}</Paragraph>
-                            </Dialog.Title>
-
                         <Dialog.Content>
+                          <View style={{flexDirection:'row'}}>
+                          <Paragraph style={styles.itemName}>{dataDialog.customerID[1]}</Paragraph>
+                          <View style={{flex:1, alignItems:'flex-end',justifyContent:'flex-start'}}>
+                            <Paragraph style={styles.itemDetail}>{dataDialog.productID[1]}: {dataDialog.qty} {dataDialog.uom[1]}</Paragraph>
+                            <Paragraph style={styles.itemDetail}>Giá: {this._formatCurency(dataDialog.price)}</Paragraph> 
+                          </View>
+                          </View>                         
                             <RadioButton.Group 
                               onValueChange={value=>{
                                 dataDialog.choose = value
