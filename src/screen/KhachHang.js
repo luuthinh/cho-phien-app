@@ -1,8 +1,9 @@
 import React from 'react';
-import {View,Text , Dimensions, FlatList, StyleSheet, RefreshControl, Image} from 'react-native';
+import {View, Dimensions, FlatList, StyleSheet, RefreshControl} from 'react-native';
 import {connect} from 'react-redux';
-import {ActivityIndicator, Card, Paragraph, FAB, withTheme, Appbar} from 'react-native-paper'
+import {ActivityIndicator, Card, Paragraph, FAB, withTheme, Appbar, Avatar, Button, Text, IconButton} from 'react-native-paper'
 import {URL_RPC,DB,URL_PARTNER} from '../constants/API';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const {width, height} = Dimensions.get('window')
 class KhachHang extends React.Component {
@@ -67,12 +68,21 @@ class KhachHang extends React.Component {
                             }}
             />
             <View style={styles.detailView}>
-              <Paragraph style={styles.itemName}>{data.item.name}</Paragraph>
+              <View style={{flexDirection:'row', alignItems:'center'}}>
+                <Text style={styles.itemName}>{data.item.name}</Text>
+                <IconButton
+                  icon="camera"
+                  size={20}
+                  onPress={() => {return this.props.navigation.navigate("Thông tin khách hàng",data.item)}}
+                />
+              </View>
               <Paragraph style={styles.itemDetail}>Email: {data.item.email}</Paragraph>
               <Paragraph style={styles.itemDetail}>Số ĐT: {data.item.mobile}</Paragraph>
+              <TouchableOpacity onPress={()=>console.log("123")}>
+                <Avatar.Text size={24} label="5"/>
+              </TouchableOpacity>
             </View>
         </Card.Content>
-
       </Card>
     );
   };
