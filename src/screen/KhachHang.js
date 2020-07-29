@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {ActivityIndicator, Card, Paragraph, FAB, withTheme, Appbar, Avatar, Button, Text, IconButton} from 'react-native-paper'
 import {URL_RPC,DB,URL_PARTNER} from '../constants/API';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const {width, height} = Dimensions.get('window')
 class KhachHang extends React.Component {
@@ -31,7 +32,8 @@ class KhachHang extends React.Component {
               "args":[DB,
                       this.props.uid,this.props.password,
                       "res.partner","search_read",[[["type", "=","contact"],['is_company','=',false]]],{
-                      "fields":["name","mobile","email","write_date"]
+                      "fields":["name","mobile","email","write_date",
+                                "x_so_gio_hang","x_so_don_hang","x_so_giao_hang","x_so_hoan_thanh","x_so_huy_dh"]
                       }]
             }
 					})
@@ -55,8 +57,7 @@ class KhachHang extends React.Component {
   _renderItem = data => {
     console.log(data)
     return (
-      <Card style={styles.container} 
-        onPress={() => {return this.props.navigation.navigate("Thông tin khách hàng",data.item)}}>
+      <Card style={styles.container}>
         <Card.Content style={styles.content}>
           <Card.Cover style={styles.imageView}                       
                           source={{uri: `${URL_PARTNER}/${data.item.id}#time=${data.item.write_date}`,
@@ -71,16 +72,60 @@ class KhachHang extends React.Component {
               <View style={{flexDirection:'row', alignItems:'center'}}>
                 <Text style={styles.itemName}>{data.item.name}</Text>
                 <IconButton
-                  icon="camera"
+                  icon="pencil-outline"
                   size={20}
                   onPress={() => {return this.props.navigation.navigate("Thông tin khách hàng",data.item)}}
                 />
               </View>
               <Paragraph style={styles.itemDetail}>Email: {data.item.email}</Paragraph>
               <Paragraph style={styles.itemDetail}>Số ĐT: {data.item.mobile}</Paragraph>
-              <TouchableOpacity onPress={()=>console.log("123")}>
-                <Avatar.Text size={24} label="5"/>
-              </TouchableOpacity>
+              <View style={{flexDirection:'row'}}>
+                <TouchableOpacity onPress={()=>console.log("123")} style={styles.itemDH}>
+                  <Text>{data.item.x_so_gio_hang}</Text>
+                  <Icon
+                      name='cart-outline'
+                      color='blue'
+                      style={{marginLeft:3}} 
+                      size={20}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>console.log("123")} style={styles.itemDH}>
+                  <Text>{data.item.x_so_don_hang}</Text>
+                  <Icon
+                      name='square-edit-outline'
+                      color='blue'
+                      style={{marginLeft:3}} 
+                      size={20}
+                  />
+                </TouchableOpacity>  
+                <TouchableOpacity onPress={()=>console.log("123")} style={styles.itemDH}>
+                  <Text>{data.item.x_so_giao_hang}</Text>
+                  <Icon
+                      name='truck-delivery'
+                      color='blue'
+                      style={{marginLeft:3}} 
+                      size={20}
+                  />
+                </TouchableOpacity> 
+                <TouchableOpacity onPress={()=>console.log("123")} style={styles.itemDH}>
+                  <Text>{data.item.x_so_hoan_thanh}</Text>
+                  <Icon
+                      name='marker-check'
+                      color='blue'
+                      style={{marginLeft:3}} 
+                      size={20}
+                  />
+                </TouchableOpacity> 
+                <TouchableOpacity onPress={()=>console.log("123")} style={styles.itemDH}>
+                  <Text>{data.item.x_so_huy_dh}</Text>
+                  <Icon
+                      name='cancel'
+                      color='blue'
+                      style={{marginLeft:3}} 
+                      size={20}
+                  />
+                </TouchableOpacity>                                                               
+              </View>
             </View>
         </Card.Content>
       </Card>
@@ -103,7 +148,8 @@ class KhachHang extends React.Component {
           "args":[DB,
                   this.props.uid,this.props.password,
                   "res.partner","search_read",[[["type", "=","contact"],['is_company','=',false]]],{
-                    "fields":["name","mobile","email","write_date"]
+                    "fields":["name","mobile","email","write_date",
+                              "x_so_gio_hang","x_so_don_hang","x_so_giao_hang","x_so_hoan_thanh","x_so_huy_dh"]
                   }]
         }
       })
@@ -215,5 +261,15 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
+  },
+  itemDH:{
+    height:24,
+    borderStyle:'solid',
+    borderColor:'red',
+    borderWidth:1,
+    flexDirection: 'row',
+    marginLeft:3,
+    borderRadius:6,
+  
   }
 });
