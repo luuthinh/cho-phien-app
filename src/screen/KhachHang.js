@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Dimensions, FlatList, StyleSheet, RefreshControl} from 'react-native';
 import {connect} from 'react-redux';
-import {ActivityIndicator, Card, Paragraph, FAB, withTheme, Appbar, Avatar, Button, Text, IconButton} from 'react-native-paper'
+import {ActivityIndicator, Card, Paragraph, FAB, withTheme, Appbar, Avatar, Surface, Text, IconButton} from 'react-native-paper'
 import {URL_RPC,DB,URL_PARTNER} from '../constants/API';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -80,50 +80,60 @@ class KhachHang extends React.Component {
               <Paragraph style={styles.itemDetail}>Email: {data.item.email}</Paragraph>
               <Paragraph style={styles.itemDetail}>Số ĐT: {data.item.mobile}</Paragraph>
               <View style={{flexDirection:'row'}}>
-                <TouchableOpacity onPress={()=>console.log("123")} style={styles.itemDH}>
-                  <Text>{data.item.x_so_gio_hang}</Text>
-                  <Icon
-                      name='cart-outline'
-                      color='blue'
-                      style={{marginLeft:3}} 
-                      size={20}
-                  />
+                <TouchableOpacity onPress={()=>console.log("123")}>
+                  <Surface style={styles.itemDH}>
+                    <Text>{data.item.x_so_gio_hang}</Text>
+                    <Icon
+                        name='cart-outline'
+                        color='gray'
+                        style={{marginLeft:5}} 
+                        size={20}
+                    />
+                  </Surface>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>console.log("123")} style={styles.itemDH}>
-                  <Text>{data.item.x_so_don_hang}</Text>
-                  <Icon
-                      name='square-edit-outline'
-                      color='blue'
-                      style={{marginLeft:3}} 
-                      size={20}
-                  />
+                <TouchableOpacity onPress={()=>console.log("123")}>
+                  <Surface style={styles.itemDH}>
+                    <Text>{data.item.x_so_don_hang}</Text>
+                    <Icon
+                        name='square-edit-outline'
+                        color='blue'
+                        style={{marginLeft:5}} 
+                        size={20}
+                    />
+                  </Surface>
                 </TouchableOpacity>  
-                <TouchableOpacity onPress={()=>console.log("123")} style={styles.itemDH}>
+                <TouchableOpacity onPress={()=>console.log("123")}>
+                  <Surface  style={styles.itemDH}>
                   <Text>{data.item.x_so_giao_hang}</Text>
                   <Icon
                       name='truck-delivery'
-                      color='blue'
-                      style={{marginLeft:3}} 
+                      color='orange'
+                      style={{marginLeft:5}} 
                       size={20}
                   />
+                  </Surface>
                 </TouchableOpacity> 
-                <TouchableOpacity onPress={()=>console.log("123")} style={styles.itemDH}>
-                  <Text>{data.item.x_so_hoan_thanh}</Text>
-                  <Icon
-                      name='marker-check'
-                      color='blue'
-                      style={{marginLeft:3}} 
-                      size={20}
-                  />
+                <TouchableOpacity onPress={()=>console.log("123")}>
+                  <Surface  style={styles.itemDH}>
+                    <Text>{data.item.x_so_hoan_thanh}</Text>
+                    <Icon
+                        name='marker-check'
+                        color='green'
+                        style={{marginLeft:5}} 
+                        size={20}
+                    />
+                  </Surface>
                 </TouchableOpacity> 
-                <TouchableOpacity onPress={()=>console.log("123")} style={styles.itemDH}>
-                  <Text>{data.item.x_so_huy_dh}</Text>
-                  <Icon
-                      name='cancel'
-                      color='blue'
-                      style={{marginLeft:3}} 
-                      size={20}
-                  />
+                <TouchableOpacity onPress={()=>console.log("123")} >
+                  <Surface style={styles.itemDH}>
+                    <Text>{data.item.x_so_huy_dh}</Text>
+                    <Icon
+                        name='cancel'
+                        color='red'
+                        style={{marginLeft:5}} 
+                        size={20}
+                    />
+                  </Surface>
                 </TouchableOpacity>                                                               
               </View>
             </View>
@@ -265,11 +275,13 @@ const styles = StyleSheet.create({
   itemDH:{
     height:24,
     borderStyle:'solid',
-    borderColor:'red',
+    borderColor:'gray',
     borderWidth:1,
     flexDirection: 'row',
-    marginLeft:3,
+    marginLeft:8,
     borderRadius:6,
-  
+    paddingLeft: 5,
+    paddingRight: 5,
+    elevation:6,
   }
 });
