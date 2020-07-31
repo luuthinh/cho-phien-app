@@ -5,6 +5,7 @@ import BottomTabs from './BottomTabs';
 import DatHang from  '../screen/DatHang';
 import KhachHangChiTiet from '../screen/KhachHangChiTiet';
 import SoDiaChi from '../screen/SoDiaChi';
+import DonHangChiTiet from '../screen/DonHangChiTiet';
 
 const Stack = createStackNavigator();
 
@@ -36,7 +37,11 @@ export default function StackDangNhap()  {
       <Stack.Screen
         name="Sổ địa chỉ"
         component={SoDiaChi}
-      />                         
+      /> 
+      <Stack.Screen
+        name="Đơn hàng chi tiết"
+        component={DonHangChiTiet}
+      />                              
     </Stack.Navigator>
   );
 };

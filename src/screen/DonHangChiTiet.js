@@ -10,14 +10,20 @@ const {width, height} = Dimensions.get('window')
 class DonHang extends React.Component{
     constructor(props){
         super(props)
-        this.state = {
+        if (props.route.params.type !== undefined){
+          let {params} = props.route;
+          this.state = {
+            type: params.type,
+            nameType: params.nameType,
+            customerID: params.customerID,
             isLoading: true,
             isRefreshing : false,
             orderData: [],
             visible: false,
             dataDialog: {},
-        }      
-      }
+            }    
+        }
+    }    
 
     componentDidMount(){
         fetch(URL_RPC, {
@@ -33,7 +39,7 @@ class DonHang extends React.Component{
                 "method":"execute_kw",
                 "args":[DB,
                         this.props.uid,this.props.password,
-                        "x_don_hang","search_read",[[['x_trang_thai', '=', 'don_hang']]],{
+                        "x_don_hang","search_read",[[['x_trang_thai', '=', this.state.type],['x_kh_id', '=',this.state.customerID]]],{
                             "fields":["x_kh_id","x_sp_id","x_so_luong","x_thanh_toan","x_gia_ban","x_dvt_id"]
                         }]
                 }
@@ -75,7 +81,7 @@ class DonHang extends React.Component{
             "method":"execute_kw",
             "args":[DB,
                     this.props.uid,this.props.password,
-                    "x_don_hang","search_read",[[['x_trang_thai', '=', 'don_hang']]],{
+                    "x_don_hang","search_read",[[['x_trang_thai', '=', this.state.type],['x_kh_id', '=',this.state.customerID]]],{
                         "fields":["x_kh_id","x_sp_id","x_so_luong","x_thanh_toan","x_gia_ban","x_dvt_id"]
                     }]
             }
@@ -230,9 +236,9 @@ class DonHang extends React.Component{
             return (
                 <View>
                     <Appbar.Header>
+                        <Appbar.BackAction onPress={this.props.navigation.goBack} color={theme.colors.title} size={30}/>
                         <Appbar.Content
-                        title="Đơn hàng"
-                        style={{alignItems:'center'}}
+                        title={this.state.nameType}
                         titleStyle={{color: theme.colors.title, fontSize:22}}
                     /> 
                     </Appbar.Header>          
@@ -243,9 +249,9 @@ class DonHang extends React.Component{
         return (
           <SafeAreaView style={{flex:1}}>
                 <Appbar.Header>
+                    <Appbar.BackAction onPress={this.props.navigation.goBack} color={theme.colors.title} size={30}/>
                     <Appbar.Content
-                    title="Đơn hàng"
-                    style={{alignItems:'center'}}
+                    title={this.state.nameType}
                     titleStyle={{color: theme.colors.title, fontSize:22}}
                   /> 
                 </Appbar.Header>

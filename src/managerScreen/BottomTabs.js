@@ -46,14 +46,14 @@ export default function BottomTab() {
           tabBarIcon:"clipboard-text-outline",
         }}
       />      
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Thông báo"
         component={Notifications}
         options={{
           tabBarIcon: 'bell',
           tabBarColor:'white'
-        }}        
-      />
+        }}         */}
+      {/* /> */}
       <Tab.Screen
         name="Cá nhân"
         component={MainCaNhan}

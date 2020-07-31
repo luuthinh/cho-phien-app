@@ -55,7 +55,6 @@ class KhachHang extends React.Component {
     return money;
   }
   _renderItem = data => {
-    console.log(data)
     return (
       <Card style={styles.container}>
         <Card.Content style={styles.content}>
@@ -80,7 +79,8 @@ class KhachHang extends React.Component {
               <Paragraph style={styles.itemDetail}>Email: {data.item.email}</Paragraph>
               <Paragraph style={styles.itemDetail}>Số ĐT: {data.item.mobile}</Paragraph>
               <View style={{flexDirection:'row'}}>
-                <TouchableOpacity onPress={()=>console.log("123")}>
+                <TouchableOpacity 
+                  onPress={()=>{return this.props.navigation.navigate("Đơn hàng chi tiết",{type:'gio_hang',nameType:'Giỏ hàng',customerID: data.item.id})}}>
                   <Surface style={styles.itemDH}>
                     <Text>{data.item.x_so_gio_hang}</Text>
                     <Icon
@@ -91,7 +91,8 @@ class KhachHang extends React.Component {
                     />
                   </Surface>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>console.log("123")}>
+                <TouchableOpacity 
+                  onPress={()=>{return this.props.navigation.navigate("Đơn hàng chi tiết",{type:'don_hang',nameType:'Đơn hàng',customerID: data.item.id})}}>
                   <Surface style={styles.itemDH}>
                     <Text>{data.item.x_so_don_hang}</Text>
                     <Icon
@@ -102,7 +103,8 @@ class KhachHang extends React.Component {
                     />
                   </Surface>
                 </TouchableOpacity>  
-                <TouchableOpacity onPress={()=>console.log("123")}>
+                <TouchableOpacity 
+                  onPress={()=>{return this.props.navigation.navigate("Đơn hàng chi tiết",{type:'giao_hang',nameType:'Giao hàng',customerID: data.item.id})}}>
                   <Surface  style={styles.itemDH}>
                   <Text>{data.item.x_so_giao_hang}</Text>
                   <Icon
@@ -113,7 +115,8 @@ class KhachHang extends React.Component {
                   />
                   </Surface>
                 </TouchableOpacity> 
-                <TouchableOpacity onPress={()=>console.log("123")}>
+                <TouchableOpacity 
+                  onPress={()=>{return this.props.navigation.navigate("Đơn hàng chi tiết",{type:'hoan_thanh',nameType:'Hoàn thành',customerID: data.item.id})}}>
                   <Surface  style={styles.itemDH}>
                     <Text>{data.item.x_so_hoan_thanh}</Text>
                     <Icon
@@ -124,7 +127,8 @@ class KhachHang extends React.Component {
                     />
                   </Surface>
                 </TouchableOpacity> 
-                <TouchableOpacity onPress={()=>console.log("123")} >
+                <TouchableOpacity 
+                  onPress={()=>{return this.props.navigation.navigate("Đơn hàng chi tiết",{type:'huy_dh',nameType:'Hủy đơn hàng',customerID: data.item.id})}}>
                   <Surface style={styles.itemDH}>
                     <Text>{data.item.x_so_huy_dh}</Text>
                     <Icon
